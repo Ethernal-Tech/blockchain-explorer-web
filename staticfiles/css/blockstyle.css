@@ -1,0 +1,252 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 18px;
+}
+
+body {
+    background-color: rgb(248,249,250);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+::selection {
+    background: rgb(130,71,229);
+    color: white;
+}
+
+.container {
+    width: 72%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+}
+
+section {
+    width: 72%;
+    margin: 0 auto;
+    height: 100%;
+}
+
+header {
+    height: 70px;
+    box-shadow: 4px 0px 4px rgb(219, 219, 219);
+    background-color: rgb(255, 255, 255);
+}
+
+header div {
+    justify-content: left;
+    align-items: center;
+}
+
+.block-number {
+    font-size: 21px;
+    color: rgb(74, 79, 85);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.block-number span {
+    font-size: 16.8px;
+    color: rgb(119, 131, 143);
+}
+
+.block-overview {
+    border: 0.4px solid rgb(242, 242, 242);
+    border-radius: 6px;
+    box-shadow: 0px 4px 8px rgb(234, 234, 234);
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+
+.block-overview-title {
+    color: rgb(130,71,229);
+    height: 38px;
+    font-size: 14px;
+    font-weight: 550;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 0.8px solid rgba(207, 205, 205, 0.45);
+}
+
+.block-overview-one-column {
+    display: flex;
+    height: 48px;
+    border-bottom: 0.8px solid rgba(207, 205, 205, 0.45);
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 14px;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+}
+
+.title {
+    min-width: 25%;
+}
+
+.block-height-title {
+    font-size: 14px;
+}
+
+.block-height-value {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.block-timestamp-title {
+    font-size: 14px
+}
+
+.block-timestamp-value {
+    font-size: 14px;
+}
+
+.block-transactions-title {
+    font-size: 14px;
+}
+
+.block-transactions-value {
+    font-size: 14px;
+}
+
+.block-transactions-value span {
+    color: rgb(130,71,229);
+    background-color: rgb(242,236,253);
+    font-size: 11.8px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.block-validation-title {
+    font-size: 14px;
+}
+
+.block-validation-value {
+    font-size: 14px;
+}
+
+.block-validation-value span {
+    color: rgb(130,71,229);
+    font-size: 14px;
+}
+
+.block-difficulty-title {
+    font-size: 14px;
+}
+
+.block-difficulty-value {
+    font-size: 14px;
+}
+
+.block-total-difficulty-title {
+    font-size: 14px;
+}
+
+.block-total-difficulty-value {
+    font-size: 14px;
+}
+
+.block-size-title {
+    font-size: 14px;
+}
+
+.block-size-value {
+    font-size: 14px;
+}
+
+.block-gas-used-title {
+    font-size: 14px;
+}
+
+.block-gas-used-value {
+    font-size: 14px;
+}
+
+.block-gas-limit-title {
+    font-size: 14px;
+}
+
+.block-gas-limit-value {
+    font-size: 14px;
+}
+
+.block-nonce-title {
+    font-size: 14px;
+}
+
+.block-nonce-value {
+    font-size: 14px;
+}
+
+.block-hase-title {
+    font-size: 14px;
+}
+
+.block-hash-value {
+    font-size: 14px;
+}
+
+.block-parent-hash-title {
+    font-size: 14px;
+}
+
+.block-parent-hash-value {
+    font-size: 14px;
+    color: rgb(130,71,229);
+}
+
+.block-parent-hash {
+    border-bottom: none;
+}
+
+footer {
+    background-color: rgb(25, 15, 61);
+    height: 140px;
+    margin-top: auto;
+}
+
+footer .container {
+    flex-direction: column;
+}
+
+.footer-one {
+    display: flex;
+    align-items: center;
+    height: 50%;
+    border-bottom: 0.1px solid rgba(244, 242, 242, 0.231);
+}
+
+.footer-one img {
+    height: 26px;
+    width: 26px;
+}
+
+.footer-one p {
+    color: white;
+    font: 20px;
+    margin-left: 10px;
+}
+
+footer-two {
+    display: flex;
+    align-items: center;
+    height: 50%;
+}
+
+.footer-two p {
+    color: white;
+    margin-top: 20px;
+    font-size: 14px;
+}

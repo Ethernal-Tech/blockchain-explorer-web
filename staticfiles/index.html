@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLock Explorer</title>
+    <link rel="stylesheet" href="css/style.css"/>
+
+    <script>
+        function sendRequest() {
+            var select = document.getElementById("select");
+            var option = select.value;
+            var input = document.getElementById("input")
+
+            if (option == "Block Number")
+            {
+                window.location = "block/" + input.value 
+            }
+            else if (option == "Txn Hash")
+            {
+                window.location = "transaction/" + input.value 
+            }
+            else {
+                window.location = "/"
+            }
+        }
+    </script>       
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img width="160" src="images/logo.svg" alt="Polygon Logo">
+            </a>
+        </div>
+    </header>
+    <section class="section-1">
+        <div class="main-container">
+            <div class="section-1-container">
+                <p>
+                    Polygon PoS Chain Explorer
+                </p>
+                <div class="section-1-container-inside">
+                    <select id="select">
+                        <option selected>
+                            Block Number
+                        </option>
+                        <option>
+                            Txn Hash
+                        </option>       
+                    </select>
+                    <input id="input" type="text" placeholder="Search by Block Number / Txn Hash "/>
+                    <button onclick="sendRequest()"><img src="images/search.png"/></button>
+                </div>
+            </div>
+            <img class="world-image" src="images/miner.svg"/>
+        </div>
+    </section>
+    <section class="section-2">
+        <div class="container">
+            <div class="blocks">
+                <p class="blocks-latest-name"><span>Latest Blocks (20)</span></p>
+                <div class="block-list">
+                    {{range .blocks}}
+                    <div class="one-block-item">
+                        <div class="one-block-item-Bk">
+                            Bk
+                        </div>
+                        <div class="one-block-item-first-div">
+                            <p class="one-block-item-number">
+                                {{.Number}}
+                            </p>
+                            <p class="one-block-item-timestamp">
+                                {{.Timestamp}} secs ago
+                            </p>
+                        </div>
+                        <div>
+                            <p class="one-block-item-validation">
+                                Validated By <span>{{.Validator}}</span>
+                            </p>
+                            <p class="one-block-item-transactions">
+                                {{.TransactionsNumber}} txns <!-- <span>in 2 secs</span> -->
+                            </p>
+                        </div>
+                    </div>
+                    {{end}}
+                </div>
+                <div class="blocks-view-all">
+                    <button>View all blocks</button>
+                </div>          
+            </div>
+            <div class="transactions">
+                <p class="transactions-latest-name"><span>Latest Transactions (20)</span></p>
+                <div class="transaction-list">
+                    {{range .transactions}}
+                    <div class="one-transaction-item">
+                        <div class="one-transaction-item-Tk">
+                            Tk
+                        </div>
+                        <div class="one-transaction-item-first-div">
+                            <p class="one-transaction-item-hash">
+                                {{.Hash}}
+                            </p>
+                            <p class="one-transaction-item-timestamp">
+                                {{.Timestamp}} secs ago
+                            </p>
+                        </div>
+                        <div>
+                            <p class="one-transaction-item-from">
+                                From <span>{{.From}}</span>
+                            </p>
+                            <p class="one-transaction-item-to">
+                                To <span>{{.To}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    {{end}}
+                </div>            
+                <div class="transactions-view-all">
+                    <button>View all transactions</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="footer-one">
+                <img src="images/poly.png"/>
+                <p>Powered by Polygon Chain</p>
+            </div>
+            <div class="footer-two">
+                <p>PolygonScan © 2022 (POLY-B1) | ⛏ Built NOT by the same team behind Etherscan </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/blockstyle.css"/>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img width="160" src="../images/logo.svg" alt="Polygon Logo">
+            </a>
+        </div>
+    </header>
+    <section>
+        <div class="block-number">
+            Block <span>#36719606</span>
+        </div>
+        <div class="block-overview">
+            <div class="block-overview-title">
+                Overview
+            </div>
+            <div class="block-height block-overview-one-column">
+                <div class="block-height-title title">
+                    Block Height:
+                </div>
+                <div class="block-height-value">
+                    {{.block.Number}}
+                </div>
+            </div>
+            <div class="block-timestamp block-overview-one-column">
+                <div class="block-timestamp-title title">
+                    Timestamp:
+                </div>
+                <div class="block-timestamp-value">
+                    {{.block.Timestamp}} secs ago
+                </div>
+            </div>
+            <div class="block-transactions block-overview-one-column">
+                <div class="block-transactions-title title">
+                    Transactions:
+                </div>
+                <div class="block-transactions-value">
+                    <span>{{.block.TransactionsNumber}} transactions</span> in this block
+                </div>
+            </div>
+            <div class="block-validation block-overview-one-column">
+                <div class="block-validation-title title">
+                    Validated by:
+                </div>
+                <div class="block-validation-value">
+                    <span>{{.block.Validator}}</span>
+                </div>
+            </div>
+            <div class="block-difficulty block-overview-one-column">
+                <div class="block-difficulty-title title">
+                    Difficulty:
+                </div>
+                <div class="block-difficulty-value">
+                    {{.block.Difficulty}}
+                </div>
+            </div>
+            <div class="block-total-difficulty block-overview-one-column">
+                <div class="block-total-difficulty-title title">
+                    Total Difficulty:
+                </div>
+                <div class="block-total-difficulty-value">
+                    {{.block.TotalDifficulty}}
+                </div>
+            </div>
+            <div class="block-size block-overview-one-column">
+                <div class="block-size-title title">
+                    Size:
+                </div>
+                <div class="block-size-value">
+                    {{.block.Size}} bytes
+                </div>
+            </div>
+            <div class="block-gas-used block-overview-one-column">
+                <div class="block-gas-used-title title">
+                    Gas Used:
+                </div>
+                <div class="block-gas-used-value">
+                    {{.block.GasUsed}}
+                </div>
+            </div>
+            <div class="block-gas-limit block-overview-one-column">
+                <div class="block-gas-limit-title title">
+                    Gas Limit:
+                </div>
+                <div class="block-gas-limit-value">
+                    {{.block.GasLimit}}
+                </div>
+            </div>
+            <div class="block-nonce block-overview-one-column">
+                <div class="block-nonce-title title">
+                    Nonce:
+                </div>
+                <div class="block-nonce-value">
+                    {{.block.Nonce}}
+                </div>
+            </div>
+            <div class="block-hash block-overview-one-column">
+                <div class="block-hase-title title">
+                    Hash:
+                </div>
+                <div class="block-hash-value">
+                    {{.block.Hash}}
+                </div>
+            </div>
+            <div class="block-parent-hash block-overview-one-column">
+                <div class="block-parent-hash-title title">
+                    Parent Hash:
+                </div>
+                <div class="block-parent-hash-value">
+                    {{.block.ParentHash}}
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="footer-one">
+                <img src="../images/poly.png"/>
+                <p>Powered by Polygon Chain</p>
+            </div>
+            <div class="footer-two">
+                <p>PolygonScan © 2022 (POLY-B1) | ⛏ Built NOT by the same team behind Etherscan </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

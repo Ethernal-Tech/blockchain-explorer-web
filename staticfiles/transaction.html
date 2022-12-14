@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/transactionstyle.css"/>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img width="160" src="../images/logo.svg" alt="Polygon Logo">
+            </a>
+        </div>
+    </header>
+    <section>
+        <div class="transaction-details">
+            Transaction Details
+        </div>
+        <div class="transaction-overview">
+            <div class="transaction-overview-title">
+                Overview
+            </div>
+            <div class="transaction-hash transaction-overview-one-column">
+                <div class="transaction-hash-title title">
+                    Transaction Hash:
+                </div>
+                <div class="transaction-hash-value">
+                    {{.transaction.Hash}}
+                </div>
+            </div>
+            <div class="transaction-status transaction-overview-one-column">
+                <div class="transaction-status-title title">
+                    Status:
+                </div>
+                <div class="transaction-status-value">
+                    {{.transaction.Status}}
+                </div>
+            </div>
+            <div class="transaction-block-number transaction-overview-one-column">
+                <div class="transaction-block-number-title title">
+                    Block:
+                </div>
+                <div class="transaction-block-number-value">
+                    {{.transaction.BlockNumber}}
+                </div>
+            </div>
+            <div class="transaction-block-hash transaction-overview-one-column">
+                <div class="transaction-block-hash-title title">
+                    Block Hash:
+                </div>
+                <div class="transaction-block-hash-value">
+                    {{.transaction.BlockHash}}
+                </div>
+            </div>
+            <div class="transaction-timestamp transaction-overview-one-column">
+                <div class="transaction-timestamp-title title">
+                    Timestamp:
+                </div>
+                <div class="transaction-timestamp-value">
+                    {{.transaction.Timestamp}} secs ago
+                </div>
+            </div>
+            <div class="transaction-from transaction-overview-one-column">
+                <div class="transaction-from-title title">
+                    From:
+                </div>
+                <div class="transaction-from-value">                   
+                    {{.transaction.From}}
+                </div>
+            </div>
+            <div class="transaction-to transaction-overview-one-column">
+                <div class="transaction-to-title title">
+                    To:
+                </div>
+                <div class="transaction-to-value">                   
+                    {{.transaction.To}}
+                </div>
+            </div>
+            <div class="transaction-gas-used transaction-overview-one-column">
+                <div class="transaction-gas-used-title title">
+                    Gas Used:
+                </div>
+                <div class="transaction-gas-used-value">                   
+                    {{.transaction.GasUsed}}
+                </div>
+            </div>
+            <div class="transaction-gas-limit transaction-overview-one-column">
+                <div class="transaction-gas-limit-title title">
+                    Gas Price:
+                </div>
+                <div class="transaction-gas-limit-value">                                     
+                    {{.transaction.GasPrice}}
+                </div>
+            </div>
+            <div class="transaction-gas transaction-overview-one-column">
+                <div class="transaction-gas-title title">
+                    Gas:
+                </div>
+                <div class="transaction-gas-value">                                     
+                    {{.transaction.Gas}}
+                </div>
+            </div>
+            <div class="transaction-value transaction-overview-one-column">
+                <div class="transaction-value-title title">
+                    Value:
+                </div>
+                <div class="transaction-value-value">                                     
+                    {{.transaction.Value}}
+                </div>
+            </div>
+            <div class="transaction-nonce transaction-overview-one-column">
+                <div class="transaction-nonce-title title">
+                    Nonce:
+                </div>
+                <div class="transaction-nonce-value">                                     
+                    {{.transaction.Nonce}}
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="footer-one">
+                <img src="../images/poly.png"/>
+                <p>Powered by Polygon Chain</p>
+            </div>
+            <div class="footer-two">
+                <p>PolygonScan © 2022 (POLY-B1) | ⛏ Built NOT by the same team behind Etherscan </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
