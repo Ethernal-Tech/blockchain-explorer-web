@@ -346,6 +346,20 @@ footer-two {
     cursor: pointer;
 }
 
+.one-block-item-a {
+    color: rgb(130, 71, 229); 
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.one-transaction-item-a {
+    color: rgb(130, 71, 229); 
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .one-transaction-item-hash {
     overflow: hidden;
     text-overflow: ellipsis;

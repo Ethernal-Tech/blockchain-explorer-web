@@ -69,7 +69,7 @@
                         </div>
                         <div class="one-block-item-first-div">
                             <p class="one-block-item-number">
-                                {{.Number}}
+                                <a class="one-block-item-a" href="block/{{.Number}}">{{.Number}}</a>
                             </p>
                             <p class="one-block-item-timestamp">
                                 {{.Timestamp}} secs ago
@@ -80,7 +80,7 @@
                                 Validated By <span>{{.Validator}}</span>
                             </p>
                             <p class="one-block-item-transactions">
-                                {{.TransactionsNumber}} txns <!-- <span>in 2 secs</span> -->
+                                {{.TransactionsNumber}} txns
                             </p>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                         </div>
                         <div class="one-transaction-item-first-div">
                             <p class="one-transaction-item-hash">
-                                {{.Hash}}
+                                <a class="one-transaction-item-a" href="transaction/{{.Hash}}">{{.Hash}}</a>
                             </p>
                             <p class="one-transaction-item-timestamp">
                                 {{.Timestamp}} secs ago
