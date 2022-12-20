@@ -21,6 +21,10 @@
             {
                 window.location = "transaction/" + input.value 
             }
+            else if(option == "Addresses")
+            {
+                window.location = "address/" + input.value
+            }
             else {
                 window.location = "/"
             }
@@ -48,7 +52,10 @@
                         </option>
                         <option>
                             Txn Hash
-                        </option>       
+                        </option> 
+                        <option>
+                            Addresses
+                        </option>      
                     </select>
                     <input id="input" type="text" placeholder="Search by Block Number / Txn Hash "/>
                     <button onclick="sendRequest()"><img src="images/search.png"/></button>

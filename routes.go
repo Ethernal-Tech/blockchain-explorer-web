@@ -16,4 +16,6 @@ func routes(server *gin.Engine, cont ...any) {
 	server.GET("/block/:blocknumber", bc.GetBlockByNumber)
 	tc := cont[2].(controllers.TransactionController)
 	server.GET("/transaction/:transactionhx", tc.GetTransactionByHash)
+	ac := cont[3].(controllers.AddressController)
+	server.GET("/address/:addresshex", ac.GetAddress)
 }

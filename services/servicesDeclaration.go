@@ -2,6 +2,7 @@ package services
 
 import (
 	"webbc/models"
+	"webbc/models/addressModel"
 )
 
 type BlockService interface {
@@ -12,4 +13,8 @@ type BlockService interface {
 type TransactionService interface {
 	GetLastTransactions(int) (*[]models.Transaction, error)
 	GetTransactionByHash(string) (*models.Transaction, error)
+}
+
+type AddressService interface {
+	GetAddress(string) (*addressModel.Address, error)
 }
