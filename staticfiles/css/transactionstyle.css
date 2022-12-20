@@ -195,6 +195,7 @@ footer {
     background-color: rgb(25, 15, 61);
     height: 140px;
     margin-top: auto;
+    background-image: url("../images/background.svg");
 }
 
 footer .container {
@@ -209,7 +210,6 @@ footer .container {
 }
 
 .footer-one img {
-    height: 26px;
     width: 26px;
 }
 
