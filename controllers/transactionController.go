@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strconv"
 	"webbc/services"
 
 	"github.com/gin-gonic/gin"
@@ -14,19 +15,37 @@ func NewTransactionController(transactionService services.TransactionService) Tr
 	return TransactionController{TransactionService: transactionService}
 }
 
-func (gc TransactionController) GetTransactionByHash(context *gin.Context) {
-	transaction, error := gc.TransactionService.GetTransactionByHash(context.Param("transactionhx"))
+func (tc TransactionController) GetTransactionByHash(context *gin.Context) {
+	transaction, error := tc.TransactionService.GetTransactionByHash(context.Param("transactionhx"))
 
 	if error != nil {
 
 	}
-
-	// var transactions *[]models.Transaction = &[]models.Transaction{}
-	// *transactions = append(*transactions, *transaction)
 
 	data := gin.H{
 		"transaction": transaction,
 	}
 
 	context.HTML(200, "transaction.html", data)
+}
+
+func (tc TransactionController) GetAllTransactionsInBlock(context *gin.Context) {
+	blockNumber, error1 := strconv.ParseUint(context.Param("blocknumber"), 10, 64)
+
+	if error1 != nil {
+
+	}
+
+	transactions, error2 := tc.TransactionService.GetAllTransactionsInBlock(blockNumber)
+
+	if error2 != nil {
+
+	}
+
+	data := gin.H{
+		"block":        blockNumber,
+		"transactions": transactions,
+	}
+
+	context.HTML(200, "transactionsInBlock.html", data)
 }

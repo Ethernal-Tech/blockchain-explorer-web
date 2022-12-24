@@ -90,3 +90,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 
 	return &oneResultTransaction, nil
 }
+
+func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumber uint64) (*[]models.Transaction, error) {
+	return &[]models.Transaction{}, nil
+}
