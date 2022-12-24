@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"math"
 	"strings"
 	"time"
@@ -26,7 +25,7 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 	err := tsi.database.NewSelect().Table("transactions").Order("block_number DESC").Limit(20).Scan(tsi.ctx, &transactions)
 
 	if err != nil {
-		fmt.Println("all ok")
+
 	}
 
 	var result []models.Transaction
@@ -92,5 +91,39 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 }
 
 func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumber uint64) (*[]models.Transaction, error) {
-	return &[]models.Transaction{}, nil
+	var transactions []DB.Transaction
+	err := tsi.database.NewSelect().Table("transactions").Where("block_number = ?", blockNumber).Order("timestamp DESC").Scan(tsi.ctx, &transactions)
+
+	if err != nil {
+
+	}
+
+	var result []models.Transaction
+
+	for _, v := range transactions {
+		var oneResultTransaction = models.Transaction{
+			Hash:             v.Hash,
+			BlockHash:        v.BlockHash,
+			BlockNumber:      v.BlockNumber,
+			From:             v.From,
+			To:               v.To,
+			Gas:              v.Gas,
+			GasUsed:          v.GasUsed,
+			GasPrice:         v.GasPrice,
+			Nonce:            v.Nonce,
+			TransactionIndex: v.TransactionIndex,
+			Value:            v.Value,
+			ContractAddress:  v.ContractAddress,
+			Status:           v.Status,
+			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+		}
+
+		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+			oneResultTransaction.To = ""
+		}
+
+		result = append(result, oneResultTransaction)
+	}
+
+	return &result, nil
 }
