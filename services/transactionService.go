@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"strings"
 	"time"
 	"webbc/DB"
 	"webbc/models"
@@ -48,6 +49,10 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
 		}
 
+		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+			oneResultTransaction.To = ""
+		}
+
 		result = append(result, oneResultTransaction)
 	}
 
@@ -77,6 +82,10 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		ContractAddress:  transaction.ContractAddress,
 		Status:           transaction.Status,
 		Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds())),
+	}
+
+	if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+		oneResultTransaction.To = ""
 	}
 
 	return &oneResultTransaction, nil

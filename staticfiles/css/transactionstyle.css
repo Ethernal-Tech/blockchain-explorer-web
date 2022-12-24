@@ -147,6 +147,11 @@ header div {
     color: rgb(130,71,229);
 }
 
+.transaction-to-value span {
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+}
+
 .transaction-gas-used-title {
     font-size: 14px;
 }

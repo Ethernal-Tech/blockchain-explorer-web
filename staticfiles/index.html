@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLock Explorer</title>
+    <title>Ethernal-Tech</title>
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel = "icon" href ="images/ethernal.png" type = "image/x-icon">
 
     <script>
         function sendRequest() {
@@ -57,7 +58,7 @@
                             Addresses
                         </option>      
                     </select>
-                    <input id="input" type="text" placeholder="Search by Block Number / Txn Hash "/>
+                    <input id="input" type="text" placeholder="Search by Block Number / Txn Hash / Address"/>
                     <button onclick="sendRequest()"><img src="images/search.png"/></button>
                 </div>
             </div>
@@ -118,7 +119,11 @@
                                 From <span>{{.From}}</span>
                             </p>
                             <p class="one-transaction-item-to">
-                                To <span>{{.To}}</span>
+                                {{if eq .To ""}}
+                                    To <span>{{.ContractAddress}}</span>
+                                {{else}}
+                                    To <span>{{.To}}</span>
+                                {{end}}    
                             </p>
                         </div>
                     </div>
