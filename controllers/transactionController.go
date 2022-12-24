@@ -43,8 +43,9 @@ func (tc TransactionController) GetAllTransactionsInBlock(context *gin.Context) 
 	}
 
 	data := gin.H{
-		"block":        blockNumber,
-		"transactions": transactions,
+		"blockNumber":          blockNumber,
+		"numberOfTransactions": len(*transactions),
+		"transactions":         transactions,
 	}
 
 	context.HTML(200, "transactionsInBlock.html", data)

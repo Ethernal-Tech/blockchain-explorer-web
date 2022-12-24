@@ -335,6 +335,7 @@ footer-two {
 
 .one-block-item-first-div {
     margin-right: 86px;
+    width: 67px;
 }
 
 .one-transaction-item-first-div {
@@ -399,6 +400,14 @@ footer-two {
     color: rgb(130, 71, 229); 
     margin-top: 2px;
     cursor: pointer;
+}
+
+.one-block-item-transactions-a {
+    font-size: 14px;
+    color: rgb(130, 71, 229); 
+    margin-top: 2px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .one-block-item-transactions span {

@@ -7,6 +7,7 @@ import (
 	"time"
 	"webbc/DB"
 	"webbc/models"
+	"webbc/utils"
 
 	"github.com/uptrace/bun"
 )
@@ -42,7 +43,7 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			GasPrice:         v.GasPrice,
 			Nonce:            v.Nonce,
 			TransactionIndex: v.TransactionIndex,
-			Value:            v.Value,
+			Value:            utils.ToUint64(v.Value),
 			ContractAddress:  v.ContractAddress,
 			Status:           v.Status,
 			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
@@ -77,7 +78,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		GasPrice:         transaction.GasPrice,
 		Nonce:            transaction.Nonce,
 		TransactionIndex: transaction.TransactionIndex,
-		Value:            transaction.Value,
+		Value:            utils.ToUint64(transaction.Value),
 		ContractAddress:  transaction.ContractAddress,
 		Status:           transaction.Status,
 		Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds())),
@@ -92,7 +93,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 
 func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumber uint64) (*[]models.Transaction, error) {
 	var transactions []DB.Transaction
-	err := tsi.database.NewSelect().Table("transactions").Where("block_number = ?", blockNumber).Order("timestamp DESC").Scan(tsi.ctx, &transactions)
+	err := tsi.database.NewSelect().Table("transactions").Where("block_number = ?", blockNumber).Scan(tsi.ctx, &transactions)
 
 	if err != nil {
 
@@ -112,7 +113,7 @@ func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumb
 			GasPrice:         v.GasPrice,
 			Nonce:            v.Nonce,
 			TransactionIndex: v.TransactionIndex,
-			Value:            v.Value,
+			Value:            utils.ToUint64(v.Value),
 			ContractAddress:  v.ContractAddress,
 			Status:           v.Status,
 			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
