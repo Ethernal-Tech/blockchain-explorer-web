@@ -46,7 +46,7 @@
                     Block:
                 </div>
                 <div class="transaction-block-number-value">
-                    {{.transaction.BlockNumber}}
+                    <a href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a>
                 </div>
             </div>
             <div class="transaction-block-hash transaction-overview-one-column">
@@ -70,7 +70,7 @@
                     From:
                 </div>
                 <div class="transaction-from-value">                   
-                    {{.transaction.From}}
+                    <a href="../address/{{.transaction.From}}">{{.transaction.From}}</a>
                 </div>
             </div>
             <div class="transaction-to transaction-overview-one-column">
@@ -79,9 +79,9 @@
                 </div>
                 <div class="transaction-to-value"> 
                     {{if eq .transaction.To ""}}
-                        <span>[Contract]</span> {{.transaction.ContractAddress}}  
+                        <span>[Contract]</span> <a href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>  
                     {{else}}
-                        {{.transaction.To}}
+                        <a href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
                     {{end}}          
                 </div>
             </div>

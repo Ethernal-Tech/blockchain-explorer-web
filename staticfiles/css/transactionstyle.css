@@ -116,9 +116,10 @@ header div {
     font-size: 14px;
 }
 
-.transaction-block-number-value {
+.transaction-block-number-value a {
     font-size: 14px;
     color: rgb(130,71,229);
+    text-decoration: none;
 }
 
 .transaction-timestamp-title {
@@ -133,18 +134,20 @@ header div {
     font-size: 14px;
 }
 
-.transaction-from-value {
+.transaction-from-value a {
     font-size: 14px;
     color: rgb(130,71,229);
+    text-decoration: none;
 }
 
 .transaction-to-title {
     font-size: 14px;
 }
 
-.transaction-to-value {
+.transaction-to-value a {
     font-size: 14px;
     color: rgb(130,71,229);
+    text-decoration: none;
 }
 
 .transaction-to-value span {
