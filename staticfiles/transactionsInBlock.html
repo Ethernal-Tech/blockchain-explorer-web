@@ -58,13 +58,13 @@
                                 <td></td>
                                 <td><a href="/block/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
                                 <td>{{.Timestamp}} secs ago</td>
-                                <td>{{.From}}</td>
+                                <td><a href="../address/{{.From}}">{{.From}}</a></td>
                                 <td></td>
                                 <td>                                
                                 {{if eq .To ""}}
-                                    {{.ContractAddress}}
+                                    <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
                                 {{else}}
-                                    {{.To}}
+                                    <a href="../address/{{.To}}">{{.To}}</a>
                                 {{end}}
                                 </td>
                                 <td>{{.Value}} Ether</td>

@@ -85,7 +85,7 @@
                         </div>
                         <div>
                             <p class="one-block-item-validation">
-                                Validated By <span>{{.Validator}}</span>
+                                Validated By <span><a href="address/{{.Validator}}">{{.Validator}}</a></span>
                             </p>
                             <p class="one-block-item-transactions">
                                 <a class="one-block-item-transactions-a" href="transactionsinblock/{{.Number}}">{{.TransactionsNumber}} txns</a>
@@ -116,13 +116,13 @@
                         </div>
                         <div>
                             <p class="one-transaction-item-from">
-                                From <span>{{.From}}</span>
+                                From <span><a href="address/{{.From}}">{{.From}}</a></span>
                             </p>
                             <p class="one-transaction-item-to">
                                 {{if eq .To ""}}
-                                    To <span>{{.ContractAddress}}</span>
+                                    To <span><a href="address/{{.ContractAddress}}">{{.ContractAddress}}</a></span>
                                 {{else}}
-                                    To <span>{{.To}}</span>
+                                    To <span><a href="address/{{.To}}">{{.To}}</a></span>
                                 {{end}}    
                             </p>
                         </div>

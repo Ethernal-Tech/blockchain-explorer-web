@@ -19,7 +19,7 @@
     </header>
     <section>
         <div class="block-number">
-            Block <span>#36719606</span>
+            Block <span>#{{.block.Number}}</span>
         </div>
         <div class="block-overview">
             <div class="block-overview-title">
@@ -46,7 +46,7 @@
                     Transactions:
                 </div>
                 <div class="block-transactions-value">
-                    <span>{{.block.TransactionsNumber}} transactions</span> in this block
+                    <span><a href="../transactionsinblock/{{.block.Number}}">{{.block.TransactionsNumber}} transactions</a></span> in this block
                 </div>
             </div>
             <div class="block-validation block-overview-one-column">
@@ -54,7 +54,7 @@
                     Validated by:
                 </div>
                 <div class="block-validation-value">
-                    <span>{{.block.Validator}}</span>
+                    <span><a href="../address/{{.block.Validator}}">{{.block.Validator}}</a></span>
                 </div>
             </div>
             <div class="block-difficulty block-overview-one-column">
