@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ethernal-Tech</title>
     <link rel="stylesheet" href="../css/transactionstyle.css"/>
+    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
+
 </head>
 <body>
     <header>
@@ -44,7 +46,7 @@
                     Block:
                 </div>
                 <div class="transaction-block-number-value">
-                    {{.transaction.BlockNumber}}
+                    <a href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a>
                 </div>
             </div>
             <div class="transaction-block-hash transaction-overview-one-column">
@@ -68,15 +70,19 @@
                     From:
                 </div>
                 <div class="transaction-from-value">                   
-                    {{.transaction.From}}
+                    <a href="../address/{{.transaction.From}}">{{.transaction.From}}</a>
                 </div>
             </div>
             <div class="transaction-to transaction-overview-one-column">
                 <div class="transaction-to-title title">
                     To:
                 </div>
-                <div class="transaction-to-value">                   
-                    {{.transaction.To}}
+                <div class="transaction-to-value"> 
+                    {{if eq .transaction.To ""}}
+                        <span>[Contract]</span> <a href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>  
+                    {{else}}
+                        <a href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
+                    {{end}}          
                 </div>
             </div>
             <div class="transaction-gas-used transaction-overview-one-column">

@@ -28,9 +28,6 @@ func (bc BlockController) GetBlockByNumber(context *gin.Context) {
 
 	}
 
-	// var blocks *[]models.Block = &[]models.Block{}
-	// *blocks = append(*blocks, *block)
-
 	data := gin.H{
 		"block": block,
 	}

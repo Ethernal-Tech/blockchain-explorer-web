@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethernal-Tech</title>
+    <link rel="stylesheet" href="../css/transactionsinblockstyle.css" />
+    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
+
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img width="160" src="/images/ethernal-logo.svg" alt="Polygon Logo">
+            </a>
+        </div>
+    </header>
+   
+    <div class="wrapper">
+        <div>
+            <div class="wrapper-title">
+                Transactions
+            </div>
+            <div class="wrapper-text">
+                For Block <a href="/block/{{.blockNumber}}">{{.blockNumber}}</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="section-3">
+        <div class="container">
+            <div class="transactions-in-block-content">
+                <div class="info">
+                    A total of {{.numberOfTransactions}} transactions found
+                </div>
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Txn Hash</th>
+                                <th>Method</th>
+                                <th>Block</th>
+                                <th>Age</th>
+                                <th>From</th>
+                                <th></th>
+                                <th>To</th>
+                                <th>Value</th>
+                                <th>Txn Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .transactions}}
+                            <tr>
+                                <td><a href="/transaction/{{.Hash}}">{{.Hash}}</a></td>
+                                <td></td>
+                                <td><a href="/block/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
+                                <td>{{.Timestamp}} secs ago</td>
+                                <td><a href="../address/{{.From}}">{{.From}}</a></td>
+                                <td></td>
+                                <td>                                
+                                {{if eq .To ""}}
+                                    <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                {{else}}
+                                    <a href="../address/{{.To}}">{{.To}}</a>
+                                {{end}}
+                                </td>
+                                <td>{{.Value}} Ether</td>
+                                <td>---</td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-one">
+                <img src="../images/ethernal.png" />
+                <p>Powered by Ethernal Tech</p>
+            </div>
+            <div class="footer-two">
+                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

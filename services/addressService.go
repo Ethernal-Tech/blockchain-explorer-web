@@ -5,8 +5,8 @@ import (
 	"math"
 	"strings"
 	"time"
+	"webbc/DB"
 	"webbc/configuration"
-	"webbc/models"
 	"webbc/models/addressModel"
 	"webbc/utils"
 
@@ -30,7 +30,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 	result.AddressHex = address
 	address = strings.ToLower(address)
 
-	var transactions []models.Transaction
+	var transactions []DB.Transaction
 	err := as.database.NewSelect().Table("transactions").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Order("timestamp DESC").Limit(25).Scan(as.ctx, &transactions)
 	if err != nil {
 		//TODO: Error handling

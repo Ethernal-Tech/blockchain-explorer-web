@@ -27,7 +27,7 @@ type Transaction struct {
 	GasPrice         uint64
 	Nonce            uint64
 	TransactionIndex uint64
-	Value            string
+	Value            uint64
 	ContractAddress  string
 	Status           uint64
 	Timestamp        int

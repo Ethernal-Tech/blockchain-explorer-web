@@ -13,6 +13,7 @@ type BlockService interface {
 type TransactionService interface {
 	GetLastTransactions(int) (*[]models.Transaction, error)
 	GetTransactionByHash(string) (*models.Transaction, error)
+	GetAllTransactionsInBlock(uint64) (*[]models.Transaction, error)
 }
 
 type AddressService interface {

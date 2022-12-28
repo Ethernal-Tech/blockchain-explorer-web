@@ -2,11 +2,12 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"math"
+	"strings"
 	"time"
 	"webbc/DB"
 	"webbc/models"
+	"webbc/utils"
 
 	"github.com/uptrace/bun"
 )
@@ -25,7 +26,7 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 	err := tsi.database.NewSelect().Table("transactions").Order("block_number DESC").Limit(20).Scan(tsi.ctx, &transactions)
 
 	if err != nil {
-		fmt.Println("all ok")
+
 	}
 
 	var result []models.Transaction
@@ -42,10 +43,14 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			GasPrice:         v.GasPrice,
 			Nonce:            v.Nonce,
 			TransactionIndex: v.TransactionIndex,
-			Value:            v.Value,
+			Value:            utils.ToUint64(v.Value),
 			ContractAddress:  v.ContractAddress,
 			Status:           v.Status,
 			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+		}
+
+		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+			oneResultTransaction.To = ""
 		}
 
 		result = append(result, oneResultTransaction)
@@ -73,11 +78,53 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		GasPrice:         transaction.GasPrice,
 		Nonce:            transaction.Nonce,
 		TransactionIndex: transaction.TransactionIndex,
-		Value:            transaction.Value,
+		Value:            utils.ToUint64(transaction.Value),
 		ContractAddress:  transaction.ContractAddress,
 		Status:           transaction.Status,
 		Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds())),
 	}
 
+	if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+		oneResultTransaction.To = ""
+	}
+
 	return &oneResultTransaction, nil
+}
+
+func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumber uint64) (*[]models.Transaction, error) {
+	var transactions []DB.Transaction
+	err := tsi.database.NewSelect().Table("transactions").Where("block_number = ?", blockNumber).Scan(tsi.ctx, &transactions)
+
+	if err != nil {
+
+	}
+
+	var result []models.Transaction
+
+	for _, v := range transactions {
+		var oneResultTransaction = models.Transaction{
+			Hash:             v.Hash,
+			BlockHash:        v.BlockHash,
+			BlockNumber:      v.BlockNumber,
+			From:             v.From,
+			To:               v.To,
+			Gas:              v.Gas,
+			GasUsed:          v.GasUsed,
+			GasPrice:         v.GasPrice,
+			Nonce:            v.Nonce,
+			TransactionIndex: v.TransactionIndex,
+			Value:            utils.ToUint64(v.Value),
+			ContractAddress:  v.ContractAddress,
+			Status:           v.Status,
+			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+		}
+
+		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+			oneResultTransaction.To = ""
+		}
+
+		result = append(result, oneResultTransaction)
+	}
+
+	return &result, nil
 }
