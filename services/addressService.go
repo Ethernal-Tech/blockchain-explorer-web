@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"math"
-	"math/big"
 	"strings"
 	"time"
 	"webbc/configuration"
@@ -65,8 +64,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 		//TODO: error handling
 	}
 
-	balanceInt := utils.ToUint64(balance)
-	balanceBigInt := new(big.Int).SetUint64(balanceInt)
+	balanceBigInt := utils.ToBigInt(balance)
 	result.Balance = utils.WeiToEther(balanceBigInt)
 	return &result, nil
 }
