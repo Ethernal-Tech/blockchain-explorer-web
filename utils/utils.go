@@ -40,7 +40,7 @@ func ToBigInt(str string) *big.Int {
 		return big.NewInt(0)
 	}
 
-	res := new(big.Int)
+	res := big.NewInt(0)
 	var err bool
 
 	if str[0:2] == "0x" {
