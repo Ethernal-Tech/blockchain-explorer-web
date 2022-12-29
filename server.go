@@ -40,10 +40,10 @@ func main() {
 	blockController = controllers.NewBlockController(blockService)
 	transactionService = services.NewTransactionService(database, ctx)
 	transactionController = controllers.NewTransactionController(transactionService)
-	globalController = controllers.NewGlobalController(blockService, transactionService)
 	addressService = services.NewAddressService(database, ctx, connection.HTTP, config)
 	addressController = controllers.NewAddressController(addressService)
+	globalController = controllers.NewGlobalController(blockService, transactionService, addressService)
 
 	routes(server, globalController, blockController, transactionController, addressController)
-	server.Run(":80")
+	server.Run(":10001")
 }

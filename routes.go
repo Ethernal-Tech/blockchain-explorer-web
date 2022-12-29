@@ -13,6 +13,7 @@ func routes(server *gin.Engine, cont ...any) {
 
 	gc := cont[0].(controllers.GlobalController)
 	server.GET("/", gc.GetIndex)
+	server.GET("/:searchValue", gc.GetBySearchValue)
 	bc := cont[1].(controllers.BlockController)
 	server.GET("/block/:blocknumber", bc.GetBlockByNumber)
 	tc := cont[2].(controllers.TransactionController)

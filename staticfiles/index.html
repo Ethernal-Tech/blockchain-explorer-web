@@ -10,25 +10,26 @@
 
     <script>
         function sendRequest() {
-            var select = document.getElementById("select");
-            var option = select.value;
-            var input = document.getElementById("input")
+            // var select = document.getElementById("select");
+            // var option = select.value;
+            var input = document.getElementById("input").value
 
-            if (option == "Block Number")
-            {
-                window.location = "block/" + input.value 
-            }
-            else if (option == "Txn Hash")
-            {
-                window.location = "transaction/" + input.value 
-            }
-            else if(option == "Addresses")
-            {
-                window.location = "address/" + input.value
-            }
-            else {
-                window.location = "/"
-            }
+            // if (option == "Block Number")
+            // {
+            //     window.location = "block/" + input.value 
+            // }
+            // else if (option == "Txn Hash")
+            // {
+            //     window.location = "transaction/" + input.value 
+            // }
+            // else if(option == "Addresses")
+            // {
+            //     window.location = "address/" + input.value
+            // }
+            // else {
+            //     window.location = "/"
+            // }
+            window.location = "/" + String(input).trim()
         }
     </script>       
 </head>
@@ -47,7 +48,7 @@
                     Goerli Testnet Network Explorer
                 </p>
                 <div class="section-1-container-inside">
-                    <select id="select">
+                    <!-- <select id="select">
                         <option selected>
                             Block Number
                         </option>
@@ -57,7 +58,7 @@
                         <option>
                             Addresses
                         </option>      
-                    </select>
+                    </select> -->
                     <input id="input" type="text" placeholder="Search by Block Number / Txn Hash / Address"/>
                     <button onclick="sendRequest()"><img src="images/search.png"/></button>
                 </div>
