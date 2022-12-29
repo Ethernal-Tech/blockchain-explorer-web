@@ -216,9 +216,10 @@ header div {
     font-size: 14px;
 }
 
-.block-parent-hash-value {
+.block-parent-hash-value a {
     font-size: 14px;
     color: rgb(130,71,229);
+    text-decoration: none;
 }
 
 .block-parent-hash {

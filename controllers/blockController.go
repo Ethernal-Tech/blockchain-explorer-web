@@ -36,9 +36,14 @@ func (bc BlockController) GetBlockByNumber(context *gin.Context) {
 }
 
 func (bc BlockController) GetBlockByHash(context *gin.Context) {
-	_, er := bc.BlockService.GetBlockByHash(context.Param("blockhsh"))
+	block, error1 := bc.BlockService.GetBlockByHash(context.Param("blockhsh"))
 
-	if er != nil {
+	if error1 != nil {
 	}
 
+	data := gin.H{
+		"block": block,
+	}
+
+	context.HTML(200, "block.html", data)
 }

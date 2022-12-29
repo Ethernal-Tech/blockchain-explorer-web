@@ -48,7 +48,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
 		}
 		value := utils.WeiToEther(utils.ToBigInt(v.Value)).String()
-		transac.Value = value[:10]
+		transac.Value = value
 		if address == v.To {
 			transac.Direction = "in"
 		} else {
