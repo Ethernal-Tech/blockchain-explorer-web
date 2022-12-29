@@ -98,3 +98,37 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 
 	return &oneResultBlock, nil
 }
+
+func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models.Block, error) {
+	var block DB.Block
+	error1 := bsi.database.NewSelect().Table("blocks").Where("blocks.hash = ?", blockHash).Scan(bsi.ctx, &block)
+
+	if error1 != nil {
+
+	}
+
+	var transactionNumberInBlock models.TransactionNumberByBlock
+	error2 := bsi.database.NewRaw("select count(*) as count from transactions where block_number = ?", block.Number).Scan(bsi.ctx, &transactionNumberInBlock)
+
+	if error2 != nil {
+
+	}
+
+	var oneResultBlock models.Block = models.Block{
+		Hash:               block.Hash,
+		Number:             block.Number,
+		ParentHash:         block.ParentHash,
+		Nonce:              block.Nonce,
+		Validator:          block.Miner,
+		Difficulty:         block.Difficulty,
+		TotalDifficulty:    block.TotalDifficulty,
+		ExtraData:          block.ExtraData,
+		Size:               block.Size,
+		GasLimit:           block.GasLimit,
+		GasUsed:            block.GasUsed,
+		Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds())),
+		TransactionsNumber: transactionNumberInBlock.Count,
+	}
+
+	return &oneResultBlock, nil
+}

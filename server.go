@@ -45,5 +45,5 @@ func main() {
 	addressController = controllers.NewAddressController(addressService)
 
 	routes(server, globalController, blockController, transactionController, addressController)
-	server.Run(":10001")
+	server.Run(":80")
 }
