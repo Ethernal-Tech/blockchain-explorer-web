@@ -8,6 +8,7 @@ import (
 type BlockService interface {
 	GetLastBlocks(int) (*[]models.Block, error)
 	GetBlockByNumber(uint64) (*models.Block, error)
+	GetBlockByHash(string) (*models.Block, error)
 }
 
 type TransactionService interface {
