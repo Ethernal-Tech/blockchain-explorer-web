@@ -17,7 +17,7 @@ type Transaction struct {
 	From        string
 	To          string
 	Direction   string
-	Value       uint64
+	Value       string
 	Gas         uint64
 	GasUsed     uint64
 	GasPrice    uint64

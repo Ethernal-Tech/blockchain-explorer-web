@@ -45,9 +45,10 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 			Gas:         v.Gas,
 			GasUsed:     v.GasUsed,
 			GasPrice:    v.GasPrice,
-			Value:       utils.ToUint64(v.Value),
 			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
 		}
+		value := utils.WeiToEther(utils.ToBigInt(v.Value)).String()
+		transac.Value = value[:10]
 		if address == v.To {
 			transac.Direction = "in"
 		} else {
