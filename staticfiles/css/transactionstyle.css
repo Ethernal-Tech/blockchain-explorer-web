@@ -1,3 +1,8 @@
+:root {
+    --darkerColor: rgb(25, 15, 61);
+    --lighterColor: rgb(130, 71, 229);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +19,7 @@ body {
 }
 
 ::selection {
-    background: rgb(130,71,229);
+    background: var(--lighterColor);
     color: white;
 }
 
@@ -61,7 +66,7 @@ header div {
 }
 
 .transaction-overview-title {
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     height: 38px;
     font-size: 14px;
     font-weight: 550;
@@ -118,7 +123,7 @@ header div {
 
 .transaction-block-number-value a {
     font-size: 14px;
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     text-decoration: none;
 }
 
@@ -136,7 +141,7 @@ header div {
 
 .transaction-from-value a {
     font-size: 14px;
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     text-decoration: none;
 }
 
@@ -146,7 +151,7 @@ header div {
 
 .transaction-to-value a {
     font-size: 14px;
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     text-decoration: none;
 }
 
@@ -200,7 +205,7 @@ header div {
 }
 
 footer {
-    background-color: rgb(25, 15, 61);
+    background-color: var(--darkerColor);
     height: 140px;
     margin-top: auto;
     background-image: url("../images/background.svg");

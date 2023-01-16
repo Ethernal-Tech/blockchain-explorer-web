@@ -1,3 +1,8 @@
+:root {
+    --darkerColor: rgb(25, 15, 61);
+    --lighterColor: rgb(130, 71, 229);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +19,7 @@ body {
 }
 
 ::selection {
-    background: rgb(130, 71, 229);
+    background: var(--lighterColor);
     color: white;
 }
 
@@ -237,7 +242,7 @@ table td, table th {
 }
 
 a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
@@ -272,7 +277,7 @@ a {
 }
 
 footer {
-    background-color: rgb(25, 15, 61);
+    background-color: var(--darkerColor);
     height: 140px;
     margin-top: auto;
     background-image: url("../images/background.svg");

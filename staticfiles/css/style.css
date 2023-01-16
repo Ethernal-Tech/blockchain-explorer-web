@@ -1,3 +1,8 @@
+:root {
+    --darkerColor: rgb(25, 15, 61);
+    --lighterColor: rgb(130, 71, 229);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +12,7 @@
 }
 
 ::selection {
-    background: rgb(130,71,229);
+    background: var(--lighterColor);
     color: white;
 }
 
@@ -28,7 +33,7 @@ header div {
 }
 
 .section-1 {
-    background-color: rgb(25, 15, 61);
+    background-color: var(--darkerColor);
     width: 100%;
     height: 268px;
     background-image: url("../images/background.svg");
@@ -127,7 +132,7 @@ header div {
     height: 44px;
     width: 50px;
     border: none;
-    background-color: rgb(130,71,229);
+    background-color: var(--lighterColor);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -174,7 +179,7 @@ header div {
 }
 
 footer {
-    background-color: rgb(25, 15, 61);
+    background-color: var(--darkerColor);
     height: 140px;
     background-image: url("../images/background.svg");
 }
@@ -264,14 +269,14 @@ footer {
     font-size: 12px;
     border-radius: 6px;
     background-color: rgba(130,71,229,.1);
-    color: rgb(130, 71, 229);
+    color: var(--lighterColor);
     cursor: pointer;
     transition: all 0.4s ease;
 }
 
 .blocks-view-all button:hover, .transactions-view-all button:hover {
     color: white;
-    background-color: rgb(130, 71, 229); 
+    background-color: var(--lighterColor); 
 }
 
 footer .container {
@@ -343,20 +348,20 @@ footer-two {
 }
 
 .one-block-item-number, .one-transaction-item-hash {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
 }
 
 .one-block-item-a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
 }
 
 .one-transaction-item-a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
@@ -385,7 +390,7 @@ footer-two {
 
 .one-block-item-validation span, .one-transaction-item-from span, .one-transaction-item-to span {
     font-size: 14px;
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     max-width: 171px;
     display: inline-block;
     overflow: hidden;
@@ -396,21 +401,21 @@ footer-two {
 }
 
 .one-block-item-validation span a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
 }
 
 .one-transaction-item-from span a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
 }
 
 .one-transaction-item-to span a {
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
@@ -418,14 +423,14 @@ footer-two {
 
 .one-block-item-transactions {
     font-size: 14px;
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     margin-top: 2px;
     cursor: pointer;
 }
 
 .one-block-item-transactions-a {
     font-size: 14px;
-    color: rgb(130, 71, 229); 
+    color: var(--lighterColor); 
     margin-top: 2px;
     cursor: pointer;
     text-decoration: none;
