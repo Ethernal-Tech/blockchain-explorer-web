@@ -14,7 +14,7 @@ func NewAddressController(addressService services.AddressService) AddressControl
 	return AddressController{AddressService: addressService}
 }
 
-func (ac AddressController) GetAddress(context *gin.Context) {
+func (ac *AddressController) GetAddress(context *gin.Context) {
 	address, _ := ac.AddressService.GetAddress(context.Param("addresshex"))
 	data := gin.H{
 		"address": address,

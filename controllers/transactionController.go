@@ -15,7 +15,7 @@ func NewTransactionController(transactionService services.TransactionService) Tr
 	return TransactionController{TransactionService: transactionService}
 }
 
-func (tc TransactionController) GetTransactionByHash(context *gin.Context) {
+func (tc *TransactionController) GetTransactionByHash(context *gin.Context) {
 	transaction, error := tc.TransactionService.GetTransactionByHash(context.Param("transactionhx"))
 
 	if error != nil {
@@ -29,7 +29,7 @@ func (tc TransactionController) GetTransactionByHash(context *gin.Context) {
 	context.HTML(200, "transaction.html", data)
 }
 
-func (tc TransactionController) GetAllTransactionsInBlock(context *gin.Context) {
+func (tc *TransactionController) GetAllTransactionsInBlock(context *gin.Context) {
 	blockNumber, error1 := strconv.ParseUint(context.Param("blocknumber"), 10, 64)
 
 	if error1 != nil {
