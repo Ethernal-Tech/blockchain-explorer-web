@@ -257,7 +257,7 @@ footer {
     cursor: pointer;
 }
 
-.blocks-view-all button, .transactions-view-all button {
+.blocks-view-all button, .transactions-view-all a {
     border: none;
     height: 60%;
     width: 96%;
@@ -267,9 +267,13 @@ footer {
     color: rgb(130, 71, 229);
     cursor: pointer;
     transition: all 0.4s ease;
+    text-decoration: none;
+    display: flex;
+    justify-content: center; /* Align horizontal */
+    align-items: center;
 }
 
-.blocks-view-all button:hover, .transactions-view-all button:hover {
+.blocks-view-all button:hover, .transactions-view-all a:hover {
     color: white;
     background-color: rgb(130, 71, 229); 
 }

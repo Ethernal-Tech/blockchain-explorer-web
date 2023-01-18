@@ -2,6 +2,7 @@ package DB
 
 import (
 	"database/sql"
+	"time"
 
 	"webbc/configuration"
 
@@ -18,6 +19,7 @@ func InitializationDB(configuration *configuration.Configuration) *bun.DB {
 		pgdriver.WithPassword(configuration.DataBasePassword),
 		pgdriver.WithDatabase(configuration.DataBaseName),
 		pgdriver.WithInsecure(true),
+		pgdriver.WithReadTimeout(time.Duration(int(configuration.CallTimeoutInSeconds))*time.Second),
 	))
 
 	return bun.NewDB(sqlDB, pgdialect.New())

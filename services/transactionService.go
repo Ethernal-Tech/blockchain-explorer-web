@@ -7,6 +7,7 @@ import (
 	"time"
 	"webbc/DB"
 	"webbc/models"
+	"webbc/models/transactionModel"
 	"webbc/utils"
 
 	"github.com/uptrace/bun"
@@ -126,5 +127,43 @@ func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumb
 		result = append(result, oneResultTransaction)
 	}
 
+	return &result, nil
+}
+
+func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage int) (*transactionModel.Transactions, error) {
+	var transactions []DB.Transaction
+
+	var offSet = perPage * (page - 1)
+	err := tsi.database.NewSelect().Table("transactions").OrderExpr("block_number DESC").Limit(perPage).Offset(offSet).Scan(tsi.ctx, &transactions)
+	if err != nil {
+		//TODO: error handling
+	}
+
+	var result transactionModel.Transactions
+	for _, v := range transactions {
+		var transaction = transactionModel.Transaction{
+			Hash:        v.Hash,
+			Method:      "",
+			BlockNumber: v.BlockNumber,
+			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			From:        v.From,
+			To:          v.To,
+			Value:       utils.ToUint64(v.Value),
+			TxnFee:      0000000,
+		}
+
+		result.Transactions = append(result.Transactions, transaction)
+	}
+
+	var totalRows int64
+	tsi.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.transactions' ::regclass;").Scan(tsi.ctx, &totalRows)
+
+	result.TotalRows = uint64(totalRows)
+	if totalRows > 500000 {
+		totalRows = 500000
+	}
+
+	totalPages := math.Ceil(float64(totalRows / int64(perPage)))
+	result.TotalPages = int(totalPages)
 	return &result, nil
 }

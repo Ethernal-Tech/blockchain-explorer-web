@@ -1,0 +1,247 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Helvetica, Arial, sans-serif;
+    /* font-size: 18px; */
+}
+
+body {
+    background-color: rgb(248, 249, 250);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+::selection {
+    background: rgb(130, 71, 229);
+    color: white;
+}
+
+.container {
+    width: 72%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+}
+
+header {
+    height: 70px;
+    box-shadow: 4px 0px 4px rgb(219, 219, 219);
+    background-color: rgb(255, 255, 255);
+}
+
+header div {
+    justify-content: left;
+    align-items: center;
+}
+
+.wrapper {
+    width: 72%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+}
+
+.wrapper-title {
+    font-size: 21px;
+    margin-top: 20px;
+    color: rgb(74, 79, 85);
+}
+
+.wrapper-text {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: rgb(119, 131, 143);
+}
+
+.title {
+    min-width: 35%;
+    font-size: 14px;
+}
+
+.border-bottom-none {
+    border: none;
+}
+
+@media screen and (max-width: 1898px) {
+    .section-1 .container {
+        justify-content: center;
+    }
+}
+
+.transactions-content {
+    height: 100%;
+    width: 100%;
+    margin-bottom: 60px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    box-shadow: 0px 8px 17px rgb(219, 219, 219);
+    flex-direction: column;
+    padding-bottom: 40px;
+}
+
+.transactions-content .info-pagination {
+    display: flex;
+    justify-content: space-between;
+}
+
+.transactions-content .info {
+    display: flex;
+    height: 48px;
+    /* align-items: center; */
+    justify-content: left;
+    padding: 12px;
+    color: #6c757e;
+    font-size: 14px;
+    flex-direction: column;
+}
+
+.transactions-content .limit {
+    display: flex;
+    height: 48px;
+    align-items: center;
+    justify-content: left;
+    padding: 12px;
+    color: #6c757e;
+    font-size: 14px;
+}
+
+.transactions-content .pagination{
+    display: flex;
+    height: 48px;
+    align-items: center;
+    justify-content: left;
+    padding: 12px;
+    color: #6c757e;
+    font-size: 14px;
+}
+
+
+/*pagination part - start*/
+.pagination {
+    text-align: center;
+    /* margin: 40px auto; */
+  }
+  
+  .pagination ul {
+    display: inline-flex;
+    align-items: center;
+    list-style: none;
+  }
+
+  .pagination ul li{
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    min-width: 36px;
+    height: 29px;
+    margin: 0px 4px;
+    background-color: rgba(130,71,229,.1);
+  }
+
+    .pagination ul li {
+        padding: 0px;
+    }
+    li a {
+        display: block; 
+        padding: 5px; 
+    }
+    li span {
+        display: block; 
+        padding: 5px;  
+    }
+
+    .disable-paging-button {
+        cursor: default;
+        user-select: none;
+    }
+
+    .limit-filter {
+        margin-left: 5px;
+        margin-right: 5px;
+        height: 29px;
+    }
+/*pagination part - end*/
+
+.small-text {
+    margin-top: 5px;
+    font-size: 11px;
+}
+
+.transactions-table {
+    padding: 2px 12px 12px 12px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    font-size: 15px;
+    border-collapse: collapse;
+}
+
+thead {
+    border-color: #e7eaf3;
+    background-color: #f8fafd;
+    color: #6c757e;
+    height: 40px;
+    font-weight: 600;
+}
+
+tbody {
+    font-size: 14px;
+    /* border-bottom: 2px solid #e7eaf3; */
+}
+
+table td, table th {
+    max-width: 140px;
+    padding: 0.625rem;
+    vertical-align: top;
+    text-align: left;
+    border-top: 1px solid #e7eaf3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a {
+    color: rgb(130, 71, 229); 
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+footer {
+    background-color: rgb(25, 15, 61);
+    height: 140px;
+    margin-top: auto;
+    background-image: url("../images/background.svg");
+}
+
+footer .container {
+    flex-direction: column;
+}
+
+.footer-one {
+    display: flex;
+    align-items: center;
+    height: 50%;
+    border-bottom: 0.1px solid rgba(244, 242, 242, 0.231);
+}
+
+.footer-one img {
+    width: 26px;
+}
+
+.footer-one p {
+    color: white;
+    font: 20px;
+    margin-left: 10px;
+}
+
+.footer-two p {
+    color: white;
+    margin-top: 20px;
+    font-size: 14px;
+}
