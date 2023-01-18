@@ -15,7 +15,7 @@ func NewBlockController(blockService services.BlockService) BlockController {
 	return BlockController{BlockService: blockService}
 }
 
-func (bc BlockController) GetBlockByNumber(context *gin.Context) {
+func (bc *BlockController) GetBlockByNumber(context *gin.Context) {
 	blockNumber, error1 := strconv.ParseUint(context.Param("blocknumber"), 10, 64)
 
 	if error1 != nil {
@@ -35,7 +35,7 @@ func (bc BlockController) GetBlockByNumber(context *gin.Context) {
 	context.HTML(200, "block.html", data)
 }
 
-func (bc BlockController) GetBlockByHash(context *gin.Context) {
+func (bc *BlockController) GetBlockByHash(context *gin.Context) {
 	block, error1 := bc.BlockService.GetBlockByHash(context.Param("blockhsh"))
 
 	if error1 != nil {

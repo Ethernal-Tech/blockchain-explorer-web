@@ -1,3 +1,8 @@
+:root {
+    --darkerColor: rgb(25, 15, 61);
+    --lighterColor: rgb(130, 71, 229);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +19,7 @@ body {
 }
 
 ::selection {
-    background: rgb(130,71,229);
+    background: var(--lighterColor);
     color: white;
 }
 
@@ -66,7 +71,7 @@ header div {
 }
 
 .block-overview-title {
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     height: 38px;
     font-size: 14px;
     font-weight: 550;
@@ -119,7 +124,7 @@ header div {
 }
 
 .block-transactions-value a {
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     background-color: rgb(242,236,253);
     font-size: 11.8px;
     display: inline-flex;
@@ -133,7 +138,7 @@ header div {
 }
 
 .block-transactions-value a:hover {
-    background-color: rgb(130,71,229);
+    background-color: var(--lighterColor);
     color: rgb(242,236,253);
 }
 
@@ -146,12 +151,12 @@ header div {
 }
 
 .block-validation-value span {
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     font-size: 14px;
 }
 
 .block-validation-value span a {
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     font-size: 14px;
     text-decoration: none;
 }
@@ -218,7 +223,7 @@ header div {
 
 .block-parent-hash-value a {
     font-size: 14px;
-    color: rgb(130,71,229);
+    color: var(--lighterColor);
     text-decoration: none;
 }
 
@@ -227,7 +232,7 @@ header div {
 }
 
 footer {
-    background-color: rgb(25, 15, 61);
+    background-color: var(--darkerColor);
     height: 140px;
     margin-top: auto;
     background-image: url("../images/background.svg");

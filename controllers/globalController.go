@@ -18,7 +18,7 @@ func NewGlobalController(blockService services.BlockService, transactionService 
 	return GlobalController{BlockService: blockService, TransactionService: transactionService, AddressService: addressService}
 }
 
-func (gc GlobalController) GetIndex(context *gin.Context) {
+func (gc *GlobalController) GetIndex(context *gin.Context) {
 	blocks, error1 := gc.BlockService.GetLastBlocks(20)
 	transactions, error2 := gc.TransactionService.GetLastTransactions(20)
 
@@ -34,7 +34,7 @@ func (gc GlobalController) GetIndex(context *gin.Context) {
 	context.HTML(200, "index.html", data)
 }
 
-func (gc GlobalController) GetBySearchValue(context *gin.Context) {
+func (gc *GlobalController) GetBySearchValue(context *gin.Context) {
 	searchValue := context.Param("searchValue")
 	searchValueLen := len(searchValue)
 
