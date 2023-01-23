@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"math"
+	"strconv"
 	"strings"
 	"time"
 	"webbc/DB"
@@ -10,6 +11,7 @@ import (
 	"webbc/models/transactionModel"
 	"webbc/utils"
 
+	"github.com/spf13/viper"
 	"github.com/uptrace/bun"
 )
 
@@ -158,9 +160,11 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 	var totalRows int64
 	tsi.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.transactions' ::regclass;").Scan(tsi.ctx, &totalRows)
 
-	result.TotalRows = uint64(totalRows)
-	if totalRows > 500000 {
-		totalRows = 500000
+	result.TotalRows = int64(totalRows)
+	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTION_MAX_ROWS").(string), 10, 64)
+
+	if totalRows > maxRows {
+		totalRows = maxRows
 	}
 
 	totalPages := math.Ceil(float64(totalRows / int64(perPage)))

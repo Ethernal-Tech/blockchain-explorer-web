@@ -5,6 +5,6 @@ type PaginationData struct {
 	PreviousPage int
 	CurrentPage  int
 	TotalPages   int
-	TotalRows    uint64
+	TotalRows    int64
 	PerPage      int
 }
