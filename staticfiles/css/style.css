@@ -10,7 +10,7 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-.section-1 {
+.top-section {
     background-color: var(--background-color); 
     background-image: url('../images/background.svg'); 
     min-height: 260px;
@@ -22,30 +22,6 @@ body {
 .network-name {
     font-size: 21px;
     color: white;
-}
-
-.input-group {
-    max-width: 800px;
-    height: 48px;
-}
-
-.form-control {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border: none;
-    text-overflow: ellipsis;
-}
-
-.form-control:focus {
-    box-shadow: 0px 0px 0px 1px var(--main-color);
-}
-
-.custom-btn {
-    border: 0;
-    background-color: var(--main-color);
-    width: 52px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
 }
 
 .card {

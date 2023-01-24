@@ -1,151 +1,208 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethernal-Tech</title>
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel = "icon" href ="images/ethernal.png" type = "image/x-icon">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ethernal-Tech</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/">
+        <link rel="icon" href="images/logo.png" type = "image/x-icon"/>
+        <link rel="stylesheet" href="css/style.css"/>
+        <script>
+            function sendRequest() {
+                var input = document.getElementById("input").value
 
-    <script>
-        function sendRequest() {
-            // var select = document.getElementById("select");
-            // var option = select.value;
-            var input = document.getElementById("input").value
-
-            // if (option == "Block Number")
-            // {
-            //     window.location = "block/" + input.value 
-            // }
-            // else if (option == "Txn Hash")
-            // {
-            //     window.location = "transaction/" + input.value 
-            // }
-            // else if(option == "Addresses")
-            // {
-            //     window.location = "address/" + input.value
-            // }
-            // else {
-            //     window.location = "/"
-            // }
-            window.location = "/" + String(input).trim()
-        }
-    </script>       
-</head>
-<body>
-    <header>
-        <div class="container">
-            <a href="/">
-                <img width="160" src="images/ethernal-logo.svg" alt="Polygon Logo">
-            </a>
+                window.location = "/" + String(input).trim()
+            }
+        </script>   
+    </head>
+    <body>
+        <div class="header container-fluid" style="background-color: rgb(255, 255, 255);">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg">
+                    <a class="navbar-brand" href="/">
+                        <img src="images/ethernal-logo.svg" width="180px">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="ms-auto navbar-nav">
+                            <li class="nav-item">
+                              <a class="nav-link active" aria-current="page" href="#" style="color: var(--main-color)">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Blockchain
+                                </a>
+                                <ul class="dropdown-menu border-0">
+                                    <li><a class="dropdown-item" href="#">View Txns</a></li>
+                                    <li><a class="dropdown-item" href="#">View Pending Txns</a></li>
+                                    <li><a class="dropdown-item" href="#">View Contract Internal Txns</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">View Blocks</a></li>
+                                    <li><a class="dropdown-item" href="#">Forked Blocks (Reorgs)</a></li>
+                                    <li><a class="dropdown-item" href="#">View Uncles</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Top Accounts</a></li>
+                                    <li><a class="dropdown-item" href="#">Verified Contracts</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Tokens
+                                </a>
+                                <ul class="dropdown-menu border-0">
+                                    <li><a class="dropdown-item" href="#">View Tokens</a></li>
+                                    <li><a class="dropdown-item" href="#">View ERC20 Transfers</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">ERC721 Top Tokens</a></li>
+                                    <li><a class="dropdown-item" href="#">View ERC721 Transfers</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">ERC1155 Top Tokens</a></li>
+                                    <li><a class="dropdown-item" href="#">View ERC1155 Transfers</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Misc
+                              </a>
+                              <ul class="dropdown-menu border-0">
+                                <li><a class="dropdown-item" href="#">API Documentation</a></li>
+                                <li><a class="dropdown-item" href="#">Verify Contract</a></li>
+                                <li><a class="dropdown-item" href="#">Byte to Opcode</a></li>
+                                <li><a class="dropdown-item" href="#">Broadcast TXN</a></li>
+                                <li><a class="dropdown-item" href="#">Vyper Online Compiler</a></li>
+                              </ul>
+                            </li>
+                          </ul>
+                    </div>
+                </nav>
+            </div>
         </div>
-    </header>
-    <section class="section-1">
-        <div class="main-container">
-            <div class="section-1-container">
-                <p>
+        <div class="top-section container-fluid">
+            <div class="container">
+                <p class="network-name">
                     Goerli Testnet Network Explorer
                 </p>
-                <div class="section-1-container-inside">
-                    <!-- <select id="select">
-                        <option selected>
-                            Block Number
-                        </option>
-                        <option>
-                            Txn Hash
-                        </option> 
-                        <option>
-                            Addresses
-                        </option>      
-                    </select> -->
-                    <input id="input" type="text" placeholder="Search by Block Number / Txn Hash / Address"/>
-                    <button onclick="sendRequest()"><img src="images/search.png"/></button>
-                </div>
-            </div>
-            <img class="world-image" src="images/miner.svg"/>
-        </div>
-    </section>
-    <section class="section-2">
-        <div class="container">
-            <div class="blocks">
-                <p class="blocks-latest-name"><span>Latest Blocks (20)</span></p>
-                <div class="block-list">
-                    {{range .blocks}}
-                    <div class="one-block-item">
-                        <div class="one-block-item-Bk">
-                            Bk
-                        </div>
-                        <div class="one-block-item-first-div">
-                            <p class="one-block-item-number">
-                                <a class="one-block-item-a" href="block/{{.Number}}">{{.Number}}</a>
-                            </p>
-                            <p class="one-block-item-timestamp">
-                                {{.Timestamp}} secs ago
-                            </p>
-                        </div>
-                        <div>
-                            <p class="one-block-item-validation">
-                                Validated By <span><a href="address/{{.Validator}}">{{.Validator}}</a></span>
-                            </p>
-                            <p class="one-block-item-transactions">
-                                <a class="one-block-item-transactions-a" href="transactionsinblock/{{.Number}}">{{.TransactionsNumber}} txns</a>
-                            </p>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="input-group input-group-lg mb-3">
+                            <input type="text" id="input" class="form-control" placeholder="Search by Block Number / Txn Hash / Address">
+                            <span class="input-group-text">
+                                <i class="fas fa-search" onclick="sendRequest()"></i>
+                            </span>
                         </div>
                     </div>
-                    {{end}}
                 </div>
-                <div class="blocks-view-all">
-                    <button>View all blocks</button>
-                </div>          
             </div>
-            <div class="transactions">
-                <p class="transactions-latest-name"><span>Latest Transactions (20)</span></p>
-                <div class="transaction-list">
-                    {{range .transactions}}
-                    <div class="one-transaction-item">
-                        <div class="one-transaction-item-Tk">
-                            Tk
-                        </div>
-                        <div class="one-transaction-item-first-div">
-                            <p class="one-transaction-item-hash">
-                                <a class="one-transaction-item-a" href="transaction/{{.Hash}}">{{.Hash}}</a>
-                            </p>
-                            <p class="one-transaction-item-timestamp">
-                                {{.Timestamp}} secs ago
-                            </p>
-                        </div>
-                        <div>
-                            <p class="one-transaction-item-from">
-                                From <span><a href="address/{{.From}}">{{.From}}</a></span>
-                            </p>
-                            <p class="one-transaction-item-to">
-                                {{if eq .To ""}}
-                                    To <span><a href="address/{{.ContractAddress}}">{{.ContractAddress}}</a></span>
-                                {{else}}
-                                    To <span><a href="address/{{.To}}">{{.To}}</a></span>
-                                {{end}}    
-                            </p>
+        </div>
+
+            </div>
+        </div>
+        <div class="section-2 container-fluid" style="background-color: rgb(255, 255, 255);">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                        <div class="card">
+                            <div class="card-header">
+                                Latest Blocks (20)
+                            </div>
+                            <div class="container card-body">
+                            {{range .blocks}}
+                                <div class="row card-item">
+                                    <div class="col-sm-4 d-flex p-0">
+                                        <div class="d-flex justify-content-center align-items-center rounded" style="width: 50px; background-color: rgb(241, 242, 244);">
+                                            Bk
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
+                                            <div style="font-size: 14px;">
+                                                <a href="block/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.Number}}</a>
+                                            </div>
+                                            <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
+                                                {{.Timestamp}} secs ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="media-mt media-ml" style="font-size: 14px;">
+                                                Validated By <span class="anchor-wrapper"><a href="address/{{.Validator}}" style="text-decoration: none; color: var(--main-color)">{{.Validator}}</a></span>
+                                            </div>
+                                            <div class="media-ml" style="font-size: 14px; color: rgb(119, 131, 143)">
+                                                <a href="transactionsinblock/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.TransactionsNumber}} txns</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{end}}
+                            </div>
+                            <div class="card-footer">
+                                <button>
+                                    <a href="#" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all blocks</a>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {{end}}
-                </div>            
-                <div class="transactions-view-all">
-                    <a href="txs">View all transactions</a>
+                    <div class="col-lg-6 mt-3">
+                        <div class="card">
+                            <div class="card-header">
+                                Latest Transactions (20)
+                            </div>
+                            <div class="card-body">
+                            {{range .transactions}}
+                                <div class="row card-item">
+                                    <div class="col-sm-4 d-flex p-0">
+                                        <div class="d-flex justify-content-center align-items-center rounded-circle" style="width: 50px; background-color: rgb(241, 242, 244);">
+                                            Tk
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
+                                            <div style="font-size: 14px;">
+                                                <span class="anchor-wrapper media-mw"><a href="transaction/{{.Hash}}" style="text-decoration: none; color: var(--main-color)">{{.Hash}}</a></span>
+                                            </div>
+                                            <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
+                                                {{.Timestamp}} secs ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="media-mt media-ml" style="font-size: 14px;">
+                                                From <span class="anchor-wrapper"><a href="address/{{.From}}" style="text-decoration: none; color: var(--main-color)">{{.From}}</a></span>
+                                            </div>
+                                            <div class="media-mt media-ml" style="font-size: 14px;">
+                                                {{if eq .To ""}}
+                                                    To <span class="anchor-wrapper"><a href="address/{{.ContractAddress}}" style="text-decoration: none; color: var(--main-color)">{{.ContractAddress}}</a></span>
+                                                {{else}}
+                                                    To <span class="anchor-wrapper"><a href="address/{{.To}}" style="text-decoration: none; color: var(--main-color)">{{.To}}</a></span>
+                                                {{end}}   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            {{end}}
+                            </div>
+                            <div class="card-footer">
+                                <button>
+                                    <a href="txs" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all transactions</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-    <footer>
-        <div class="container">
-            <div class="footer-one">
-                <img src="images/ethernal.png"/>
-                <p>Powered by Ethernal Tech</p>
-            </div>
-            <div class="footer-two">
-                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
+        <div class="footer container-fluid">
+            <div class="container">
+                <div class="footer-container-1">
+                    <img src="images/ethernal.png" width="26px">
+                    <span style="margin-left: 16px;">Powered by Ethernal Tech</span>
+                </div>
+                <div class="footer-container-2">
+                    Ethernal-Tech © 2023 (Goerli) | ⛏ Donate
+                </div>
             </div>
         </div>
-    </footer>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    </body>
 </html>
