@@ -31,7 +31,7 @@ func (gc *GlobalController) GetIndex(context *gin.Context) {
 		"transactions": transactions,
 	}
 
-	context.HTML(200, "index.html", data)
+	context.HTML(200, "indexR.html", data)
 }
 
 func (gc *GlobalController) GetBySearchValue(context *gin.Context) {
