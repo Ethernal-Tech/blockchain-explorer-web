@@ -183,8 +183,17 @@
                 transition: 0.4s;
             }
 
+            .card-footer button a {
+                color: var(--main-color);
+                transition: 0.4s;
+            }
+
             .card-footer button:hover {
                 background-color: var(--main-color);
+                color: white;
+            }
+
+            .card-footer button:hover a {
                 color: white;
             }
 
@@ -209,6 +218,14 @@
                 font-size: 14px;
             }          
         </style>
+
+        <script>
+            function sendRequest() {
+                var input = document.getElementById("input").value
+
+                window.location = "/" + String(input).trim()
+            }
+        </script>   
     </head>
     <body>
         <div class="header container-fluid" style="background-color: rgb(255, 255, 255);">
@@ -280,8 +297,8 @@
                     Goerli Testnet Network Explorer
                 </p>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search by Block Number / Txn Hash / Address" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="custom-btn" type="button" id="button-addon2"><img src="images/search.png" width="16px" height="16px"></button>
+                    <input type="text" id="input" class="form-control" placeholder="Search by Block Number / Txn Hash / Address" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="custom-btn" type="button" id="button-addon2" onclick="sendRequest()"><img src="images/search.png" width="16px" height="16px"></button>
                 </div>
             </div>
         </div>
@@ -302,7 +319,7 @@
                                         </div>
                                         <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
                                             <div style="font-size: 14px;">
-                                                <a href="#" style="text-decoration:none; color: var(--main-color)">{{.Number}}</a>
+                                                <a href="block/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.Number}}</a>
                                             </div>
                                             <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
                                                 {{.Timestamp}} secs ago
@@ -312,10 +329,10 @@
                                     <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
                                         <div class="d-flex flex-column justify-content-center">
                                             <div class="media-mt media-ml" style="font-size: 14px;">
-                                                Validated By <span class="anchor-wrapper"><a href="#" style="text-decoration: none; color: var(--main-color)">{{.Validator}}</a></span>
+                                                Validated By <span class="anchor-wrapper"><a href="address/{{.Validator}}" style="text-decoration: none; color: var(--main-color)">{{.Validator}}</a></span>
                                             </div>
                                             <div class="media-ml" style="font-size: 14px; color: rgb(119, 131, 143)">
-                                                <a href="#" style="text-decoration:none; color: var(--main-color)">{{.TransactionsNumber}} txns</a>
+                                                <a href="transactionsinblock/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.TransactionsNumber}} txns</a>
                                             </div>
                                         </div>
                                     </div>
@@ -343,7 +360,7 @@
                                         </div>
                                         <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
                                             <div style="font-size: 14px;">
-                                                <span class="anchor-wrapper media-mw"><a href="#" style="text-decoration: none; color: var(--main-color)">{{.Hash}}</a></span>
+                                                <span class="anchor-wrapper media-mw"><a href="transaction/{{.Hash}}" style="text-decoration: none; color: var(--main-color)">{{.Hash}}</a></span>
                                             </div>
                                             <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
                                                 {{.Timestamp}} secs ago
@@ -353,13 +370,13 @@
                                     <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
                                         <div class="d-flex flex-column justify-content-center">
                                             <div class="media-mt media-ml" style="font-size: 14px;">
-                                                From <span class="anchor-wrapper"><a href="#" style="text-decoration: none; color: var(--main-color)">{{.From}}</a></span>
+                                                From <span class="anchor-wrapper"><a href="address/{{.From}}" style="text-decoration: none; color: var(--main-color)">{{.From}}</a></span>
                                             </div>
                                             <div class="media-mt media-ml" style="font-size: 14px;">
                                                 {{if eq .To ""}}
-                                                    To <span class="anchor-wrapper"><a href="#" style="text-decoration: none; color: var(--main-color)">{{.ContractAddress}}</a></span>
+                                                    To <span class="anchor-wrapper"><a href="address/{{.ContractAddress}}" style="text-decoration: none; color: var(--main-color)">{{.ContractAddress}}</a></span>
                                                 {{else}}
-                                                    To <span class="anchor-wrapper"><a href="#" style="text-decoration: none; color: var(--main-color)">{{.To}}</a></span>
+                                                    To <span class="anchor-wrapper"><a href="address/{{.To}}" style="text-decoration: none; color: var(--main-color)">{{.To}}</a></span>
                                                 {{end}}   
                                             </div>
                                         </div>
@@ -369,7 +386,7 @@
                             </div>
                             <div class="card-footer">
                                 <button>
-                                    View all transaction
+                                    <a href="txs" style="text-decoration: none">View all transactions</a>
                                 </button>
                             </div>
                         </div>
