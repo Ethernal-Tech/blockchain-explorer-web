@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"text/template"
 	"webbc/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +10,15 @@ import (
 
 func routes(server *gin.Engine, cont ...any) {
 	server.LoadHTMLGlob("staticfiles/*.html")
-	server.Static("/css", "./staticfiles/css")
+	//server.Static("/css", "./staticfiles/css")
+	server.GET("/css/style.css", func(c *gin.Context) {
+		t, _ := template.ParseFiles("staticfiles/css/style.css")
+		var doc bytes.Buffer
+		t.Execute(&doc, &config)
+		c.Header("Content-Type", "text/css")
+		c.Writer.Write(doc.Bytes())
+	})
+
 	server.Static("/images", "./staticfiles/images")
 
 	gc := cont[0].(controllers.GlobalController)
