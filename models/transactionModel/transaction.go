@@ -2,7 +2,7 @@ package transactionModel
 
 type Transactions struct {
 	TotalPages   int
-	TotalRows    uint64
+	TotalRows    int64
 	Transactions []Transaction
 }
 
