@@ -24,41 +24,39 @@ body {
     color: white;
 }
 
-.card {
-    margin-bottom: 20px;
-    height: 480px;
+.index-card {
+    min-height: 200px;
+    height: calc(100vh - 492px);
     box-shadow: 0px 4px 10px rgb(219 219 219);
 }
 
-.card-header {
+.index-card-header {
     background-color: rgb(255, 255, 255);
     color: rgb(74, 79, 85);
 }
 
-.card-body {
+.index-card-body {
     overflow-y: hidden;
     overflow-x: hidden;
-    padding-top: 0px;
-    padding-bottom: 0px;
     padding-left: 30px;
     padding-right: 30px;
 }
 
-.card-body:hover {
+.index-card-body:hover {
     overflow-y: scroll;
     padding-right: 25px;
 }
 
-.card-body::-webkit-scrollbar {
+.index-card-body::-webkit-scrollbar {
     width: 5px;
 }
 
-.card-body::-webkit-scrollbar-thumb {
+.index-card-body::-webkit-scrollbar-thumb {
     border-radius: 6px;
     background-color: rgb(231, 227, 227);              
 }
 
-.card-item {
+.index-card-item {
     height: 68px;
     border-bottom: 1px solid rgb(210, 210, 210);
     padding-top: 10px;
@@ -79,7 +77,7 @@ body {
 /*  */
 
 @media screen and (max-width: 575px) {
-    .card-item {
+    .index-card-item {
         height: 120px;
     }
 
@@ -127,7 +125,7 @@ body {
 
 /*  */
 
-.card-footer {
+.index-card-footer {
     min-height: 50px;
     border-top: 1px solid rgb(210, 210, 210);
     background-color: white;
@@ -136,7 +134,7 @@ body {
     align-items: center;
 }
 
-.card-footer button {
+.index-card-footer button {
     border: none;
     border-radius: 6px;
     height: 86%;
@@ -147,21 +145,21 @@ body {
     transition: 0.4s;
 }
 
-.card-footer button a {
+.index-card-footer button a {
     color: var(--main-color);
     transition: 0.4s;
 }
 
-.card-footer button:hover {
+.index-card-footer button:hover {
     background-color: var(--main-color);
     color: white;
 }
 
-.card-footer button:hover a {
+.index-card-footer button:hover a {
     color: white;
 }
 
-.footer {
+.index-footer {
     margin-top: auto;
     min-height: 140px;
     background-image: url('../images/background.svg');
@@ -180,4 +178,5 @@ body {
 .footer-container-2 {
     margin-top: 20px;
     font-size: 14px;
-}  
+}
+

@@ -1,142 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethernal-Tech</title>
-    <link rel="stylesheet" href="../css/transactionstyle.css"/>
-    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
-
-</head>
-<body>
-    <header>
+{{template "header.html"}}
+    <div class="container pb-5">
+        <div class="container py-3">
+            <h4 class="mb-0">Transaction Details</h4>
+        </div>
         <div class="container">
-            <a href="/">
-                <img width="160" src="../images/ethernal-logo.svg" alt="Polygon Logo">
-            </a>
-        </div>
-    </header>
-    <section>
-        <div class="transaction-details">
-            Transaction Details
-        </div>
-        <div class="transaction-overview">
-            <div class="transaction-overview-title">
-                Overview
-            </div>
-            <div class="transaction-hash transaction-overview-one-column">
-                <div class="transaction-hash-title title">
-                    Transaction Hash:
+            <div class="card">
+                <div class="card-header p-2 bg-white">
+                    <h5 class="mb-0 text-center">Overview</h5>
                 </div>
-                <div class="transaction-hash-value">
-                    {{.transaction.Hash}}
-                </div>
-            </div>
-            <div class="transaction-status transaction-overview-one-column">
-                <div class="transaction-status-title title">
-                    Status:
-                </div>
-                <div class="transaction-status-value">
-                    {{.transaction.Status}}
-                </div>
-            </div>
-            <div class="transaction-block-number transaction-overview-one-column">
-                <div class="transaction-block-number-title title">
-                    Block:
-                </div>
-                <div class="transaction-block-number-value">
-                    <a href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a>
-                </div>
-            </div>
-            <div class="transaction-block-hash transaction-overview-one-column">
-                <div class="transaction-block-hash-title title">
-                    Block Hash:
-                </div>
-                <div class="transaction-block-hash-value">
-                    {{.transaction.BlockHash}}
-                </div>
-            </div>
-            <div class="transaction-timestamp transaction-overview-one-column">
-                <div class="transaction-timestamp-title title">
-                    Timestamp:
-                </div>
-                <div class="transaction-timestamp-value">
-                    {{.transaction.Timestamp}} secs ago
-                </div>
-            </div>
-            <div class="transaction-from transaction-overview-one-column">
-                <div class="transaction-from-title title">
-                    From:
-                </div>
-                <div class="transaction-from-value">                   
-                    <a href="../address/{{.transaction.From}}">{{.transaction.From}}</a>
-                </div>
-            </div>
-            <div class="transaction-to transaction-overview-one-column">
-                <div class="transaction-to-title title">
-                    To:
-                </div>
-                <div class="transaction-to-value"> 
-                    {{if eq .transaction.To ""}}
-                        <span>[Contract]</span> <a href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>  
-                    {{else}}
-                        <a href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
-                    {{end}}          
-                </div>
-            </div>
-            <div class="transaction-gas-used transaction-overview-one-column">
-                <div class="transaction-gas-used-title title">
-                    Gas Used:
-                </div>
-                <div class="transaction-gas-used-value">                   
-                    {{.transaction.GasUsed}}
-                </div>
-            </div>
-            <div class="transaction-gas-limit transaction-overview-one-column">
-                <div class="transaction-gas-limit-title title">
-                    Gas Price:
-                </div>
-                <div class="transaction-gas-limit-value">                                     
-                    {{.transaction.GasPrice}}
-                </div>
-            </div>
-            <div class="transaction-gas transaction-overview-one-column">
-                <div class="transaction-gas-title title">
-                    Gas:
-                </div>
-                <div class="transaction-gas-value">                                     
-                    {{.transaction.Gas}}
-                </div>
-            </div>
-            <div class="transaction-value transaction-overview-one-column">
-                <div class="transaction-value-title title">
-                    Value:
-                </div>
-                <div class="transaction-value-value">                                     
-                    {{.transaction.Value}}
-                </div>
-            </div>
-            <div class="transaction-nonce transaction-overview-one-column">
-                <div class="transaction-nonce-title title">
-                    Nonce:
-                </div>
-                <div class="transaction-nonce-value">                                     
-                    {{.transaction.Nonce}}
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Transaction Hash:</div>
+                        <div class="col-md-9">{{.transaction.Hash}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Status:</div>
+                        <div class="col-md-9">{{.transaction.Status}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Block:</div>
+                        <div class="col-md-9"><a class="text-decoration-none" href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Block Hash:</div>
+                        <div class="col-md-9">{{.transaction.BlockHash}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Timestamp:</div>
+                        <div class="col-md-9">{{.transaction.Timestamp}} secs ago</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">From:</div>
+                        <div class="col-md-9"><a class="text-decoration-none" href="../address/{{.transaction.From}}">{{.transaction.From}}</a></div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">To:</div>
+                        <div class="col-md-9">
+                            {{if eq .transaction.To ""}}
+                            <span>[Contract]</span> <a class="text-decoration-none" href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
+                            {{else}}
+                            <a class="text-decoration-none" href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
+                            {{end}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas Used:</div>
+                        <div class="col-md-9">{{.transaction.GasUsed}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas Price:</div>
+                        <div class="col-md-9">{{.transaction.GasPrice}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas:</div>
+                        <div class="col-md-9">{{.transaction.Gas}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Value:</div>
+                        <div class="col-md-9">{{.transaction.Value}}</div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Nonce:</div>
+                        <div class="col-md-9">{{.transaction.Nonce}}</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-    <footer>
-        <div class="container">
-            <div class="footer-one">
-                <img src="../images/ethernal.png"/>
-                <p>Powered by Ethernal Tech</p>
-            </div>
-            <div class="footer-two">
-                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+    </div>
+    {{template "footer.html"}}
