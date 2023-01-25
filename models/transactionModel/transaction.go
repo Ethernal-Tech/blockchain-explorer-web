@@ -13,6 +13,6 @@ type Transaction struct {
 	Timestamp   int
 	From        string
 	To          string
-	Value       uint64
+	Value       string
 	TxnFee      uint64
 }

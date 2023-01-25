@@ -42,13 +42,16 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 			BlockNumber: v.BlockNumber,
 			From:        v.From,
 			To:          v.To,
+			Value:       utils.WeiToEther(v.Value),
 			Gas:         v.Gas,
 			GasUsed:     v.GasUsed,
 			GasPrice:    v.GasPrice,
 			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
 		}
-		value := utils.WeiToEther(utils.ToBigInt(v.Value)).String()
-		transac.Value = value
+
+		// value := utils.WeiToEther(v.Value)
+		// transac.Value = value
+
 		if address == v.To {
 			transac.Direction = "in"
 		} else {
@@ -65,8 +68,8 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 		//TODO: error handling
 	}
 
-	balanceBigInt := utils.ToBigInt(balance)
-	result.Balance = utils.WeiToEther(balanceBigInt)
+	//balanceBigInt := utils.ToBigInt(balance)
+	result.Balance = utils.WeiToEther(balance)
 	return &result, nil
 }
 
