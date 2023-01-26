@@ -1,81 +1,80 @@
 {{template "header.html"}}
+
+    <div class="container py-3">
+        <h4 class="mb-0">Transaction Details</h4>
+    </div>
     <div class="container pb-5">
-        <div class="container py-3">
-            <h4 class="mb-0">Transaction Details</h4>
-        </div>
-        <div class="container">
-            <div class="card">
-                <div class="card-header p-2 bg-white">
-                    <h5 class="mb-0 text-center">Overview</h5>
+        <div class="card border-1 shadow">
+            <div class="card-header bg-white be-card-header">
+                Overview
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Transaction Hash:</div>
+                    <div class="col-md-9">{{.transaction.Hash}}</div>
                 </div>
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Transaction Hash:</div>
-                        <div class="col-md-9">{{.transaction.Hash}}</div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Status:</div>
+                    <div class="col-md-9">{{.transaction.Status}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Block:</div>
+                    <div class="col-md-9"><a class="text-decoration-none" href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Block Hash:</div>
+                    <div class="col-md-9">{{.transaction.BlockHash}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Timestamp:</div>
+                    <div class="col-md-9">{{.transaction.Timestamp}} secs ago</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">From:</div>
+                    <div class="col-md-9"><a class="text-decoration-none" href="../address/{{.transaction.From}}">{{.transaction.From}}</a></div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">To:</div>
+                    <div class="col-md-9">
+                        {{if eq .transaction.To ""}}
+                        <span>[Contract]</span> <a class="text-decoration-none" href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
+                        {{else}}
+                        <a class="text-decoration-none" href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
+                        {{end}}
                     </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Status:</div>
-                        <div class="col-md-9">{{.transaction.Status}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Block:</div>
-                        <div class="col-md-9"><a class="text-decoration-none" href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Block Hash:</div>
-                        <div class="col-md-9">{{.transaction.BlockHash}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Timestamp:</div>
-                        <div class="col-md-9">{{.transaction.Timestamp}} secs ago</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">From:</div>
-                        <div class="col-md-9"><a class="text-decoration-none" href="../address/{{.transaction.From}}">{{.transaction.From}}</a></div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">To:</div>
-                        <div class="col-md-9">
-                            {{if eq .transaction.To ""}}
-                            <span>[Contract]</span> <a class="text-decoration-none" href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
-                            {{else}}
-                            <a class="text-decoration-none" href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
-                            {{end}}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Gas Used:</div>
-                        <div class="col-md-9">{{.transaction.GasUsed}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Gas Price:</div>
-                        <div class="col-md-9">{{.transaction.GasPrice}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Gas:</div>
-                        <div class="col-md-9">{{.transaction.Gas}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Value:</div>
-                        <div class="col-md-9">{{.transaction.Value}}</div>
-                    </div>
-                    <hr>
-                    <div class="row align-items-center">
-                        <div class="col-md-3">Nonce:</div>
-                        <div class="col-md-9">{{.transaction.Nonce}}</div>
-                    </div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Gas Used:</div>
+                    <div class="col-md-9">{{.transaction.GasUsed}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Gas Price:</div>
+                    <div class="col-md-9">{{.transaction.GasPrice}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Gas:</div>
+                    <div class="col-md-9">{{.transaction.Gas}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Value:</div>
+                    <div class="col-md-9">{{.transaction.Value}}</div>
+                </div>
+                <hr class="transaction-hr">
+                <div class="row align-items-center">
+                    <div class="col-md-3">Nonce:</div>
+                    <div class="col-md-9">{{.transaction.Nonce}}</div>
                 </div>
             </div>
         </div>
     </div>
-    {{template "footer.html"}}
+{{template "footer.html"}}

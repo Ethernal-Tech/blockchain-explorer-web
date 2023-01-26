@@ -8,6 +8,8 @@ body {
     flex-direction: column;
     height: 100vh;
     font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    background-color: rgb(248, 249, 250);
 }
 
 .top-section {
@@ -30,9 +32,11 @@ body {
     box-shadow: 0px 4px 10px rgb(219 219 219);
 }
 
-.index-card-header {
+.be-card-header {
     background-color: rgb(255, 255, 255);
-    color: rgb(74, 79, 85);
+    color: var(--background-color);
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .index-card-body {
@@ -180,3 +184,24 @@ body {
     font-size: 14px;
 }
 
+.hash-tag {
+    max-width: 171px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+a {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+a:hover{
+    color: var(--main-color);
+}
+
+.transaction-hr {
+    border-top: 1px solid #e7eaf3;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    opacity: .75;
+}

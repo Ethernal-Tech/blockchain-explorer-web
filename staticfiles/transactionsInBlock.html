@@ -1,65 +1,63 @@
 {{template "header.html"}}
-    <div class="container pb-5">
-        <div class="container">
-            <div class="d-md-flex justify-content-between align-items-center py-3">
-                <div class="mb-0">
-                    <h4 class="mb-0">Transactions</h4>
-                    <p class="mb-0 text-break small">
-                        <span>For Block <a class="text-break text-decoration-none" href="/block/{{.blockNumber}}">{{.blockNumber}}</a></span>
-                    </p>
-                </div>
+    <div class="container">
+        <div class="d-md-flex justify-content-between align-items-center py-3">
+            <div class="mb-0">
+                <h4 class="mb-0">Transactions</h4>
+                <p class="mb-0 text-break small">
+                    <span>For Block <a class="text-break" href="/block/{{.blockNumber}}">{{.blockNumber}}</a></span>
+                </p>
             </div>
         </div>
-        <div class="container">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-md-flex justify-content-between mb-4">
-                        <p class="mb-0">
-                            <span class="d-flex align-items-center"> A total of {{.numberOfTransactions}} transactions found</span>
-                        </p>
-                    </div>
-                    <div class="table-responsive mb-0">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Txn Hash</th>
-                                    <th scope="col">Method</th>
-                                    <th scope="col">Block</th>
-                                    <th scope="col">Age</th>
-                                    <th scope="col">From</th>
-                                    <th scope="col"></th>
-                                    <th scope="col">To</th>
-                                    <th scope="col">Value</th>
-                                    <th scope="col">Txn Fee</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{range .transactions}}
-                                <tr>
-                                    <td><span class="hash-tag text-truncate"><a class="text-decoration-none" href="/transaction/{{.Hash}}">{{.Hash}}</a></span></td>
-                                    <td></td>
-                                    <td class="d-none d-sm-table-cell"><a class="text-decoration-none" href="/block/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
-                                    <td>{{.Timestamp}} secs ago</td>
-                                    <td><span class="hash-tag text-truncate"><a class="text-decoration-none" href="../address/{{.From}}">{{.From}}</a></span></td>
-                                    <td class="text-center"><span class="btn rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
-                                    <td>
-                                        <span class="hash-tag text-truncate">
-                                            {{if eq .To ""}}
-                                            <a class="text-decoration-none" href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
-                                            {{else}}
-                                            <a class="text-decoration-none" href="../address/{{.To}}">{{.To}}</a>
-                                            {{end}}
-                                        </span>
-                                    </td>
-                                    <td>{{.Value}} Ether</td>
-                                    <td>---</td>
-                                </tr>
-                                {{end}}
-                            </tbody>
-                        </table>
-                    </div>
+    </div>
+    <div class="container pb-5">
+        <div class="card border-1 shadow">
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between mb-4">
+                    <p class="mb-0">
+                        <span class="d-flex align-items-center"> A total of {{.numberOfTransactions}} transactions found</span>
+                    </p>
+                </div>
+                <div class="table-responsive mb-0">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Txn Hash</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Block</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">From</th>
+                                <th scope="col"></th>
+                                <th scope="col">To</th>
+                                <th scope="col">Value</th>
+                                <th scope="col">Txn Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .transactions}}
+                            <tr>
+                                <td><span class="hash-tag text-truncate"><a href="/transaction/{{.Hash}}">{{.Hash}}</a></span></td>
+                                <td></td>
+                                <td class="d-none d-sm-table-cell"><a href="/block/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
+                                <td>{{.Timestamp}} secs ago</td>
+                                <td><span class="hash-tag text-truncate"><a href="../address/{{.From}}">{{.From}}</a></span></td>
+                                <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                                <td>
+                                    <span class="hash-tag text-truncate">
+                                        {{if eq .To ""}}
+                                        <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                        {{else}}
+                                        <a href="../address/{{.To}}">{{.To}}</a>
+                                        {{end}}
+                                    </span>
+                                </td>
+                                <td>{{.Value}} Ether</td>
+                                <td>---</td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    {{template "footer.html"}}
+ {{template "footer.html"}}
