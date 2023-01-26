@@ -205,3 +205,19 @@ a:hover{
     margin-bottom: 12px;
     opacity: .75;
 }
+
+.be-subtitle {
+    font-size: 20px;
+    color: rgb(74, 79, 85);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.be-subtitle span {
+    font-size: 16px;
+    color: rgb(119, 131, 143);
+}
+
+.h-100 {
+    height: 100%;
+}
