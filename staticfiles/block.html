@@ -1,138 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethernal-Tech</title>
-    <link rel="stylesheet" href="../css/blockstyle.css"/>
-    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
 
-</head>
-<body>
-    <header>
-        <div class="container">
-            <a href="/">
-                <img width="160" src="../images/ethernal-logo.svg" alt="Polygon Logo">
-            </a>
+
+{{template "header.html"}}
+
+
+<div class="container py-3">
+    <h4 class="mb-0">Block<span class="small text-secondary">&nbsp;#{{.block.Number}}</span></h4>
+</div>
+<div class="container pb-5">
+    <div class="card border-1 shadow">
+        <div class="card-header bg-white be-card-header">
+            Overview
         </div>
-    </header>
-    <section>
-        <div class="block-number">
-            Block <span>#{{.block.Number}}</span>
-        </div>
-        <div class="block-overview">
-            <div class="block-overview-title">
-                Overview
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3">Block Height:</div>
+                <div class="col-md-9">{{.block.Number}}</div>
             </div>
-            <div class="block-height block-overview-one-column">
-                <div class="block-height-title title">
-                    Block Height:
-                </div>
-                <div class="block-height-value">
-                    {{.block.Number}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Timestamp:</div>
+                <div class="col-md-9">{{.block.Timestamp}} secs ago</div>
             </div>
-            <div class="block-timestamp block-overview-one-column">
-                <div class="block-timestamp-title title">
-                    Timestamp:
-                </div>
-                <div class="block-timestamp-value">
-                    {{.block.Timestamp}} secs ago
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Transactions:</div>
+                <div class="col-md-9">
+                    <span class='badge rounded-pill bg-dark'> 
+                        <a href="../transactionsinblock/{{.block.Number}}" style="color: inherit;" data-toggle='tooltip' title='Click to view Transactions' >
+                            37 transactions
+                        </a> 
+                    </span>								
+                    in this block
                 </div>
             </div>
-            <div class="block-transactions block-overview-one-column">
-                <div class="block-transactions-title title">
-                    Transactions:
-                </div>
-                <div class="block-transactions-value">
-                    <span><a href="../transactionsinblock/{{.block.Number}}">{{.block.TransactionsNumber}} transactions</a></span> in this block
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Validated by:</div>
+                <div class="col-md-9"><a href="../address/{{.block.Validator}}">{{.block.Validator}}</a></span></div>
             </div>
-            <div class="block-validation block-overview-one-column">
-                <div class="block-validation-title title">
-                    Validated by:
-                </div>
-                <div class="block-validation-value">
-                    <span><a href="../address/{{.block.Validator}}">{{.block.Validator}}</a></span>
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Difficulty:</div>
+                <div class="col-md-9">{{.block.Difficulty}} secs ago</div>
             </div>
-            <div class="block-difficulty block-overview-one-column">
-                <div class="block-difficulty-title title">
-                    Difficulty:
-                </div>
-                <div class="block-difficulty-value">
-                    {{.block.Difficulty}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Total Difficulty:</div>
+                <div class="col-md-9">{{.block.TotalDifficulty}}</div>
             </div>
-            <div class="block-total-difficulty block-overview-one-column">
-                <div class="block-total-difficulty-title title">
-                    Total Difficulty:
-                </div>
-                <div class="block-total-difficulty-value">
-                    {{.block.TotalDifficulty}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Size:</div>
+                <div class="col-md-9">{{.block.Size}} bytes</div>
             </div>
-            <div class="block-size block-overview-one-column">
-                <div class="block-size-title title">
-                    Size:
-                </div>
-                <div class="block-size-value">
-                    {{.block.Size}} bytes
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Gas Used:</div>
+                <div class="col-md-9">{{.block.GasUsed}}</div>
             </div>
-            <div class="block-gas-used block-overview-one-column">
-                <div class="block-gas-used-title title">
-                    Gas Used:
-                </div>
-                <div class="block-gas-used-value">
-                    {{.block.GasUsed}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Gas Limit:</div>
+                <div class="col-md-9">{{.block.GasLimit}}</div>
             </div>
-            <div class="block-gas-limit block-overview-one-column">
-                <div class="block-gas-limit-title title">
-                    Gas Limit:
-                </div>
-                <div class="block-gas-limit-value">
-                    {{.block.GasLimit}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Nonce:</div>
+                <div class="col-md-9">{{.block.Nonce}}</div>
             </div>
-            <div class="block-nonce block-overview-one-column">
-                <div class="block-nonce-title title">
-                    Nonce:
-                </div>
-                <div class="block-nonce-value">
-                    {{.block.Nonce}}
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Hash:</div>
+                <div class="col-md-9">{{.block.Hash}}</div>
             </div>
-            <div class="block-hash block-overview-one-column">
-                <div class="block-hase-title title">
-                    Hash:
-                </div>
-                <div class="block-hash-value">
-                    {{.block.Hash}}
-                </div>
-            </div>
-            <div class="block-parent-hash block-overview-one-column">
-                <div class="block-parent-hash-title title">
-                    Parent Hash:
-                </div>
-                <div class="block-parent-hash-value">
-                    <a href="../blockhash/{{.block.ParentHash}}">{{.block.ParentHash}}</a>
-                </div>
+            <hr class="transaction-hr">
+            <div class="row align-items-center">
+                <div class="col-md-3">Parent Hash:</div>
+                <div class="col-md-9"><a href="../blockhash/{{.block.ParentHash}}">{{.block.ParentHash}}</a></div>
             </div>
         </div>
-    </section>
-    <footer>
-        <div class="container">
-            <div class="footer-one">
-                <img src="../images/ethernal.png"/>
-                <p>Powered by Ethernal Tech</p>
-            </div>
-            <div class="footer-two">
-                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+    </div>
+</div>
+
+{{template "footer.html"}}
