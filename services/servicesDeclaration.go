@@ -17,6 +17,7 @@ type TransactionService interface {
 	GetTransactionByHash(string) (*models.Transaction, error)
 	GetAllTransactionsInBlock(uint64) (*[]models.Transaction, error)
 	GetAllTransactions(int, int) (*transactionModel.Transactions, error)
+	GetTransactionsByAddress(string, int, int) (*transactionModel.Transactions, error)
 }
 
 type AddressService interface {

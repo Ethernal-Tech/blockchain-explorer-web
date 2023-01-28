@@ -159,15 +159,60 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 
 	var totalRows int64
 	tsi.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.transactions' ::regclass;").Scan(tsi.ctx, &totalRows)
-
 	result.TotalRows = int64(totalRows)
-	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTION_MAX_ROWS").(string), 10, 64)
 
+	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTIONS_MAX_COUNT").(string), 10, 64)
 	if totalRows > maxRows {
 		totalRows = maxRows
 	}
 
-	totalPages := math.Ceil(float64(totalRows / int64(perPage)))
-	result.TotalPages = int(totalPages)
+	totalPages := math.Ceil(float64(totalRows) / float64(perPage))
+	if totalPages == 0 {
+		result.TotalPages = 1
+	} else {
+		result.TotalPages = int(totalPages)
+	}
+	return &result, nil
+}
+
+func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address string, page int, perPage int) (*transactionModel.Transactions, error) {
+	var transactions []DB.Transaction
+
+	var offest = perPage * (page - 1)
+	err := tsi.database.NewSelect().Table("transactions").OrderExpr("block_number DESC").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Offset(offest).Limit(perPage).Scan(tsi.ctx, &transactions)
+	if err != nil {
+		//TODO: error handling
+	}
+
+	var result transactionModel.Transactions
+	for _, v := range transactions {
+		var transaction = transactionModel.Transaction{
+			Hash:        v.Hash,
+			Method:      "",
+			BlockNumber: v.BlockNumber,
+			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			From:        v.From,
+			To:          v.To,
+			Value:       utils.ToUint64(v.Value),
+			TxnFee:      0000000,
+		}
+		result.Transactions = append(result.Transactions, transaction)
+	}
+
+	var totalRows int
+	totalRows, err = tsi.database.NewSelect().Table("transactions").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Count(tsi.ctx)
+	result.TotalRows = int64(totalRows)
+
+	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTIONS_BY_ADDRESS_MAX_COUNT").(string), 10, 64)
+	if totalRows > int(maxRows) {
+		totalRows = int(maxRows)
+	}
+
+	totalPages := math.Ceil(float64(totalRows) / float64(perPage))
+	if totalPages == 0 {
+		result.TotalPages = 1
+	} else {
+		result.TotalPages = int(totalPages)
+	}
 	return &result, nil
 }

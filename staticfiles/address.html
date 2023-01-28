@@ -87,7 +87,7 @@
                 <div class="info">
                     <i class="fas fa-sort-amount-down text-secondary image" data-toggle="tooltip" title=""
                         data-original-title="Oldest First"></i>
-                    Latest 25 from a total of {{.address.TransactionCount}} transactions
+                    <span>Latest 25 from a total of <a href="../txsByAddress?address={{.address.AddressHex}}">{{ .address.TransactionCount }}</a> transactions</span>
                 </div>
                 <div class="transactions-table">
                     <table>

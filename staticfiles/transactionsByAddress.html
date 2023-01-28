@@ -25,6 +25,7 @@
             </div>
             <div class="wrapper-text">
                 Transactions
+                <p>For <a href="../address/{{.address}}">{{.address}}</a></p>
             </div>
         </div>
     </div>
@@ -34,17 +35,19 @@
             <div class="transactions-content">
                 <div class="info-pagination">
                     <div class="info">
-                        More than > {{.pagination.TotalRows}} transactions found
-                        <span class="small-text">(Showing the last 500k records)</span>
+                        A total of {{.pagination.TotalRows}} transactions found
+                        {{ if (gt .pagination.TotalRows 100000)}}
+                        <span class="small-text">(Showing the last 100k records)</span>
+                        {{end}}
                     </div>
                     <div class="pagination">
                         <ul>
                             <li>
-                                <a href="txs?p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="txsByAddress?address={{.address}}&p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="txs?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -54,13 +57,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="txs?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="txs?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -117,11 +120,11 @@
                     <div class="pagination">
                         <ul>
                             <li>
-                                <a href="txs?p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="txsByAddress?address={{.address}}&p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="txs?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -131,13 +134,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="txs?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="txs?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="txsByAddress?address={{.address}}&p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -162,7 +165,7 @@
 <script>
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
-        window.location = "txs?l=" + limitFilter;
+        window.location = "txsByAddress?address={{.address}}&l=" + limitFilter;
     }
 </script>
 
