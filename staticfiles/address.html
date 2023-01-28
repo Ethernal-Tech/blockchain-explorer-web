@@ -1,145 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
+{{template "header.html"}}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethernal-Tech</title>
-    <link rel="stylesheet" href="../css/addressstyle.css" />
-    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/js/all.min.js"
-        crossorigin="anonymous"></script>
+<div class="container">
+    <div class="be-subtitle">
+        Address <span>{{.address.AddressHex}}</span>
+    </div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="card h-100">
+				<div class="card-header be-card-header">
+					Overview
+				</div>
+				<div class="card-body">
+					<div class="row align-items-center">
+                        <div class="col-md-3">Ether Value:</div>
+                        <div class="col-md-9"></div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Balance:</div>
+                        <div class="col-md-9">{{.address.Balance}} Ether</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Token:</div>
+                        <div class="col-md-9"></div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="card h-100">
+				<div class="card-header be-card-header">
+					More info
+				</div>
+				<div class="card-body">
+					<div class="row align-items-center">
+                        <div class="col-md-3">My Name Tag:</div>
+                        <div class="col-md-9">Not Available</div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col mt-3">
+			<div class="card mb-3">
+			<div class="card-header be-card-header">
+             Transactions
+			</div>
+			<div class="card-body">
+                <div class="d-md-flex justify-content-between">
+                    <p class="mb-0">
+                        <span class="d-flex align-items-center">Latest 25 from a total of {{.address.TransactionCount}} transactions</span>
+                    </p>
+                </div>
+			<div class="table-responsive mb-2 mb-md-0">
+				<table class="table table-hover align-middle">
+				<thead>
+					<tr>
+						<th scope="col">Txn Hash</th>
+						<th scope="col">Method</th>
+						<th scope="col">Block</th>
+						<th scope="col">Age</th>
+						<th scope="col">From</th>
+                        <th scope="col"></th>
+						<th scope="col">To</th>
+						<th scope="col">Value</th>
+                        <th scope="col">Txn Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {{range .address.Transactions}}
+					<tr>
+						<td>
+							<a class="hash-tag text-truncate" href="/transaction/{{.Hash}}">{{.Hash}}</a>
+						</td>
+						<td></td>
+						<td>
+                            <a class="hash-tag text-truncate" href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a>
+                        </td>
+						<td>{{.Timestamp}} secs ago</td>
+						<td>
+							<a class="hash-tag text-truncate" href="/address/{{.From}}">{{.From}}</a>
+						</td>
+                        {{if eq .Direction "out"}}
+                        	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                        {{ else }}
+                        	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-left"></i></span></td>
+                        {{ end }}
+						<td>
+							<a class="hash-tag text-truncate" href="/address/{{.To}}">{{.To}}</a>
+						</td>
+						<td>{{.Value}} Ether</td>
+                        <td></td>
+					</tr>
+                    {{end}}
+				</tbody>
+				</table>
+			</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-</head>
-
-<body>
-    <header>
-        <div class="container">
-            <a href="/">
-                <img width="160" src="/images/ethernal-logo.svg" alt="Polygon Logo">
-            </a>
-        </div>
-    </header>
-    <section class="section-1">
-        <div class="container">
-            <div class="address-hex">
-                Address <span>{{.address.AddressHex}}</span>
-            </div>
-        </div>
-    </section>
-    <section class="section-2">
-        <div class="container">
-            <div class="overview">
-                <div class="address-overview-title">Overview</div>
-                <div class="address-overview-one-column">
-                    <div class="title">
-                        Ether Value:
-                    </div>
-                    <div class="address-overview-balance-value">
-                        
-                    </div>
-                </div>
-                <div class="address-overview-one-column">
-                    <div class="title">
-                        Balance:
-                    </div>
-                    <div class="address-overview-eth-value-value">
-                        {{.address.Balance}} Ether
-                    </div>
-                </div>
-                <div class="border-bottom-none address-overview-one-column ">
-                    <div class="title">
-                        Token:
-                    </div>
-                    <div class="address-overview-token-value">
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="more-info">
-                <div class="address-more-info-title">More Info</div>
-                <div class="address-more-info-one-column">
-                    <div class="title">
-                        My Name Tag:
-                    </div>
-                    <div class="address-more-info-tag-value">
-                        Not Available
-                    </div>
-                </div>
-                <!-- <div class="border-bottom-none address-more-info-one-column">
-                    <div class="title">
-                        Contract Creator:
-                    </div>
-                    <div class="address-more-info-contract-creator-value">
-                        0x1B487Uj51.... at txn 0x24487YUj5
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </section>
-    <section class="section-3">
-        <div class="container">
-            <div class="address-content">
-                <div class="nav">
-                    Transactions
-                </div>
-                <div class="info">
-                    <i class="fas fa-sort-amount-down text-secondary image" data-toggle="tooltip" title=""
-                        data-original-title="Oldest First"></i>
-                    <span>Latest 25 from a total of <a href="../txsByAddress?address={{.address.AddressHex}}">{{ .address.TransactionCount }}</a> transactions</span>
-                </div>
-                <div class="transactions-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Txn Hash</th>
-                                <th>Method</th>
-                                <th>Block</th>
-                                <th>Age</th>
-                                <th>From</th>
-                                <th></th>
-                                <th>To</th>
-                                <th>Value</th>
-                                <th>Txn Fee</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{range .address.Transactions}}
-                            <tr>
-                                <td><a href="/transaction/{{.Hash}}">{{.Hash}}</a></td>
-                                <td></td>
-                                <td><a href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
-                                <td>{{.Timestamp}} secs ago</td>
-                                <td>{{.From}}</td>
-                                {{if eq .Direction "out"}}
-                                <td class="direction-cell"><span class="transaction-out">{{.Direction}}</span></td>
-                                {{ else }}
-                                <td class="direction-cell"><span class="transaction-in">{{.Direction}}</span></td>
-                                {{ end }}
-                                <td>{{.To}}</td>
-                                <td>{{.Value}} Ether</td>
-                                <td>------</td>
-                            </tr>
-                            {{end}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-one">
-                <img src="../images/ethernal.png" />
-                <p>Powered by Ethernal Tech</p>
-            </div>
-            <div class="footer-two">
-                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
-            </div>
-        </div>
-    </footer>
-</body>
-
-</html>
+{{template "footer.html"}}

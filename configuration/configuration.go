@@ -15,6 +15,8 @@ type Configuration struct {
 	DataBaseName         string
 	HTTPUrl              string
 	CallTimeoutInSeconds uint
+	BackgroundColor      string
+	MainColor            string
 }
 
 func LoadConfiguration() *Configuration {
@@ -41,6 +43,8 @@ func LoadConfiguration() *Configuration {
 		DataBaseName:         viper.GetString("DB_NAME"),
 		HTTPUrl:              viper.GetString("HTTPUrl"),
 		CallTimeoutInSeconds: viper.GetUint("CALL_TIMEOUT_IN_SECONDS"),
+		BackgroundColor:      viper.GetString("BACKGROUND_COLOR"),
+		MainColor:            viper.GetString("MAIN_COLOR"),
 	}
 
 	return &configuration
