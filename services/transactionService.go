@@ -192,7 +192,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
 			From:        v.From,
 			To:          v.To,
-			Value:       utils.ToUint64(v.Value),
+			Value:       utils.WeiToEther(v.Value),
 			TxnFee:      0000000,
 		}
 		result.Transactions = append(result.Transactions, transaction)
