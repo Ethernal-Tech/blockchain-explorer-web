@@ -6,6 +6,7 @@ import (
 	"time"
 	"webbc/DB"
 	"webbc/models"
+	"webbc/utils"
 
 	"github.com/uptrace/bun"
 )
@@ -87,7 +88,7 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 		Nonce:              block.Nonce,
 		Validator:          block.Miner,
 		Difficulty:         block.Difficulty,
-		TotalDifficulty:    block.TotalDifficulty,
+		TotalDifficulty:    utils.ToBigInt(block.TotalDifficulty).String(),
 		ExtraData:          block.ExtraData,
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,
@@ -121,7 +122,7 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 		Nonce:              block.Nonce,
 		Validator:          block.Miner,
 		Difficulty:         block.Difficulty,
-		TotalDifficulty:    block.TotalDifficulty,
+		TotalDifficulty:    utils.ToBigInt(block.TotalDifficulty).String(),
 		ExtraData:          block.ExtraData,
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,

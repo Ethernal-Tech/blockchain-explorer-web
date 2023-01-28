@@ -1,10 +1,8 @@
 package addressModel
 
-import "math/big"
-
 type Address struct {
 	AddressHex       string
-	Balance          *big.Float
+	Balance          string
 	TransactionCount int
 	Transactions     []Transaction
 }
