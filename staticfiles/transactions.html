@@ -1,44 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethernal-Tech</title>
-    <link rel="stylesheet" href="../css/transactions.css" />
-    <link rel = "icon" href ="../images/ethernal.png" type = "image/x-icon">
-
-</head>
-<body>
-    <header>
-        <div class="container">
-            <a href="/">
-                <img width="160" src="/images/ethernal-logo.svg" alt="Polygon Logo">
-            </a>
+{{template "header.html"}}
+    <div class="container pb-3">
+        <div class="be-subtitle">
+            Transactions
         </div>
-    </header>
-   
-    <div class="wrapper">
-        <div>
-            <div class="wrapper-title">
-            </div>
-            <div class="wrapper-text">
-                Transactions
-            </div>
-        </div>
-    </div>
-
-    <section class="section-3">
-        <div class="container">
-            <div class="transactions-content">
-                <div class="info-pagination">
-                    <div class="info">
-                        More than > {{.pagination.TotalRows}} transactions found
-                        <span class="small-text">(Showing the last 500k records)</span>
-                    </div>
-                    <div class="pagination">
-                        <ul>
+        <div class="card border-1 shadow">
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between mb-3">
+                    <p class="mb-0">
+                        <span class="d-flex align-items-center"> More than > {{.pagination.TotalRows}} transactions found</span>
+                        <span class="be-small-text">(Showing the last 500k records)</span>
+                    </p>
+                    <div class="be-pagination">
+                        <ul class="d-inline-flex">
                             <li>
                                 <a href="txs?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
@@ -65,37 +38,38 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="transactions-table">
-                    <table>
-                        <thead>
+                <div class="table-responsive mb-0">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th>Txn Hash</th>
-                                <th>Method</th>
-                                <th>Block</th>
-                                <th>Age</th>
-                                <th>From</th>
-                                <th></th>
-                                <th>To</th>
-                                <th>Value</th>
-                                <th>Txn Fee</th>
+                                <th scope="col">Txn Hash</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Block</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">From</th>
+                                <th scope="col"></th>
+                                <th scope="col">To</th>
+                                <th scope="col">Value</th>
+                                <th scope="col">Txn Fee</th>
                             </tr>
                         </thead>
                         <tbody>
                             {{range .transactions}}
                             <tr>
-                                <td><a href="/transaction/{{.Hash}}">{{.Hash}}</a></td>
+                                <td><span class="hash-tag text-truncate"><a href="/transaction/{{.Hash}}">{{.Hash}}</a></span></td>
                                 <td></td>
-                                <td><a href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
+                                <td class="d-none d-sm-table-cell"><a href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
                                 <td>{{.Timestamp}} secs ago</td>
-                                <td><a href="../address/{{.From}}">{{.From}}</a></td>
-                                <td></td>
-                                <td>                                
-                                {{if eq .To ""}}
-                                    <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
-                                {{else}}
-                                    <a href="../address/{{.To}}">{{.To}}</a>
-                                {{end}}
+                                <td><span class="hash-tag text-truncate"><a href="../address/{{.From}}">{{.From}}</a></span></td>
+                                <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                                <td>
+                                    <span class="hash-tag text-truncate">
+                                        {{if eq .To ""}}
+                                        <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                        {{else}}
+                                        <a href="../address/{{.To}}">{{.To}}</a>
+                                        {{end}}
+                                    </span>
                                 </td>
                                 <td>{{.Value}} Ether</td>
                                 <td>---</td>
@@ -104,18 +78,18 @@
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="info-pagination">
-                    <div class="limit">
-                        Show <select id="limitFilterId" class="limit-filter" onchange="limitChanged()">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
                             <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
                             <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
                             <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
                             <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
-                        </select> records
+                        </select>
+                        <span>records</span>
                     </div>
-                    <div class="pagination">
-                        <ul>
+                    <div class="be-pagination">
+                        <ul class="d-inline-flex">
                             <li>
                                 <a href="txs?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
@@ -144,26 +118,12 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+ {{template "footer.html"}}
 
-    <footer>
-        <div class="container">
-            <div class="footer-one">
-                <img src="../images/ethernal.png" />
-                <p>Powered by Ethernal Tech</p>
-            </div>
-            <div class="footer-two">
-                <p>Ethernal-Tech © 2022 (Goerli) | ⛏ Donate</p>
-            </div>
-        </div>
-    </footer>
-</body>
-
-<script>
+ <script>
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
         window.location = "txs?l=" + limitFilter;
     }
 </script>
-
-</html>

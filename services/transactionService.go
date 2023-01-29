@@ -143,16 +143,19 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 	var result transactionModel.Transactions
 	for _, v := range transactions {
 		var transaction = transactionModel.Transaction{
-			Hash:        v.Hash,
-			Method:      "",
-			BlockNumber: v.BlockNumber,
-			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
-			From:        v.From,
-			To:          v.To,
-			Value:       utils.WeiToEther(v.Value),
-			TxnFee:      0000000,
+			Hash:            v.Hash,
+			Method:          "",
+			BlockNumber:     v.BlockNumber,
+			Timestamp:       int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			From:            v.From,
+			To:              v.To,
+			Value:           utils.WeiToEther(v.Value),
+			TxnFee:          0000000,
+			ContractAddress: v.ContractAddress,
 		}
-
+		if strings.ReplaceAll(transaction.To, " ", "") == "" {
+			transaction.To = ""
+		}
 		result.Transactions = append(result.Transactions, transaction)
 	}
 
@@ -194,6 +197,9 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 			To:          v.To,
 			Value:       utils.WeiToEther(v.Value),
 			TxnFee:      0000000,
+		}
+		if strings.ReplaceAll(transaction.To, " ", "") == "" {
+			transaction.To = ""
 		}
 		result.Transactions = append(result.Transactions, transaction)
 	}

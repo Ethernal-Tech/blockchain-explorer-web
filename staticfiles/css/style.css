@@ -234,3 +234,38 @@ span.badge.rounded-pill:hover{
     background-color:var(--background-color) !important;
     color: var(--main-color) !important;
 }
+
+.be-small-text {
+    font-size: 12px;
+}
+
+/*pagination part - start*/
+.be-pagination {
+    text-align: center;
+    font-size: 12.37px;
+  }
+
+  .be-pagination ul li{
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    min-width: 36px;
+    height: 29px;
+    margin: 0px 4px;
+    background-color: rgb(248, 249, 250);
+  }
+
+    li a {
+        display: block; 
+        padding: 5px; 
+    }
+    li span {
+        display: block; 
+        padding: 5px;  
+    }
+
+    .disable-paging-button {
+        cursor: default;
+        user-select: none;
+    }
+/*pagination part - end*/
