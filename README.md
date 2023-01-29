@@ -12,7 +12,7 @@
 </br>
 
 <div align='center'>
-  <img src='https://ethernal.tech/static/media/header-itirijum-ispravka.6d7a1acd09898e5f50bfc5932a8d437a.svg' width='70%' />
+  <img src='https://ethernal.tech/static/media/header-itirijum-ispravka.6d7a1acd09898e5f50bfc5932a8d437a.svg' width='550px' />
 </div>
 
 </br>
@@ -63,9 +63,10 @@ Installation is very simple and consists of only a few steps:
 1. download project
 2. open windows command prompt or linux bash
 3. positionate to the root directory of the project (the directory where, among other things, the server.go and routes.go files are located)
-4. run the following command `go build *.go`
-5. after the command is executed successfully the `.exe` file will appear in the same root directory
-6. running the `.exe` file starts the web server (by default on port 8080)
+4. run the `go mod tidy` command to obtain all the necessary elements for the proper operation of the application
+5. everything is now ready to install the application, run the command `go build *.go`
+6. after the previous command is executed successfully the `.exe` file will appear in the same root directory
+7. running the `.exe` file starts the web server (by default on port 8080)
 
 Notes:
 1. if the application doesn't want to start, check if the port 8080 is free or just change the port of the blockchain explorer web application
@@ -81,7 +82,7 @@ The configuration file enables fine-tuning of the application. One of the more i
 <br/>
 <br/>
 
-<p align="center"><img src="ethernal-gif.gif" width="36%"/></p>
+<p align="center"><img src="ethernal-gif.gif" width="300px"/></p>
 
 <br/>
 <br/>
