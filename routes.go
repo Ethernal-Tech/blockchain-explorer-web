@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"text/template"
 	"webbc/controllers"
 
@@ -10,16 +9,9 @@ import (
 
 func routes(server *gin.Engine, cont ...any) {
 	server.LoadHTMLGlob("staticfiles/*.html")
-	//server.Static("/css", "./staticfiles/css")
-	server.GET("/css/style.css", func(c *gin.Context) {
-		t, _ := template.ParseFiles("staticfiles/css/style.css")
-		var doc bytes.Buffer
-		t.Execute(&doc, &config)
-		c.Header("Content-Type", "text/css")
-		c.Writer.Write(doc.Bytes())
-	})
-
 	server.Static("/images", "./staticfiles/images")
+
+	server.GET("/css/style.css", getCssFile)
 
 	gc := cont[0].(controllers.GlobalController)
 	server.GET("/", gc.GetIndex)
@@ -37,4 +29,16 @@ func routes(server *gin.Engine, cont ...any) {
 
 	ac := cont[3].(controllers.AddressController)
 	server.GET("/address/:addresshex", ac.GetAddress)
+}
+
+func getCssFile(c *gin.Context) {
+	t, err := template.ParseFiles("staticfiles/css/style.css")
+
+	if err != nil {
+		// error handle
+	}
+
+	c.Header("Content-Type", "text/css")
+
+	t.Execute(c.Writer, config)
 }
