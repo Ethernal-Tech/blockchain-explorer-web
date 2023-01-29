@@ -7,12 +7,13 @@ type Transactions struct {
 }
 
 type Transaction struct {
-	Hash        string
-	Method      string
-	BlockNumber uint64
-	Timestamp   int
-	From        string
-	To          string
-	Value       string
-	TxnFee      uint64
+	Hash            string
+	Method          string
+	BlockNumber     uint64
+	Timestamp       int
+	From            string
+	To              string
+	Value           string
+	TxnFee          uint64
+	ContractAddress string
 }
