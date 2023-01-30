@@ -48,7 +48,7 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			TransactionIndex: v.TransactionIndex,
 			ContractAddress:  v.ContractAddress,
 			Status:           v.Status,
-			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:        utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 		}
 
 		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
@@ -83,7 +83,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		Value:            utils.WeiToEther(transaction.Value),
 		ContractAddress:  transaction.ContractAddress,
 		Status:           transaction.Status,
-		Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds())),
+		Timestamp:        utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds()))),
 	}
 
 	if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
@@ -118,7 +118,7 @@ func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumb
 			Value:            utils.WeiToEther(v.Value),
 			ContractAddress:  v.ContractAddress,
 			Status:           v.Status,
-			Timestamp:        int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:        utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 		}
 
 		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
@@ -146,7 +146,7 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 			Hash:            v.Hash,
 			Method:          "",
 			BlockNumber:     v.BlockNumber,
-			Timestamp:       int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			From:            v.From,
 			To:              v.To,
 			Value:           utils.WeiToEther(v.Value),
@@ -192,7 +192,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 			Hash:        v.Hash,
 			Method:      "",
 			BlockNumber: v.BlockNumber,
-			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:   utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			From:        v.From,
 			To:          v.To,
 			Value:       utils.WeiToEther(v.Value),

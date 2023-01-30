@@ -10,7 +10,7 @@ type Transaction struct {
 	Hash            string
 	Method          string
 	BlockNumber     uint64
-	Timestamp       int
+	Timestamp       string
 	From            string
 	To              string
 	Value           string
