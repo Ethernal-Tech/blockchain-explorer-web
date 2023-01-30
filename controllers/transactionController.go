@@ -6,6 +6,7 @@ import (
 	"webbc/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 type TransactionController struct {
@@ -85,9 +86,12 @@ func (tc TransactionController) GetTransactionsByAddress(context *gin.Context) {
 		//TODO error handling
 	}
 
+	txsMaxCount, _ := strconv.Atoi(viper.Get("TRANSACTIONS_BY_ADDRESS_MAX_COUNT").(string))
+
 	data := gin.H{
 		"address":      address,
 		"transactions": result.Transactions,
+		"txsMaxCount":  txsMaxCount,
 		"pagination": paginationModel.PaginationData{
 			NextPage:     page + 1,
 			PreviousPage: page - 1,

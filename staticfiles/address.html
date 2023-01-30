@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="be-subtitle">
-        Address <span>{{.address.AddressHex}}</span>
+        Address <span class="strong">{{.address.AddressHex}}</span>
     </div>
 	<div class="row">
 		<div class="col-lg-6">
@@ -50,10 +50,13 @@
 			</div>
 			<div class="card-body">
                 <div class="d-md-flex justify-content-between">
-                    <p class="mb-0">
-                        <span class="d-flex align-items-center">Latest 25 from a total of {{.address.TransactionCount}} transactions</span>
-                    </p>
-                </div>
+					<p class="mb-0">
+					  <span class="d-flex align-items-center">Latest 25 from a total of
+						  <a style="margin: 0px 4px;" href="../txsByAddress?address={{.address.AddressHex}}">{{ .address.TransactionCount }}</a>
+						  transactions
+					  </span>
+					</p>
+				  </div>				  
 			<div class="table-responsive mb-2 mb-md-0">
 				<table class="table table-hover align-middle">
 				<thead>
