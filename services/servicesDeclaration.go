@@ -3,6 +3,7 @@ package services
 import (
 	"webbc/models"
 	"webbc/models/addressModel"
+	"webbc/models/blockModel"
 	"webbc/models/transactionModel"
 )
 
@@ -10,6 +11,7 @@ type BlockService interface {
 	GetLastBlocks(int) (*[]models.Block, error)
 	GetBlockByNumber(uint64) (*models.Block, error)
 	GetBlockByHash(string) (*models.Block, error)
+	GetAllBlocks(int, int) (*blockModel.Blocks, error)
 }
 
 type TransactionService interface {

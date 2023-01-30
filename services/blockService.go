@@ -6,6 +6,7 @@ import (
 	"time"
 	"webbc/DB"
 	"webbc/models"
+	"webbc/models/blockModel"
 	"webbc/utils"
 
 	"github.com/uptrace/bun"
@@ -132,4 +133,46 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 	}
 
 	return &oneResultBlock, nil
+}
+
+func (bsi *BlockServiceImplementation) GetAllBlocks(page int, perPage int) (*blockModel.Blocks, error) {
+	var blocks []DB.Block
+
+	var offSet = perPage * (page - 1)
+	err := bsi.database.NewSelect().Table("blocks").OrderExpr("number DESC").Limit(perPage).Offset(offSet).Scan(bsi.ctx, &blocks)
+	if err != nil {
+		//TODO: error handling
+	}
+
+	var result blockModel.Blocks
+	for _, v := range blocks {
+		var block = blockModel.Block{
+			Number:             v.Number,
+			Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			TransactionsNumber: 0,
+			Validator:          v.Miner,
+			GasUsed:            v.GasUsed,
+			GasLimit:           v.GasLimit,
+		}
+
+		err := bsi.database.NewRaw("select count(*) as count from transactions where block_number = ?", block.Number).Scan(bsi.ctx, &block.TransactionsNumber)
+
+		if err != nil {
+
+		}
+
+		result.Blocks = append(result.Blocks, block)
+	}
+
+	var totalRows int64
+	bsi.database.NewRaw("SELECT count(*) FROM blocks").Scan(bsi.ctx, &totalRows)
+	result.TotalRows = int64(totalRows)
+
+	totalPages := math.Ceil(float64(totalRows) / float64(perPage))
+	if totalPages == 0 {
+		result.TotalPages = 1
+	} else {
+		result.TotalPages = int(totalPages)
+	}
+	return &result, nil
 }

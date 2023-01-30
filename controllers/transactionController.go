@@ -53,7 +53,7 @@ func (tc *TransactionController) GetAllTransactionsInBlock(context *gin.Context)
 }
 
 func (tc TransactionController) GetTransactions(context *gin.Context) {
-	page, perPage := Pagination(context)
+	page, perPage := PaginationTransaction(context)
 
 	result, err := tc.TransactionService.GetAllTransactions(page, perPage)
 
@@ -78,7 +78,7 @@ func (tc TransactionController) GetTransactions(context *gin.Context) {
 func (tc TransactionController) GetTransactionsByAddress(context *gin.Context) {
 	address := context.Query("address")
 
-	page, perPage := Pagination(context)
+	page, perPage := PaginationTransaction(context)
 	result, err := tc.TransactionService.GetTransactionsByAddress(address, page, perPage)
 
 	if err != nil {
@@ -100,7 +100,7 @@ func (tc TransactionController) GetTransactionsByAddress(context *gin.Context) {
 	context.HTML(200, "transactionsByAddress.html", data)
 }
 
-func Pagination(context *gin.Context) (int, int) {
+func PaginationTransaction(context *gin.Context) (int, int) {
 	page := 1
 	pageStr := context.Query("p")
 	if pageStr != "" {
