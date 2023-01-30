@@ -56,7 +56,7 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 			Size:               v.Size,
 			GasLimit:           v.GasLimit,
 			GasUsed:            v.GasUsed,
-			Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			TransactionsNumber: mapTransactionNumberByBlock[v.Number],
 		}
 
@@ -93,7 +93,7 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,
 		GasUsed:            block.GasUsed,
-		Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds())),
+		Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
 		TransactionsNumber: transactionNumberInBlock.Count,
 	}
 
@@ -127,7 +127,7 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,
 		GasUsed:            block.GasUsed,
-		Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds())),
+		Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
 		TransactionsNumber: transactionNumberInBlock.Count,
 	}
 

@@ -46,7 +46,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 			Gas:         v.Gas,
 			GasUsed:     v.GasUsed,
 			GasPrice:    v.GasPrice,
-			Timestamp:   int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:   utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 		}
 
 		// value := utils.WeiToEther(v.Value)
