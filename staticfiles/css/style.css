@@ -114,6 +114,19 @@ body {
     }
 }
 
+@media screen and (max-width: 992px) {  
+    .trim {
+        font-size: 14px;
+        max-width: 300px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+        cursor: pointer;
+    }
+}
+
 @media screen and (min-width: 1200px) {
     .media-mw {
         max-width: 100px;
@@ -273,3 +286,29 @@ span.badge.rounded-pill:hover{
         user-select: none;
     }
 /*pagination part - end*/
+
+.txns-number button{
+    border: none;
+    border-radius: 6px;
+    height: 86%;
+    width: 100%;
+    font-size: 12px;
+    color: var(--main-color);
+    background-color: var(--button-all-color);
+    transition: 0.4s;
+    size: 2cm;
+}
+
+.txns-number button a {
+    color: var(--main-color);
+    transition: 0.4s;
+}
+
+.txns-number button:hover {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.txns-number button:hover a {
+    color: white;
+}
