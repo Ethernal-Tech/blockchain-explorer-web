@@ -11,7 +11,11 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-3">Transaction Hash:</div>
-                    <div class="col-md-9">{{.transaction.Hash}}</div>
+                    <div class="col-md-9">
+                        <span class="trim">
+                            {{.transaction.Hash}}
+                        </span>
+                    </div>
                 </div>
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
@@ -26,7 +30,11 @@
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
                     <div class="col-md-3">Block Hash:</div>
-                    <div class="col-md-9">{{.transaction.BlockHash}}</div>
+                    <div class="col-md-9">
+                        <span class="trim">
+                            {{.transaction.BlockHash}}
+                        </span>
+                    </div>
                 </div>
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
