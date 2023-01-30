@@ -70,7 +70,7 @@ func (bc BlockController) GetBlocks(context *gin.Context) {
 	data := gin.H{
 		"blocks":     result.Blocks,
 		"pagination": pag,
-		"last":       pag.PerPage - 1,
+		"last":       len(result.Blocks) - 1,
 	}
 
 	context.HTML(200, "blocks.html", data)
