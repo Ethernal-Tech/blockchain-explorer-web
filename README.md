@@ -27,11 +27,12 @@
 ### 🏗 — Architecture (Application structure)
 ___
                                            
-It is a classic Web 2 application that relies on Web 3 technology. Therefore, the already well-known MVC architecture is used with some specific extensions. Extensions are all about offloading application logic to the service layer instead of controllers. The following programming languages were used in the implementation of the solution:
+It is a classic Web 2 application that relies on Web 3 technology. Therefore, the already well-known MVC architecture is used with some specific extensions. Extensions are all about offloading application logic to the service layer instead of controllers. The following techology stack were used in the implementation of the solution:
 1. Golang (GO)
 2. HTML
-3. CSS (Bootstrap 5)
+3. CSS
 4. JavaScript
+5. Bootstrap 5
 
 <br/>
 
