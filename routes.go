@@ -7,6 +7,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Function for defining web server routes (endpoints). The route format (pattern) is as follows:
+//
+// /controller/closer_description
+//
+// Or, if there is a need for a parameter, use:
+//
+// /controller/closer_description/:value
+//
+// For example:
+//
+// /block/all
+//
+// /transaction/txinblock/:blocknumber
+//
+// If there is a need for more than one parameter, use the GET query parameters or the POST http method,
+// but still register the route in one of the two ways defined previously.
+// Parameters and potential conflicts in that case should be resolved at the controller level.
+//
+// For example, if there is a need for 'actionX' in 'controllerA' with three parameters, register one
+// of the following routes:
+//
+// /controllerA/actionX/:value1 will refer to /controllerA/actionX/:value1?parameter2=value2&parameter3=value3
+//
+// /controllerA/actionX will refer to /controllerA/actionX?parameter1=value1&parameter2=value2&parameter3=value3
 func routes(server *gin.Engine, cont ...any) {
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
@@ -18,18 +42,11 @@ func routes(server *gin.Engine, cont ...any) {
 	server.GET("/:searchValue", gc.GetBySearchValue)
 
 	bc := cont[1].(controllers.BlockController)
-	// server.GET("/block/:blocknumber", bc.GetBlockByNumber)
-	// server.GET("/blockhash/:blockhsh", bc.GetBlockByHash)
-	// server.GET("/blocks", bc.GetBlocks)
 	server.GET("/block/all", bc.GetBlocks)
 	server.GET("/block/number/:blocknumber", bc.GetBlockByNumber)
 	server.GET("/block/hash/:blockhash", bc.GetBlockByHash)
 
 	tc := cont[2].(controllers.TransactionController)
-	// server.GET("/transaction/:transactionhx", tc.GetTransactionByHash)
-	// server.GET("/transactionsinblock/:blocknumber", tc.GetAllTransactionsInBlock)
-	// server.GET("/txs", tc.GetTransactions)
-	// server.GET("/txsByAddress", tc.GetTransactionsByAddress)
 	server.GET("/transaction/all", tc.GetTransactions)
 	server.GET("/transaction/hash/:txhash", tc.GetTransactionByHash)
 	server.GET("/transaction/address/:address", tc.GetTransactionsByAddress)
