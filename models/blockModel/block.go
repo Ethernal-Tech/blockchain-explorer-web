@@ -8,7 +8,7 @@ type Blocks struct {
 
 type Block struct {
 	Number             uint64
-	Timestamp          int
+	Timestamp          string
 	TransactionsNumber int
 	Validator          string
 	GasUsed            uint64

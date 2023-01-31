@@ -148,7 +148,7 @@ func (bsi *BlockServiceImplementation) GetAllBlocks(page int, perPage int) (*blo
 	for _, v := range blocks {
 		var block = blockModel.Block{
 			Number:             v.Number,
-			Timestamp:          int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds())),
+			Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			TransactionsNumber: 0,
 			Validator:          v.Miner,
 			GasUsed:            v.GasUsed,
