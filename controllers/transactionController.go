@@ -18,10 +18,9 @@ func NewTransactionController(transactionService services.TransactionService) Tr
 }
 
 func (tc *TransactionController) GetTransactionByHash(context *gin.Context) {
-	transaction, error := tc.TransactionService.GetTransactionByHash(context.Param("transactionhx"))
+	transaction, error := tc.TransactionService.GetTransactionByHash(context.Param("txhash"))
 
 	if error != nil {
-
 	}
 
 	data := gin.H{
