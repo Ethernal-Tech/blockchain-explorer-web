@@ -6,7 +6,7 @@
     </div>
 	<div class="row">
 		<div class="col-lg-6">
-			<div class="card h-100">
+			<div class="card h-100 border-1 shadow">
 				<div class="card-header be-card-header">
 					Overview
 				</div>
@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div class="col-lg-6">
-			<div class="card h-100">
+			<div class="card h-100 border-1 shadow">
 				<div class="card-header be-card-header">
 					More info
 				</div>
@@ -44,7 +44,7 @@
 	</div>
 	<div class="row">
 		<div class="col mt-3">
-			<div class="card mb-3">
+			<div class="card mb-3 border-1 shadow">
 			<div class="card-header be-card-header">
              Transactions
 			</div>
@@ -52,7 +52,7 @@
                 <div class="d-md-flex justify-content-between">
 					<p class="mb-0">
 					  <span class="d-flex align-items-center">Latest 25 from a total of
-						  <a style="margin: 0px 4px;" href="../txsByAddress?address={{.address.AddressHex}}">{{ .address.TransactionCount }}</a>
+						  <a style="margin: 0px 4px;" href="/transaction/address/{{.address.AddressHex}}">{{ .address.TransactionCount }}</a>
 						  transactions
 					  </span>
 					</p>
@@ -76,15 +76,15 @@
                     {{range .address.Transactions}}
 					<tr>
 						<td>
-							<a class="hash-tag text-truncate" href="/transaction/{{.Hash}}">{{.Hash}}</a>
+							<a class="hash-tag text-truncate" href="/transaction/hash/{{.Hash}}">{{.Hash}}</a>
 						</td>
 						<td></td>
 						<td>
-                            <a class="hash-tag text-truncate" href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a>
+                            <a class="hash-tag text-truncate" href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a>
                         </td>
 						<td>{{.Timestamp}} ago</td>
 						<td>
-							<a class="hash-tag text-truncate" href="/address/{{.From}}">{{.From}}</a>
+							<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
 						</td>
                         {{if eq .Direction "out"}}
                         	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
@@ -92,7 +92,7 @@
                         	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-left"></i></span></td>
                         {{ end }}
 						<td>
-							<a class="hash-tag text-truncate" href="/address/{{.To}}">{{.To}}</a>
+							<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>
 						</td>
 						<td>{{.Value}} Ether</td>
                         <td></td>

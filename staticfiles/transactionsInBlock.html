@@ -1,10 +1,8 @@
 {{template "header.html"}}
     <div class="container pb-3">
-        <div class="be-subtitle">
+        <div class="be-subtitle d-flex flex-column">
             Transactions 
-            <p class="mb-0 text-break">
-                <span>For Block <a class="text-break" href="/block/{{.blockNumber}}">{{.blockNumber}}</a></span>
-            </p>
+            <span class="weak">For Block <a href="/block/{{.blockNumber}}">{{.blockNumber}}</a></span>
         </div>
         <div class="card border-1 shadow">
             <div class="card-body">

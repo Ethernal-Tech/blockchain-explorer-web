@@ -12,11 +12,11 @@
                     <div class="be-pagination">
                         <ul class="d-inline-flex">
                             <li>
-                                <a href="blocks?p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="blocks?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -26,13 +26,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="blocks?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="blocks?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -55,10 +55,10 @@
                         <tbody>
                             {{range .blocks}}
                             <tr>
-                                <td><span class="hash-tag text-truncate"><a href="/block/{{.Number}}">{{.Number}}</a></span></td>
+                                <td><span class="hash-tag text-truncate"><a href="/block/number/{{.Number}}">{{.Number}}</a></span></td>
                                 <td>{{.Timestamp}} ago</td>
-                                <td class="d-none d-sm-table-cell"><a href="/transactionsinblock/{{.Number}}">{{.TransactionsNumber}}</a></td>
-                                <td><span class="hash-tag text-truncate"><a href="/address/{{.Validator}}">{{.Validator}}</a></span></td>
+                                <td class="d-none d-sm-table-cell"><a href="/transaction/txinblock/{{.Number}}">{{.TransactionsNumber}}</a></td>
+                                <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.Validator}}">{{.Validator}}</a></span></td>
                                 <td>{{.GasUsed}}</td>
                                 <td>{{.GasLimit}}</td>
                                 <td>---</td>
@@ -82,11 +82,11 @@
                     <div class="be-pagination">
                         <ul class="d-inline-flex">
                             <li>
-                                <a href="blocks?p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="blocks?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -96,13 +96,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="blocks?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="blocks?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -115,6 +115,6 @@
  <script>
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
-        window.location = "blocks?l=" + limitFilter;
+        window.location = "/block/all?l=" + limitFilter;
     }
 </script>

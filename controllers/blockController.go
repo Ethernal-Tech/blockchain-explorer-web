@@ -37,7 +37,7 @@ func (bc *BlockController) GetBlockByNumber(context *gin.Context) {
 }
 
 func (bc *BlockController) GetBlockByHash(context *gin.Context) {
-	block, error1 := bc.BlockService.GetBlockByHash(context.Param("blockhsh"))
+	block, error1 := bc.BlockService.GetBlockByHash(context.Param("blockhash"))
 
 	if error1 != nil {
 	}
