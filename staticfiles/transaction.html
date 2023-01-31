@@ -25,7 +25,7 @@
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
                     <div class="col-md-3">Block:</div>
-                    <div class="col-md-9"><a class="text-decoration-none" href="../block/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
+                    <div class="col-md-9"><a class="text-decoration-none" href="/block/number/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
                 </div>
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
@@ -44,16 +44,16 @@
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
                     <div class="col-md-3">From:</div>
-                    <div class="col-md-9"><a class="text-decoration-none" href="../address/{{.transaction.From}}">{{.transaction.From}}</a></div>
+                    <div class="col-md-9"><a class="text-decoration-none" href="/address/hash/{{.transaction.From}}">{{.transaction.From}}</a></div>
                 </div>
                 <hr class="transaction-hr">
                 <div class="row align-items-center">
                     <div class="col-md-3">To:</div>
                     <div class="col-md-9">
                         {{if eq .transaction.To ""}}
-                        <span>[Contract]</span> <a class="text-decoration-none" href="../address/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
+                        <span>[Contract]</span> <a class="text-decoration-none" href="/address/hash/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
                         {{else}}
-                        <a class="text-decoration-none" href="../address/{{.transaction.To}}">{{.transaction.To}}</a>
+                        <a class="text-decoration-none" href="/address/hash/{{.transaction.To}}">{{.transaction.To}}</a>
                         {{end}}
                     </div>
                 </div>

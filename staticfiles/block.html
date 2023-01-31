@@ -24,7 +24,7 @@
                 <div class="col-md-3">Transactions:</div>
                 <div class="col-md-9 txns-number" style="width: fit-content; padding-right: 5px;">
                     <button>
-                        <a href="#" style="text-decoration: none">{{.block.TransactionsNumber}} transactions</a>
+                        <a href="/transaction/txinblock/{{.block.Number}}" style="text-decoration: none">{{.block.TransactionsNumber}} transactions</a>
                     </button>
                 </div>
                 in this block
@@ -32,7 +32,7 @@
             <hr class="transaction-hr">
             <div class="row align-items-center">
                 <div class="col-md-3">Validated by:</div>
-                <div class="col-md-9"><a href="../address/{{.block.Validator}}">{{.block.Validator}}</a></span></div>
+                <div class="col-md-9"><a href="/address/hash/{{.block.Validator}}">{{.block.Validator}}</a></span></div>
             </div>
             <hr class="transaction-hr">
             <div class="row align-items-center">
@@ -78,7 +78,7 @@
                 <div class="col-md-3">Parent Hash:</div>
                 <div class="col-md-9">
                     <span class="trim">
-                        <a href="../blockhash/{{.block.ParentHash}}">
+                        <a href="/block/hash/{{.block.ParentHash}}">
                             {{.block.ParentHash}}
                         </a>
                     </span>

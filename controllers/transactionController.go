@@ -76,7 +76,7 @@ func (tc TransactionController) GetTransactions(context *gin.Context) {
 }
 
 func (tc TransactionController) GetTransactionsByAddress(context *gin.Context) {
-	address := context.Query("address")
+	address := context.Param("address")
 
 	page, perPage := PaginationTransaction(context)
 	result, err := tc.TransactionService.GetTransactionsByAddress(address, page, perPage)
