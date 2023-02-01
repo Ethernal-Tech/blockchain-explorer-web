@@ -2,7 +2,7 @@
     <div class="container pb-3">
         <div class="be-subtitle d-flex flex-column">
             Transactions
-            <span class="weak">For <a href="/address/{{.address}}">{{.address}}</a></span>
+            <span class="weak">For <a href="/address/hash/{{.address}}">{{.address}}</a></span>
         </div>
         <div class="card border-1 shadow">
             <div class="card-body">
@@ -16,11 +16,11 @@
                     <div class="be-pagination">
                         <ul class="d-inline-flex">
                             <li>
-                                <a href="/txsByAddress?address={{.address}}&p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="/transaction/address/{{.address}}?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -30,13 +30,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -59,18 +59,18 @@
                         <tbody>
                             {{range .transactions}}
                             <tr>
-                                <td><span class="hash-tag text-truncate"><a href="/transaction/{{.Hash}}">{{.Hash}}</a></span></td>
+                                <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
                                 <td></td>
-                                <td class="d-none d-sm-table-cell"><a href="/block/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
+                                <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
                                 <td>{{.Timestamp}} ago</td>
-                                <td><span class="hash-tag text-truncate"><a href="../address/{{.From}}">{{.From}}</a></span></td>
+                                <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.From}}">{{.From}}</a></span></td>
                                 <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
                                 <td>
                                     <span class="hash-tag text-truncate">
                                         {{if eq .To ""}}
-                                        <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                        <a href="/address/hash/{{.ContractAddress}}">{{.ContractAddress}}</a>
                                         {{else}}
-                                        <a href="../address/{{.To}}">{{.To}}</a>
+                                        <a href="/address/hash/{{.To}}">{{.To}}</a>
                                         {{end}}
                                     </span>
                                 </td>
@@ -94,11 +94,11 @@
                     <div class="be-pagination">
                         <ul class="d-inline-flex">
                             <li>
-                                <a href="/txsByAddress?address={{.address}}&p=1&l={{.pagination.PerPage}}">First</a>
+                                <a href="/transaction/address/{{.address}}?p=1&l={{.pagination.PerPage}}">First</a>
                             </li>
                             <li>
                                 {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
                                 {{ else }}
                                 <span class="disable-paging-button"><</span>
                                 {{ end }}
@@ -108,13 +108,13 @@
                             </li>
                             <li>
                                 {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
                                 {{ else }}
                                 <span class="disable-paging-button">></span>
                                 {{ end }}
                             </li>
                             <li>
-                                <a href="/txsByAddress?address={{.address}}&p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                                <a href="/transaction/address/{{.address}}?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
                             </li>
                         </ul>
                     </div>
@@ -127,6 +127,6 @@
  <script>
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
-        window.location = "/txsByAddress?address={{.address}}&l=" + limitFilter;
+        window.location = "/transaction/address/{{.address}}?l=" + limitFilter;
     }
 </script>
