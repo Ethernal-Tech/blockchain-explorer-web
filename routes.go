@@ -2,6 +2,7 @@ package main
 
 import (
 	"text/template"
+	"webbc/configuration"
 	"webbc/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,9 @@ import (
 //
 // /controllerA/actionX will refer to /controllerA/actionX?parameter1=value1&parameter2=value2&parameter3=value3
 func routes(server *gin.Engine, cont ...any) {
+	server.SetFuncMap(template.FuncMap{
+		"getConfig": getConfig,
+	})
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
 
@@ -56,6 +60,10 @@ func routes(server *gin.Engine, cont ...any) {
 	server.GET("/address/hash/:addresshash", ac.GetAddress)
 }
 
+func getConfig() *configuration.TemplateConfiguration {
+	return templateConfig
+}
+
 func getCssFile(c *gin.Context) {
 	t, err := template.ParseFiles("staticfiles/css/style.css")
 
@@ -65,5 +73,5 @@ func getCssFile(c *gin.Context) {
 
 	c.Header("Content-Type", "text/css")
 
-	t.Execute(c.Writer, config)
+	t.Execute(c.Writer, templateConfig)
 }

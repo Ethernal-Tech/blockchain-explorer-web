@@ -1,9 +1,10 @@
- {{template "header.html"}}
+{{$config := getConfig}}
+{{template "header.html"}}
 
         <div class="top-section container-fluid">
             <div class="container">
                 <p class="network-name">
-                    Goerli Testnet Network Explorer
+                    {{$config.MainTitle}}
                 </p>
                 <div class="row">
                     <div class="col-lg-8">

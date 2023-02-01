@@ -219,6 +219,13 @@ a:hover{
     opacity: .75;
 }
 
+.be-title {
+    font-size: 20px;
+    color: var(--background-color);
+    margin-left: 16px;
+    font-weight: bold;
+}
+
 .be-subtitle {
     font-size: 20px;
     color: rgb(74, 79, 85);

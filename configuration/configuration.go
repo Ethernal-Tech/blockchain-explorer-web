@@ -15,11 +15,16 @@ type Configuration struct {
 	DataBaseName         string
 	HTTPUrl              string
 	CallTimeoutInSeconds uint
-	BackgroundColor      string
-	MainColor            string
 }
 
-func LoadConfiguration() *Configuration {
+type TemplateConfiguration struct {
+	BackgroundColor string
+	MainColor       string
+	HeaderTitle     string
+	MainTitle       string
+}
+
+func LoadConfiguration() (*Configuration, *TemplateConfiguration) {
 	configurationFile, error := filepath.Abs(".env")
 
 	if error != nil {
@@ -43,9 +48,14 @@ func LoadConfiguration() *Configuration {
 		DataBaseName:         viper.GetString("DB_NAME"),
 		HTTPUrl:              viper.GetString("HTTPUrl"),
 		CallTimeoutInSeconds: viper.GetUint("CALL_TIMEOUT_IN_SECONDS"),
-		BackgroundColor:      viper.GetString("BACKGROUND_COLOR"),
-		MainColor:            viper.GetString("MAIN_COLOR"),
 	}
 
-	return &configuration
+	templateConfiguration := TemplateConfiguration{
+		BackgroundColor: viper.GetString("BACKGROUND_COLOR"),
+		MainColor:       viper.GetString("MAIN_COLOR"),
+		HeaderTitle:     viper.GetString("HEADER_TITLE"),
+		MainTitle:       viper.GetString("MAIN_TITLE"),
+	}
+
+	return &configuration, &templateConfiguration
 }

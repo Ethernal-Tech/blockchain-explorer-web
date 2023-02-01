@@ -15,6 +15,7 @@ import (
 var (
 	ctx                   context.Context
 	config                *configuration.Configuration
+	templateConfig        *configuration.TemplateConfiguration
 	database              *bun.DB
 	server                *gin.Engine
 	connection            eth.BlockchainNodeConnection
@@ -29,7 +30,7 @@ var (
 
 func main() {
 	ctx = context.TODO()
-	config = configuration.LoadConfiguration()
+	config, templateConfig = configuration.LoadConfiguration()
 	database = DB.InitializationDB(config)
 	server = gin.Default()
 	connection := eth.BlockchainNodeConnection{
