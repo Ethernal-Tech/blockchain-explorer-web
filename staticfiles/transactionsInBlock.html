@@ -29,7 +29,7 @@
                         <tbody>
                             {{range .transactions}}
                             <tr>
-                                <td><span class="hash-tag text-truncate"><a href="/transaction/{{.Hash}}">{{.Hash}}</a></span></td>
+                                <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
                                 <td></td>
                                 <td class="d-none d-sm-table-cell"><a href="/block/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
                                 <td>{{.Timestamp}} ago</td>
