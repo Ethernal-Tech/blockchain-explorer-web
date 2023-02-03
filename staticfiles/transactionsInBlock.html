@@ -2,14 +2,41 @@
     <div class="container pb-3">
         <div class="be-subtitle d-flex flex-column">
             Transactions 
-            <span class="weak">For Block <a href="/block/number/{{.blockNumber}}">{{.blockNumber}}</a></span>
+            <span class="weak">For Block <a href="/block/number/{{.block}}">{{.block}}</a></span>
         </div>
         <div class="card border-1 shadow">
             <div class="card-body">
                 <div class="d-md-flex justify-content-between mb-4">
                     <p class="mb-0">
-                        <span class="d-flex align-items-center"> A total of {{.numberOfTransactions}} transactions found</span>
+                        <span class="d-flex align-items-center"> A total of {{.pagination.TotalRows}} transactions found</span>
                     </p>
+                    <div class="be-pagination">
+                        <ul class="d-inline-flex">
+                            <li>
+                                <a href="/transaction/txinblock/{{.block}}?p=1&l={{.pagination.PerPage}}">First</a>
+                            </li>
+                            <li>
+                                {{ if (gt .pagination.CurrentPage 1)}}
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                {{ else }}
+                                <span class="disable-paging-button"><</span>
+                                {{ end }}
+                            </li>
+                            <li>
+                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                            </li>
+                            <li>
+                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                {{ else }}
+                                <span class="disable-paging-button">></span>
+                                {{ end }}
+                            </li>
+                            <li>
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="table-responsive mb-0">
                     <table class="table table-hover align-middle">
@@ -31,7 +58,7 @@
                             <tr>
                                 <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
                                 <td></td>
-                                <td class="d-none d-sm-table-cell"><a href="/block/number/{{$.blockNumber}}">{{$.blockNumber}}</a></td>
+                                <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
                                 <td>{{.Timestamp}} ago</td>
                                 <td><span class="hash-tag text-truncate"><a href="../address/{{.From}}">{{.From}}</a></span></td>
                                 <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
@@ -51,7 +78,53 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
+                            <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
+                            <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
+                            <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
+                            <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
+                        </select>
+                        <span>records</span>
+                    </div>
+                    <div class="be-pagination">
+                        <ul class="d-inline-flex">
+                            <li>
+                                <a href="/transaction/txinblock/{{.block}}?p=1&l={{.pagination.PerPage}}">First</a>
+                            </li>
+                            <li>
+                                {{ if (gt .pagination.CurrentPage 1)}}
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                                {{ else }}
+                                <span class="disable-paging-button"><</span>
+                                {{ end }}
+                            </li>
+                            <li>
+                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                            </li>
+                            <li>
+                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                                {{ else }}
+                                <span class="disable-paging-button">></span>
+                                {{ end }}
+                            </li>
+                            <li>
+                                <a href="/transaction/txinblock/{{.block}}?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
  {{template "footer.html"}}
+
+
+ <script>
+    function limitChanged(){
+        var limitFilter =  document.getElementById("limitFilterId").value;
+        window.location = "/transaction/txinblock/{{.block}}?l=" + limitFilter;
+    }
+</script>

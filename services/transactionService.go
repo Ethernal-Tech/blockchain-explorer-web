@@ -93,39 +93,45 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	return &oneResultTransaction, nil
 }
 
-func (tsi *TransactionServiceImplementation) GetAllTransactionsInBlock(blockNumber uint64) (*[]models.Transaction, error) {
+func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber string, page int, perPage int) (*transactionModel.Transactions, error) {
 	var transactions []DB.Transaction
-	err := tsi.database.NewSelect().Table("transactions").Where("block_number = ?", blockNumber).Scan(tsi.ctx, &transactions)
+
+	var offSet = perPage * (page - 1)
+	err := tsi.database.NewSelect().Table("transactions").OrderExpr("block_number DESC").Where("block_number = ?", blockNumber).Limit(perPage).Offset(offSet).Scan(tsi.ctx, &transactions)
 
 	if err != nil {
-
+		//TODO: error handling
 	}
 
-	var result []models.Transaction
+	var result transactionModel.Transactions
 
 	for _, v := range transactions {
-		var oneResultTransaction = models.Transaction{
-			Hash:             v.Hash,
-			BlockHash:        v.BlockHash,
-			BlockNumber:      v.BlockNumber,
-			From:             v.From,
-			To:               v.To,
-			Gas:              v.Gas,
-			GasUsed:          v.GasUsed,
-			GasPrice:         v.GasPrice,
-			Nonce:            v.Nonce,
-			TransactionIndex: v.TransactionIndex,
-			Value:            utils.WeiToEther(v.Value),
-			ContractAddress:  v.ContractAddress,
-			Status:           v.Status,
-			Timestamp:        utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+		var transaction = transactionModel.Transaction{
+			Hash:            v.Hash,
+			Method:          "",
+			BlockNumber:     v.BlockNumber,
+			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			From:            v.From,
+			To:              v.To,
+			Value:           utils.WeiToEther(v.Value),
+			TxnFee:          0000000,
+			ContractAddress: v.ContractAddress,
 		}
-
-		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
-			oneResultTransaction.To = ""
+		if strings.ReplaceAll(transaction.To, " ", "") == "" {
+			transaction.To = ""
 		}
+		result.Transactions = append(result.Transactions, transaction)
+	}
 
-		result = append(result, oneResultTransaction)
+	var totalRows int
+	totalRows, err = tsi.database.NewSelect().Table("transactions").Where("? = ?", bun.Ident("block_number"), blockNumber).Count(tsi.ctx)
+	result.TotalRows = int64(totalRows)
+
+	totalPages := math.Ceil(float64(totalRows) / float64(perPage))
+	if totalPages == 0 {
+		result.TotalPages = 1
+	} else {
+		result.TotalPages = int(totalPages)
 	}
 
 	return &result, nil
@@ -189,14 +195,15 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 	var result transactionModel.Transactions
 	for _, v := range transactions {
 		var transaction = transactionModel.Transaction{
-			Hash:        v.Hash,
-			Method:      "",
-			BlockNumber: v.BlockNumber,
-			Timestamp:   utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
-			From:        v.From,
-			To:          v.To,
-			Value:       utils.WeiToEther(v.Value),
-			TxnFee:      0000000,
+			Hash:            v.Hash,
+			Method:          "",
+			BlockNumber:     v.BlockNumber,
+			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			From:            v.From,
+			To:              v.To,
+			Value:           utils.WeiToEther(v.Value),
+			TxnFee:          0000000,
+			ContractAddress: v.ContractAddress,
 		}
 		if strings.ReplaceAll(transaction.To, " ", "") == "" {
 			transaction.To = ""
