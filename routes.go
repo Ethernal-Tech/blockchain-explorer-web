@@ -8,30 +8,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Function for defining web server routes (endpoints). The route format (pattern) is as follows:
+// Function for defining web server routes (endpoints). First, it is necessary to take the corresponding route group
+// depending on which controller you are working with.
+// Then, the route format (pattern) is as follows:
 //
-// /controller/closer_description
+// /closer_description
 //
 // Or, if there is a need for a parameter, use:
 //
-// /controller/closer_description/:value
+// /closer_description/:value
 //
 // For example:
 //
-// /block/all
+// /all
 //
-// /transaction/txinblock/:blocknumber
+// /txinblock/:blocknumber
 //
 // If there is a need for more than one parameter, use the GET query parameters or the POST http method,
 // but still register the route in one of the two ways defined previously.
 // Parameters and potential conflicts in that case should be resolved at the controller level.
 //
 // For example, if there is a need for 'actionX' in 'controllerA' with three parameters, register one
-// of the following routes:
+// of the following routes (inside controllerA rout group):
 //
-// /controllerA/actionX/:value1 will refer to /controllerA/actionX/:value1?parameter2=value2&parameter3=value3
+// /actionX/:value1 will refer to /controllerA/actionX/:value1?parameter2=value2&parameter3=value3
 //
-// /controllerA/actionX will refer to /controllerA/actionX?parameter1=value1&parameter2=value2&parameter3=value3
+// /actionX will refer to /controllerA/actionX?parameter1=value1&parameter2=value2&parameter3=value3
 func routes(server *gin.Engine, cont ...any) {
 	server.SetFuncMap(template.FuncMap{
 		"getConfig": getConfig,
@@ -46,18 +48,27 @@ func routes(server *gin.Engine, cont ...any) {
 	server.GET("/:searchValue", gc.GetBySearchValue)
 
 	bc := cont[1].(controllers.BlockController)
-	server.GET("/block/all", bc.GetBlocks)
-	server.GET("/block/number/:blocknumber", bc.GetBlockByNumber)
-	server.GET("/block/hash/:blockhash", bc.GetBlockByHash)
+	blockRoutes := server.Group("/block")
+	{
+		blockRoutes.GET("/all", bc.GetBlocks)
+		blockRoutes.GET("/number/:blocknumber", bc.GetBlockByNumber)
+		blockRoutes.GET("/hash/:blockhash", bc.GetBlockByHash)
+	}
 
 	tc := cont[2].(controllers.TransactionController)
-	server.GET("/transaction/all", tc.GetTransactions)
-	server.GET("/transaction/hash/:txhash", tc.GetTransactionByHash)
-	server.GET("/transaction/address/:address", tc.GetTransactionsByAddress)
-	server.GET("/transaction/txinblock/:blocknumber", tc.GetTransactionsInBlock)
+	transactionRoutes := server.Group("/transaction")
+	{
+		transactionRoutes.GET("/all", tc.GetTransactions)
+		transactionRoutes.GET("/hash/:txhash", tc.GetTransactionByHash)
+		transactionRoutes.GET("/address/:address", tc.GetTransactionsByAddress)
+		transactionRoutes.GET("/txinblock/:blocknumber", tc.GetTransactionsInBlock)
+	}
 
 	ac := cont[3].(controllers.AddressController)
-	server.GET("/address/hash/:addresshash", ac.GetAddress)
+	addressRoutes := server.Group("/address")
+	{
+		addressRoutes.GET("/hash/:addresshash", ac.GetAddress)
+	}
 }
 
 func getConfig() *configuration.TemplateConfiguration {
