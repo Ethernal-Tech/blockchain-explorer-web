@@ -46,6 +46,7 @@ func routes(server *gin.Engine, cont ...any) {
 	gc := cont[0].(controllers.GlobalController)
 	server.GET("/", gc.GetIndex)
 	server.GET("/:searchValue", gc.GetBySearchValue)
+	server.POST("/configuration", gc.UpdateConfiguration)
 
 	bc := cont[1].(controllers.BlockController)
 	blockRoutes := server.Group("/block")
@@ -72,6 +73,8 @@ func routes(server *gin.Engine, cont ...any) {
 }
 
 func getConfig() *configuration.TemplateConfiguration {
+	templateConfig.Mutex.RLock()
+	defer templateConfig.Mutex.RUnlock()
 	return templateConfig
 }
 

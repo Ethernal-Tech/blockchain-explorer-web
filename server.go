@@ -26,6 +26,7 @@ var (
 	globalController      controllers.GlobalController
 	addressService        services.AddressService
 	addressController     controllers.AddressController
+	configurationService  services.ConfigurationService
 )
 
 func main() {
@@ -43,7 +44,8 @@ func main() {
 	transactionController = controllers.NewTransactionController(transactionService)
 	addressService = services.NewAddressService(database, ctx, connection.HTTP, config)
 	addressController = controllers.NewAddressController(addressService)
-	globalController = controllers.NewGlobalController(blockService, transactionService, addressService)
+	configurationService = services.NewConfigurationService(templateConfig)
+	globalController = controllers.NewGlobalController(blockService, transactionService, addressService, configurationService)
 
 	routes(server, globalController, blockController, transactionController, addressController)
 	server.Run(":8080")

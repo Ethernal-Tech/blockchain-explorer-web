@@ -3,19 +3,21 @@ package controllers
 import (
 	"strconv"
 	"strings"
+	"webbc/configuration"
 	"webbc/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GlobalController struct {
-	BlockService       services.BlockService
-	TransactionService services.TransactionService
-	AddressService     services.AddressService
+	BlockService         services.BlockService
+	TransactionService   services.TransactionService
+	AddressService       services.AddressService
+	ConfigurationService services.ConfigurationService
 }
 
-func NewGlobalController(blockService services.BlockService, transactionService services.TransactionService, addressService services.AddressService) GlobalController {
-	return GlobalController{BlockService: blockService, TransactionService: transactionService, AddressService: addressService}
+func NewGlobalController(blockService services.BlockService, transactionService services.TransactionService, addressService services.AddressService, configurationService services.ConfigurationService) GlobalController {
+	return GlobalController{BlockService: blockService, TransactionService: transactionService, AddressService: addressService, ConfigurationService: configurationService}
 }
 
 func (gc *GlobalController) GetIndex(context *gin.Context) {
@@ -65,4 +67,15 @@ func (gc *GlobalController) GetBySearchValue(context *gin.Context) {
 
 		context.HTML(200, "block.html", data)
 	}
+}
+
+func (gc *GlobalController) UpdateConfiguration(context *gin.Context) {
+	var templateConfig *configuration.TemplateConfiguration
+	if err := context.Bind(&templateConfig); err != nil {
+
+	}
+	if err := gc.ConfigurationService.Update(templateConfig); err != nil {
+
+	}
+	context.Redirect(302, context.Request.Referer())
 }

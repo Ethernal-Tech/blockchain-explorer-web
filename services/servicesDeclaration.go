@@ -1,6 +1,7 @@
 package services
 
 import (
+	"webbc/configuration"
 	"webbc/models"
 	"webbc/models/addressModel"
 	"webbc/models/blockModel"
@@ -24,4 +25,8 @@ type TransactionService interface {
 
 type AddressService interface {
 	GetAddress(string) (*addressModel.Address, error)
+}
+
+type ConfigurationService interface {
+	Update(*configuration.TemplateConfiguration) error
 }
