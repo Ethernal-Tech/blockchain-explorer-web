@@ -187,6 +187,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 	var transactions []DB.Transaction
 
 	var offest = perPage * (page - 1)
+	address = strings.ToLower(address)
 	err := tsi.database.NewSelect().Table("transactions").OrderExpr("block_number DESC").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Offset(offest).Limit(perPage).Scan(tsi.ctx, &transactions)
 	if err != nil {
 		//TODO: error handling
