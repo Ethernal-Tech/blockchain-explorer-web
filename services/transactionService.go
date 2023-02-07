@@ -209,6 +209,11 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 		if strings.ReplaceAll(transaction.To, " ", "") == "" {
 			transaction.To = ""
 		}
+		if address == v.To {
+			transaction.Direction = "in"
+		} else {
+			transaction.Direction = "out"
+		}
 		result.Transactions = append(result.Transactions, transaction)
 	}
 

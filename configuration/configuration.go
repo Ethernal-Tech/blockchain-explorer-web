@@ -3,6 +3,7 @@ package configuration
 import (
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/spf13/viper"
 )
@@ -18,10 +19,11 @@ type Configuration struct {
 }
 
 type TemplateConfiguration struct {
-	BackgroundColor string
-	MainColor       string
-	HeaderTitle     string
-	MainTitle       string
+	Mutex           *sync.RWMutex
+	BackgroundColor string `form:"backgroundColor"`
+	MainColor       string `form:"mainColor"`
+	HeaderTitle     string `form:"headerTitle"`
+	MainTitle       string `form:"mainTitle"`
 }
 
 func LoadConfiguration() (*Configuration, *TemplateConfiguration) {
@@ -33,6 +35,7 @@ func LoadConfiguration() (*Configuration, *TemplateConfiguration) {
 	}
 
 	viper.SetConfigFile(configurationFile)
+	viper.SetConfigType("env")
 	error = viper.ReadInConfig()
 
 	if error != nil {
@@ -51,6 +54,7 @@ func LoadConfiguration() (*Configuration, *TemplateConfiguration) {
 	}
 
 	templateConfiguration := TemplateConfiguration{
+		Mutex:           &sync.RWMutex{},
 		BackgroundColor: viper.GetString("BACKGROUND_COLOR"),
 		MainColor:       viper.GetString("MAIN_COLOR"),
 		HeaderTitle:     viper.GetString("HEADER_TITLE"),

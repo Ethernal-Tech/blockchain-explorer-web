@@ -87,9 +87,9 @@
 							<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
 						</td>
                         {{if eq .Direction "out"}}
-                        	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                        	<td class="text-center"><span class="badge bg-light text-dark">OUT</span></td>
                         {{ else }}
-                        	<td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-left"></i></span></td>
+                        	<td class="text-center"><span class="badge bg-dark">IN</span></td>
                         {{ end }}
 						<td>
 							<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>

@@ -16,4 +16,5 @@ type Transaction struct {
 	Value           string
 	TxnFee          uint64
 	ContractAddress string
+	Direction       string
 }

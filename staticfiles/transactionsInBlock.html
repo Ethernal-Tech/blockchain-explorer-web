@@ -60,14 +60,14 @@
                                 <td></td>
                                 <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
                                 <td>{{.Timestamp}} ago</td>
-                                <td><span class="hash-tag text-truncate"><a href="../address/{{.From}}">{{.From}}</a></span></td>
+                                <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.From}}">{{.From}}</a></span></td>
                                 <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
                                 <td>
                                     <span class="hash-tag text-truncate">
                                         {{if eq .To ""}}
-                                        <a href="../address/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                        <a href="/address/hash/{{.ContractAddress}}"><i class="fas fa-file-contract"></i> {{.ContractAddress}}</a>
                                         {{else}}
-                                        <a href="../address/{{.To}}">{{.To}}</a>
+                                        <a href="/address/hash/{{.To}}">{{.To}}</a>
                                         {{end}}
                                     </span>
                                 </td>

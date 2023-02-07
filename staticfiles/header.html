@@ -30,55 +30,19 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="ms-auto navbar-nav">
-                            <li class="nav-item">
-                              <a class="nav-link active" aria-current="page" href="/" style="color: var(--main-color)">Home</a>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Blockchain
+                                    Configuration
                                 </a>
                                 <ul class="dropdown-menu border-0">
-                                    <li><a class="dropdown-item" href="#">View Txns</a></li>
-                                    <li><a class="dropdown-item" href="#">View Pending Txns</a></li>
-                                    <li><a class="dropdown-item" href="#">View Contract Internal Txns</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">View Blocks</a></li>
-                                    <li><a class="dropdown-item" href="#">Forked Blocks (Reorgs)</a></li>
-                                    <li><a class="dropdown-item" href="#">View Uncles</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Top Accounts</a></li>
-                                    <li><a class="dropdown-item" href="#">Verified Contracts</a></li>
+                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#configurationModal">Application</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">Database</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">Node</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Tokens
-                                </a>
-                                <ul class="dropdown-menu border-0">
-                                    <li><a class="dropdown-item" href="#">View Tokens</a></li>
-                                    <li><a class="dropdown-item" href="#">View ERC20 Transfers</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">ERC721 Top Tokens</a></li>
-                                    <li><a class="dropdown-item" href="#">View ERC721 Transfers</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">ERC1155 Top Tokens</a></li>
-                                    <li><a class="dropdown-item" href="#">View ERC1155 Transfers</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Misc
-                              </a>
-                              <ul class="dropdown-menu border-0">
-                                <li><a class="dropdown-item" href="#">API Documentation</a></li>
-                                <li><a class="dropdown-item" href="#">Verify Contract</a></li>
-                                <li><a class="dropdown-item" href="#">Byte to Opcode</a></li>
-                                <li><a class="dropdown-item" href="#">Broadcast TXN</a></li>
-                                <li><a class="dropdown-item" href="#">Vyper Online Compiler</a></li>
-                              </ul>
-                            </li>
-                          </ul>
+                        </ul>
                     </div>
                 </nav>
             </div>
         </div>
+        {{template "configuration.html" $config}}
