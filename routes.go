@@ -43,10 +43,14 @@ func routes(server *gin.Engine, cont ...any) {
 
 	server.GET("/css/style.css", getCssFile)
 
+	authorized := server.Group("/", gin.BasicAuth(gin.Accounts{
+		"admin": "admin",
+	}))
+
 	gc := cont[0].(controllers.GlobalController)
 	server.GET("/", gc.GetIndex)
 	server.GET("/:searchValue", gc.GetBySearchValue)
-	server.POST("/configuration", gc.UpdateConfiguration)
+	authorized.POST("/configuration", gc.UpdateConfiguration)
 
 	bc := cont[1].(controllers.BlockController)
 	blockRoutes := server.Group("/block")
