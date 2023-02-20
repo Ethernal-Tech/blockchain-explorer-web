@@ -48,5 +48,5 @@ func main() {
 	globalController = controllers.NewGlobalController(blockService, transactionService, addressService, configurationService)
 
 	routes(server, globalController, blockController, transactionController, addressController)
-	server.Run(":8080")
+	server.Run(":10010")
 }

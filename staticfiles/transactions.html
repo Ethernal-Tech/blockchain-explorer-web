@@ -1,127 +1,146 @@
 {{template "header.html"}}
-    <div class="container pb-3">
-        <div class="be-subtitle">
-            Transactions
-        </div>
-        <div class="card border-1 shadow">
-            <div class="card-body">
-                <div class="d-md-flex justify-content-between mb-3">
-                    <p class="mb-0">
-                        <span class="d-flex align-items-center"> More than > {{.pagination.TotalRows}} transactions found</span>
-                        <span class="be-small-text">(Showing the last 500k records)</span>
-                    </p>
-                    <div class="be-pagination">
-                        <ul class="d-inline-flex">
-                            <li>
-                                <a href="/transaction/all?p=1&l={{.pagination.PerPage}}">First</a>
-                            </li>
-                            <li>
-                                {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/transaction/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
-                                {{ else }}
-                                <span class="disable-paging-button"><</span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
-                            </li>
-                            <li>
-                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/transaction/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
-                                {{ else }}
-                                <span class="disable-paging-button">></span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <a href="/transaction/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
-                            </li>
-                        </ul>
-                    </div>
+
+<div class="container pb-3">
+    <div class="be-subtitle">
+        Transactions
+    </div>
+    <div class="card border-1 shadow">
+        <div class="card-body">
+            <div class="d-md-flex justify-content-between mb-3">
+                <p class="mb-0">
+                    <span class="d-flex align-items-center"> More than > {{.pagination.TotalRows}} transactions found</span>
+                    <span class="be-small-text">(Showing the last 500k records)</span>
+                </p>
+                <div class="be-pagination">
+                    <ul class="d-inline-flex">
+                        <li>
+                            <a href="/transaction/all?p=1&l={{.pagination.PerPage}}">First</a>
+                        </li>
+                        <li>
+                            {{ if (gt .pagination.CurrentPage 1)}}
+                            <a href="/transaction/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                            {{ else }}
+                            <span class="disable-paging-button"></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                        </li>
+                        <li>
+                            {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                            <a href="/transaction/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                            {{ else }}
+                            <span class="disable-paging-button">></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <a href="/transaction/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="table-responsive mb-0">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Txn Hash</th>
-                                <th scope="col">Method</th>
-                                <th scope="col">Block</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">From</th>
-                                <th scope="col"></th>
-                                <th scope="col">To</th>
-                                <th scope="col">Value</th>
-                                <th scope="col">Txn Fee</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{range .transactions}}
-                            <tr>
-                                <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
-                                <td><span class="method-name badge align-middle bg-light text-dark border border-dark dark:border-white border-opacity-10 fw-normal text-truncate w-100 py-1.5">{{.Method}}</span></td>
-                                <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
-                                <td>{{.Timestamp}} ago</td>
-                                <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.From}}">{{.From}}</a></span></td>
-                                <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
-                                <td>
-                                    <span class="hash-tag text-truncate">
-                                        {{if eq .To ""}}
-                                        <a href="/address/hash/{{.ContractAddress}}">{{.ContractAddress}}</a>
-                                        {{else}}
-                                        <a href="/address/hash/{{.To}}">{{.To}}</a>
-                                        {{end}}
-                                    </span>
-                                </td>
-                                <td>{{.Value}} Ether</td>
-                                <td>---</td>
-                            </tr>
-                            {{end}}
-                        </tbody>
-                    </table>
+            </div>
+            <div class="table-responsive mb-0">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Txn Hash</th>
+                            <th scope="col">Method</th>
+                            <th scope="col">Block</th>
+                            <th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
+                            <th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
+                            <th scope="col">From</th>
+                            <th scope="col"></th>
+                            <th scope="col">To</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Txn Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .transactions}}
+                        <tr>
+                            <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
+                            <td><span class="method-name badge align-middle bg-light text-dark border border-dark dark:border-white border-opacity-10 fw-normal text-truncate w-100 py-1.5">{{.Method}}</span></td>
+                            <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
+                            <td class="ageData">{{.Age}} ago</td>
+                            <td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
+                            <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.From}}">{{.From}}</a></span></td>
+                            <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                            <td>
+                                <span class="hash-tag text-truncate">
+                                    {{if eq .To ""}}
+                                    <a href="/address/hash/{{.ContractAddress}}">{{.ContractAddress}}</a>
+                                    {{else}}
+                                    <a href="/address/hash/{{.To}}">{{.To}}</a>
+                                    {{end}}
+                                </span>
+                            </td>
+                            <td>{{.Value}} Ether</td>
+                            <td>---</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
+                        <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
+                        <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
+                        <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
+                        <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
+                    </select>
+                    <span>records</span>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
-                            <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
-                            <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
-                            <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
-                            <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
-                        </select>
-                        <span>records</span>
-                    </div>
-                    <div class="be-pagination">
-                        <ul class="d-inline-flex">
-                            <li>
-                                <a href="/transaction/all?p=1&l={{.pagination.PerPage}}">First</a>
-                            </li>
-                            <li>
-                                {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/transaction/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
-                                {{ else }}
-                                <span class="disable-paging-button"><</span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
-                            </li>
-                            <li>
-                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/transaction/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
-                                {{ else }}
-                                <span class="disable-paging-button">></span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <a href="/transaction/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="be-pagination">
+                    <ul class="d-inline-flex">
+                        <li>
+                            <a href="/transaction/all?p=1&l={{.pagination.PerPage}}">First</a>
+                        </li>
+                        <li>
+                            {{ if (gt .pagination.CurrentPage 1)}}
+                            <a href="/transaction/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                            {{ else }}
+                            <span class="disable-paging-button"></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                        </li>
+                        <li>
+                            {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                            <a href="/transaction/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                            {{ else }}
+                            <span class="disable-paging-button">></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <a href="/transaction/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
  {{template "footer.html"}}
 
  <script>
+    javascript:(function() {      
+        var cookies = document.cookie.split("; ")     
+        cookies.forEach(element => {
+            var nameValuePair = element.split("=");       
+            if(nameValuePair[0] === "timestamp"){                
+                if(nameValuePair[1] === 'DateTime'){
+                    changeColumn('dateTime')
+                }
+                else if (value === 'Age'){
+                    changeColumn('age')
+                }          
+            }     
+        });
+    })();
+
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
         window.location = "/transaction/all?l=" + limitFilter;

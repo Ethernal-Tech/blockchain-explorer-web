@@ -12,7 +12,8 @@ type Block struct {
 	Size               uint64
 	GasLimit           uint64
 	GasUsed            uint64
-	Timestamp          string
+	Age                string
+	DateTime           string
 	TransactionsNumber int
 }
 
@@ -30,5 +31,6 @@ type Transaction struct {
 	Value            string
 	ContractAddress  string
 	Status           uint64
-	Timestamp        string
+	Age              string
+	DateTime         string
 }

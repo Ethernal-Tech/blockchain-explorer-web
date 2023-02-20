@@ -11,7 +11,8 @@ type Transaction struct {
 	Hash        string
 	Method      string
 	BlockNumber uint64
-	Timestamp   string
+	Age         string
+	DateTime    string
 	From        string
 	To          string
 	Direction   string
