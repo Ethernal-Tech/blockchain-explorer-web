@@ -1,118 +1,137 @@
 {{template "header.html"}}
-    <div class="container pb-3">
-        <div class="be-subtitle">
-            Blocks
-        </div>
-        <div class="card border-1 shadow">
-            <div class="card-body">
-                <div class="d-md-flex justify-content-between mb-3">
-                    <p class="mb-0">
-                        <span class="d-flex align-items-center">Block #{{(index .blocks .last).Number}} to #{{(index .blocks 0).Number}} (Total of {{.pagination.TotalRows}} blocks)</span>
-                    </p>
-                    <div class="be-pagination">
-                        <ul class="d-inline-flex">
-                            <li>
-                                <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
-                            </li>
-                            <li>
-                                {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
-                                {{ else }}
-                                <span class="disable-paging-button"><</span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
-                            </li>
-                            <li>
-                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
-                                {{ else }}
-                                <span class="disable-paging-button">></span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
-                            </li>
-                        </ul>
-                    </div>
+
+<div class="container pb-3">
+    <div class="be-subtitle">
+        Blocks
+    </div>
+    <div class="card border-1 shadow">
+        <div class="card-body">
+            <div class="d-md-flex justify-content-between mb-3">
+                <p class="mb-0">
+                    <span class="d-flex align-items-center">Block #{{(index .blocks .last).Number}} to #{{(index .blocks 0).Number}} (Total of {{.pagination.TotalRows}} blocks)</span>
+                </p>
+                <div class="be-pagination">
+                    <ul class="d-inline-flex">
+                        <li>
+                            <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
+                        </li>
+                        <li>
+                            {{ if (gt .pagination.CurrentPage 1)}}
+                            <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                            {{ else }}
+                            <span class="disable-paging-button"></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                        </li>
+                        <li>
+                            {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                            <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                            {{ else }}
+                            <span class="disable-paging-button">></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="table-responsive mb-0">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Block</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">Txn</th>
-                                <th scope="col">Free Recipient</th>
-                                <th scope="col">Gas Used</th>
-                                <th scope="col">Gas Limit</th>
-                                <th scope="col">Base Free</th>
-                                <th scope="col">Reward</th>
-                                <th scope="col">Burnt Fees (ETH)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{range .blocks}}
-                            <tr>
-                                <td><span class="hash-tag text-truncate"><a href="/block/number/{{.Number}}">{{.Number}}</a></span></td>
-                                <td>{{.Timestamp}} ago</td>
-                                <td class="d-none d-sm-table-cell"><a href="/transaction/txinblock/{{.Number}}">{{.TransactionsNumber}}</a></td>
-                                <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.Validator}}">{{.Validator}}</a></span></td>
-                                <td>{{.GasUsed}}</td>
-                                <td>{{.GasLimit}}</td>
-                                <td>---</td>
-                                <td>---</td>
-                                <td>---</td>
-                            </tr>
-                            {{end}}
-                        </tbody>
-                    </table>
+            </div>
+            <div class="table-responsive mb-0">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Block</th>
+                            <th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
+                            <th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
+                            <th scope="col">Txn</th>
+                            <th scope="col">Free Recipient</th>
+                            <th scope="col">Gas Used</th>
+                            <th scope="col">Gas Limit</th>
+                            <th scope="col">Base Free</th>
+                            <th scope="col">Reward</th>
+                            <th scope="col">Burnt Fees (ETH)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .blocks}}
+                        <tr>
+                            <td><span class="hash-tag text-truncate"><a href="/block/number/{{.Number}}">{{.Number}}</a></span></td>
+                            <td class="ageData">{{.Age}} ago</td>
+                            <td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
+                            <td class="d-none d-sm-table-cell"><a href="/transaction/txinblock/{{.Number}}">{{.TransactionsNumber}}</a></td>
+                            <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.Validator}}">{{.Validator}}</a></span></td>
+                            <td>{{.GasUsed}}</td>
+                            <td>{{.GasLimit}}</td>
+                            <td>---</td>
+                            <td>---</td>
+                            <td>---</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
+                        <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
+                        <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
+                        <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
+                        <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
+                    </select>
+                    <span>records</span>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
-                            <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
-                            <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
-                            <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
-                            <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
-                        </select>
-                        <span>records</span>
-                    </div>
-                    <div class="be-pagination">
-                        <ul class="d-inline-flex">
-                            <li>
-                                <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
-                            </li>
-                            <li>
-                                {{ if (gt .pagination.CurrentPage 1)}}
-                                <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
-                                {{ else }}
-                                <span class="disable-paging-button"><</span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
-                            </li>
-                            <li>
-                                {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
-                                <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
-                                {{ else }}
-                                <span class="disable-paging-button">></span>
-                                {{ end }}
-                            </li>
-                            <li>
-                                <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="be-pagination">
+                    <ul class="d-inline-flex">
+                        <li>
+                            <a href="/block/all?p=1&l={{.pagination.PerPage}}">First</a>
+                        </li>
+                        <li>
+                            {{ if (gt .pagination.CurrentPage 1)}}
+                            <a href="/block/all?p={{.pagination.PreviousPage}}&l={{.pagination.PerPage}}"><</a>
+                            {{ else }}
+                            <span class="disable-paging-button"></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <span>Page {{.pagination.CurrentPage}} of {{.pagination.TotalPages}}</span>
+                        </li>
+                        <li>
+                            {{ if (lt .pagination.CurrentPage .pagination.TotalPages)}}
+                            <a href="/block/all?p={{.pagination.NextPage}}&l={{.pagination.PerPage}}">></a>
+                            {{ else }}
+                            <span class="disable-paging-button">></span>
+                            {{ end }}
+                        </li>
+                        <li>
+                            <a href="/block/all?p={{.pagination.TotalPages}}&l={{.pagination.PerPage}}">Last</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
  {{template "footer.html"}}
 
  <script>
+    javascript:(function() {      
+        var cookies = document.cookie.split("; ")     
+        cookies.forEach(element => {
+            var nameValuePair = element.split("=");       
+            if(nameValuePair[0] === "timestamp"){                
+                if(nameValuePair[1] === 'DateTime'){
+                    changeColumn('dateTime')
+                }
+                else if (value === 'Age'){
+                    changeColumn('age')
+                }          
+            }     
+        });
+    })();
+
     function limitChanged(){
         var limitFilter =  document.getElementById("limitFilterId").value;
         window.location = "/block/all?l=" + limitFilter;

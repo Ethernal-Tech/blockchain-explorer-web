@@ -40,6 +40,7 @@ func routes(server *gin.Engine, cont ...any) {
 	})
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
+	server.Static("/staticfiles", "./staticfiles")
 
 	server.GET("/css/style.css", getCssFile)
 

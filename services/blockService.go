@@ -57,7 +57,8 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 			Size:               v.Size,
 			GasLimit:           v.GasLimit,
 			GasUsed:            v.GasUsed,
-			Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			DateTime:           time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 			TransactionsNumber: mapTransactionNumberByBlock[v.Number],
 		}
 
@@ -94,7 +95,8 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,
 		GasUsed:            block.GasUsed,
-		Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
+		Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
+		DateTime:           time.Unix(int64(block.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
 		TransactionsNumber: transactionNumberInBlock.Count,
 	}
 
@@ -128,7 +130,8 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 		Size:               block.Size,
 		GasLimit:           block.GasLimit,
 		GasUsed:            block.GasUsed,
-		Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
+		Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
+		DateTime:           time.Unix(int64(block.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 		TransactionsNumber: transactionNumberInBlock.Count,
 	}
 
@@ -148,7 +151,8 @@ func (bsi *BlockServiceImplementation) GetAllBlocks(page int, perPage int) (*blo
 	for _, v := range blocks {
 		var block = blockModel.Block{
 			Number:             v.Number,
-			Timestamp:          utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			DateTime:           time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 			TransactionsNumber: 0,
 			Validator:          v.Miner,
 			GasUsed:            v.GasUsed,

@@ -1,117 +1,122 @@
 {{$config := getConfig}}
 {{template "header.html"}}
-
-        <div class="top-section container-fluid">
-            <div class="container">
-                <p class="network-name">
-                    {{$config.MainTitle}}
-                </p>
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="input-group input-group-lg mb-3">
-                            <input type="text" id="input" class="form-control" placeholder="Search by Block Number / Txn Hash / Address">
-                            <span class="input-group-text" onclick="sendRequest()" style="background-color: var(--main-color); border:none; cursor: pointer">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </div>
-                    </div>
+        
+<div class="top-section container-fluid">
+    <div class="container">
+        <p class="network-name">
+            {{$config.MainTitle}}
+        </p>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="input-group input-group-lg mb-3">
+                    <input type="text" id="input" class="form-control" placeholder="Search by Block Number / Txn Hash / Address">
+                    <span class="input-group-text" onclick="sendRequest()" style="background-color: var(--main-color); border:none; cursor: pointer">
+                        <i class="fas fa-search"></i>
+                    </span>
                 </div>
             </div>
         </div>
-
-            </div>
-        </div>
-        <div class="section-2 container-fluid" style="background-color: rgb(255, 255, 255);">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 my-3">
-                        <div class="card index-card">
-                            <div class="card-header be-card-header">
-                                Latest Blocks (20)
-                            </div>
-                            <div class="container card-body index-card-body py-0">
-                            {{range .blocks}}
-                                <div class="row card-item index-card-item">
-                                    <div class="col-sm-4 d-flex p-0">
-                                        <div class="d-flex justify-content-center align-items-center rounded" style="width: 50px; background-color: rgb(241, 242, 244);">
-                                            Bk
-                                        </div>
-                                        <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
-                                            <div style="font-size: 14px;">
-                                                <a href="block/number/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.Number}}</a>
-                                            </div>
-                                            <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
-                                                {{.Timestamp}} ago
-                                            </div>
-                                        </div>
+    </div>
+</div>
+</div>
+</div>
+<div class="section-2 container-fluid" style="background-color: rgb(255, 255, 255);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-3">
+                <div class="card index-card">
+                    <div class="card-header be-card-header">
+                        Latest Blocks (20)
+                    </div>
+                    <div class="container card-body index-card-body py-0">
+                    {{range .blocks}}
+                        <div class="row card-item index-card-item">
+                            <div class="col-sm-4 d-flex p-0">
+                                <div class="d-flex justify-content-center align-items-center rounded" style="width: 50px; background-color: rgb(241, 242, 244);">
+                                    Bk
+                                </div>
+                                <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
+                                    <div style="font-size: 14px;">
+                                        <a href="block/number/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.Number}}</a>
                                     </div>
-                                    <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <div class="media-mt media-ml" style="font-size: 14px;">
-                                                Validated By <span class="anchor-wrapper"><a href="address/hash/{{.Validator}}" style="text-decoration: none; color: var(--main-color)">{{.Validator}}</a></span>
-                                            </div>
-                                            <div class="media-ml" style="font-size: 14px; color: rgb(119, 131, 143)">
-                                                <a href="transaction/txinblock/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.TransactionsNumber}} txns</a>
-                                            </div>
-                                        </div>
+                                    <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
+                                        {{.Age}} ago
                                     </div>
                                 </div>
-                            {{end}}
                             </div>
-                            <div class="card-footer index-card-footer">
-                                <button>
-                                    <a href="block/all" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all blocks</a>
-                                </button>
+                            <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <div class="media-mt media-ml" style="font-size: 14px;">
+                                        Validated By <span class="anchor-wrapper"><a href="address/hash/{{.Validator}}" style="text-decoration: none; color: var(--main-color)">{{.Validator}}</a></span>
+                                    </div>
+                                    <div class="media-ml" style="font-size: 14px; color: rgb(119, 131, 143)">
+                                        <a href="transaction/txinblock/{{.Number}}" style="text-decoration:none; color: var(--main-color)">{{.TransactionsNumber}} txns</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    {{end}}
                     </div>
-                    <div class="col-lg-6 my-3">
-                        <div class="card index-card">
-                            <div class="card-header be-card-header">
-                                Latest Transactions (20)
-                            </div>
-                            <div class="container card-body index-card-body py-0">
-                            {{range .transactions}}
-                                <div class="row card-item index-card-item">
-                                    <div class="col-sm-4 d-flex p-0">
-                                        <div class="d-flex justify-content-center align-items-center rounded-circle" style="width: 50px; background-color: rgb(241, 242, 244);">
-                                            Tk
-                                        </div>
-                                        <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
-                                            <div style="font-size: 14px;">
-                                                <span class="anchor-wrapper media-mw"><a href="transaction/hash/{{.Hash}}" style="text-decoration: none; color: var(--main-color)">{{.Hash}}</a></span>
-                                            </div>
-                                            <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
-                                                {{.Timestamp}} ago
-                                            </div>
-                                        </div>
+                    <div class="card-footer index-card-footer">
+                        <button>
+                            <a href="block/all" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all blocks</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 my-3">
+                <div class="card index-card">
+                    <div class="card-header be-card-header">
+                        Latest Transactions (20)
+                    </div>
+                    <div class="container card-body index-card-body py-0">
+                    {{range .transactions}}
+                        <div class="row card-item index-card-item">
+                            <div class="col-sm-4 d-flex p-0">
+                                <div class="d-flex justify-content-center align-items-center rounded-circle" style="width: 50px; background-color: rgb(241, 242, 244);">
+                                    Tk
+                                </div>
+                                <div class="d-flex flex-column justify-content-center" style="margin-left: 10px;">
+                                    <div style="font-size: 14px;">
+                                        <span class="anchor-wrapper media-mw"><a href="transaction/hash/{{.Hash}}" style="text-decoration: none; color: var(--main-color)">{{.Hash}}</a></span>
                                     </div>
-                                    <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <div class="media-mt media-ml" style="font-size: 14px;">
-                                                From <span class="anchor-wrapper"><a href="address/hash/{{.From}}" style="text-decoration: none; color: var(--main-color)">{{.From}}</a></span>
-                                            </div>
-                                            <div class="media-mt media-ml" style="font-size: 14px;">
-                                                {{if eq .To ""}}
-                                                    To <span class="anchor-wrapper"><a href="address/hash/{{.ContractAddress}}" style="text-decoration: none; color: var(--main-color)">{{.ContractAddress}}</a></span>
-                                                {{else}}
-                                                    To <span class="anchor-wrapper"><a href="address/hash/{{.To}}" style="text-decoration: none; color: var(--main-color)">{{.To}}</a></span>
-                                                {{end}}   
-                                            </div>
-                                        </div>
+                                    <div style="font-size: 11.2px; color: rgb(119, 131, 143)">
+                                        {{.Age}} ago
                                     </div>
-                                </div>                                
-                            {{end}}
+                                </div>
                             </div>
-                            <div class="card-footer index-card-footer">
-                                <button>
-                                    <a href="transaction/all" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all transactions</a>
-                                </button>
+                            <div class="col-sm-8 d-flex flex-column p-0 justify-content-center" style="font-size: 14px;">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <div class="media-mt media-ml" style="font-size: 14px;">
+                                        From 
+                                        <span class="anchor-wrapper">
+                                            <a href="address/hash/{{.From}}" style="text-decoration: none; color: var(--main-color)">
+                                                {{.From}}
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="media-mt media-ml" style="font-size: 14px;">
+                                        {{if eq .To ""}}
+                                            To <span class="anchor-wrapper"><a href="address/hash/{{.ContractAddress}}" style="text-decoration: none; color: var(--main-color)">{{.ContractAddress}}</a></span>
+                                        {{else}}
+                                            To <span class="anchor-wrapper"><a href="address/hash/{{.To}}" style="text-decoration: none; color: var(--main-color)">{{.To}}</a></span>
+                                        {{end}}   
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </div>                                
+                    {{end}}
+                    </div>
+                    <div class="card-footer index-card-footer">
+                        <button>
+                            <a href="transaction/all" class="d-inline-block w-100 h-100 p-1" style="text-decoration: none">View all transactions</a>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    {{template "footer.html"}}
+    </div>
+</div>
+
+{{template "footer.html"}}
         

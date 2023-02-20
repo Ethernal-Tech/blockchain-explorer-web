@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
+	"time"
 	"webbc/services"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +27,18 @@ func (gc *GlobalController) GetIndex(context *gin.Context) {
 	if error1 != nil || error2 != nil {
 		// return 500 or something like that
 	}
+
+	cookie, err := context.Cookie("timestamp")
+
+	if err != nil {
+		cookie = "NotSet"
+		currentDate := time.Now()
+		yearFromNow := currentDate.AddDate(1, 0, 0)
+		dateSubtraction := yearFromNow.Sub(currentDate)
+		context.SetCookie("timestamp", "Age", int(dateSubtraction.Seconds()), "/", "", false, false)
+	}
+
+	fmt.Printf("Cookie value: %s \n", cookie)
 
 	data := gin.H{
 		"blocks":       blocks,

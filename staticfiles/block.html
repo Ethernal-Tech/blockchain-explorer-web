@@ -1,6 +1,5 @@
 {{template "header.html"}}
 
-
 <div class="container py-3">
     <h4 class="mb-0">Block<span class="small text-secondary">&nbsp;#{{.block.Number}}</span></h4>
 </div>
@@ -17,7 +16,7 @@
             <hr class="transaction-hr">
             <div class="row align-items-center">
                 <div class="col-md-3">Timestamp:</div>
-                <div class="col-md-9">{{.block.Timestamp}} ago</div>
+                <div class="col-md-9">{{.block.Age}} ago ({{.block.DateTime}} UTC)</div>
             </div>
             <hr class="transaction-hr">
             <div class="row align-items-center">

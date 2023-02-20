@@ -45,66 +45,85 @@
 	<div class="row">
 		<div class="col mt-3">
 			<div class="card mb-3 border-1 shadow">
-			<div class="card-header be-card-header">
-             Transactions
-			</div>
-			<div class="card-body">
-                <div class="d-md-flex justify-content-between">
-					<p class="mb-0">
-					  <span class="d-flex align-items-center">Latest 25 from a total of
-						  <a style="margin: 0px 4px;" href="/transaction/address/{{.address.AddressHex}}">{{ .address.TransactionCount }}</a>
-						  transactions
-					  </span>
-					</p>
-				  </div>				  
-			<div class="table-responsive mb-2 mb-md-0">
-				<table class="table table-hover align-middle">
-				<thead class="table-light">
-					<tr>
-						<th scope="col">Txn Hash</th>
-						<th scope="col">Method</th>
-						<th scope="col">Block</th>
-						<th scope="col">Age</th>
-						<th scope="col">From</th>
-                        <th scope="col"></th>
-						<th scope="col">To</th>
-						<th scope="col">Value</th>
-                        <th scope="col">Txn Fee</th>
-					</tr>
-				</thead>
-				<tbody>
-                    {{range .address.Transactions}}
-					<tr>
-						<td>
-							<a class="hash-tag text-truncate" href="/transaction/hash/{{.Hash}}">{{.Hash}}</a>
-						</td>
-						<td></td>
-						<td>
-                            <a class="hash-tag text-truncate" href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a>
-                        </td>
-						<td>{{.Timestamp}} ago</td>
-						<td>
-							<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
-						</td>
-                        {{if eq .Direction "out"}}
-                        	<td class="text-center"><span class="badge bg-light text-dark">OUT</span></td>
-                        {{ else }}
-                        	<td class="text-center"><span class="badge bg-dark">IN</span></td>
-                        {{ end }}
-						<td>
-							<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>
-						</td>
-						<td>{{.Value}} Ether</td>
-                        <td></td>
-					</tr>
-                    {{end}}
-				</tbody>
-				</table>
-			</div>
-			</div>
+				<div class="card-header be-card-header">
+				Transactions
+				</div>
+				<div class="card-body">
+					<div class="d-md-flex justify-content-between">
+						<p class="mb-0">
+						<span class="d-flex align-items-center">Latest 25 from a total of
+							<a style="margin: 0px 4px;" href="/transaction/address/{{.address.AddressHex}}">{{ .address.TransactionCount }}</a>
+							transactions
+						</span>
+						</p>
+					</div>				  
+					<div class="table-responsive mb-2 mb-md-0">
+						<table class="table table-hover align-middle">
+						<thead class="table-light">
+							<tr>
+								<th scope="col">Txn Hash</th>
+								<th scope="col">Method</th>
+								<th scope="col">Block</th>
+								<th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
+								<th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
+								<th scope="col">From</th>
+								<th scope="col"></th>
+								<th scope="col">To</th>
+								<th scope="col">Value</th>
+								<th scope="col">Txn Fee</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{range .address.Transactions}}
+							<tr>
+								<td>
+									<a class="hash-tag text-truncate" href="/transaction/hash/{{.Hash}}">{{.Hash}}</a>
+								</td>
+								<td></td>
+								<td>
+									<a class="hash-tag text-truncate" href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a>
+								</td>
+								<td class="ageData">{{.Age}} ago</td>
+								<td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
+								<td>
+									<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
+								</td>
+								{{if eq .Direction "out"}}
+									<td class="text-center"><span class="badge bg-light text-dark">OUT</span></td>
+								{{ else }}
+									<td class="text-center"><span class="badge bg-dark">IN</span></td>
+								{{ end }}
+								<td>
+									<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>
+								</td>
+								<td>{{.Value}} Ether</td>
+								<td></td>
+							</tr>
+							{{end}}
+						</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
 {{template "footer.html"}}
+
+<script>
+	javascript:(function() {      
+        var cookies = document.cookie.split("; ")     
+        cookies.forEach(element => {
+            var nameValuePair = element.split("=");       
+            if(nameValuePair[0] === "timestamp"){                
+                if(nameValuePair[1] === 'DateTime'){
+                    changeColumn('dateTime')
+                }
+                else if (value === 'Age'){
+                    changeColumn('age')
+                }          
+            }     
+        });
+    })();
+</script>
