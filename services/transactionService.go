@@ -3,25 +3,25 @@ package services
 import (
 	"context"
 	"math"
-	"strconv"
 	"strings"
 	"time"
 	"webbc/DB"
+	"webbc/configuration"
 	"webbc/models"
 	"webbc/models/transactionModel"
 	"webbc/utils"
 
-	"github.com/spf13/viper"
 	"github.com/uptrace/bun"
 )
 
 type TransactionServiceImplementation struct {
-	database *bun.DB
-	ctx      context.Context
+	database      *bun.DB
+	ctx           context.Context
+	generalConfig *configuration.GeneralConfiguration
 }
 
-func NewTransactionService(database *bun.DB, ctx context.Context) TransactionService {
-	return &TransactionServiceImplementation{database: database, ctx: ctx}
+func NewTransactionService(database *bun.DB, ctx context.Context, generalConfig *configuration.GeneralConfiguration) TransactionService {
+	return &TransactionServiceImplementation{database: database, ctx: ctx, generalConfig: generalConfig}
 }
 
 func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransactions int) (*[]models.Transaction, error) {
@@ -173,7 +173,7 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 	tsi.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.transactions' ::regclass;").Scan(tsi.ctx, &totalRows)
 	result.TotalRows = int64(totalRows)
 
-	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTIONS_MAX_COUNT").(string), 10, 64)
+	maxRows := int64(tsi.generalConfig.TransactionsMaxCount)
 	if totalRows > maxRows {
 		totalRows = maxRows
 	}
@@ -226,7 +226,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 	totalRows, err = tsi.database.NewSelect().Table("transactions").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Count(tsi.ctx)
 	result.TotalRows = int64(totalRows)
 
-	maxRows, _ := strconv.ParseInt(viper.Get("TRANSACTIONS_BY_ADDRESS_MAX_COUNT").(string), 10, 64)
+	maxRows := tsi.generalConfig.TransactionsByAddressMaxCount
 	if totalRows > int(maxRows) {
 		totalRows = int(maxRows)
 	}
@@ -237,6 +237,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 	} else {
 		result.TotalPages = int(totalPages)
 	}
+	result.MaxCount = int(maxRows)
 	return &result, nil
 }
 

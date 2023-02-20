@@ -11,7 +11,7 @@ import (
 	"github.com/uptrace/bun/driver/pgdriver"
 )
 
-func InitializationDB(configuration *configuration.Configuration) *bun.DB {
+func InitializationDB(configuration *configuration.GeneralConfiguration) *bun.DB {
 
 	sqlDB := sql.OpenDB(pgdriver.NewConnector(
 		pgdriver.WithAddr(configuration.DataBaseHost+":"+configuration.DataBasePort),
@@ -23,4 +23,16 @@ func InitializationDB(configuration *configuration.Configuration) *bun.DB {
 	))
 
 	return bun.NewDB(sqlDB, pgdialect.New())
+}
+
+func ChangeDB(configuration *configuration.GeneralConfiguration, db *bun.DB) {
+
+	db.DB = sql.OpenDB(pgdriver.NewConnector(
+		pgdriver.WithAddr(configuration.DataBaseHost+":"+configuration.DataBasePort),
+		pgdriver.WithUser(configuration.DataBaseUser),
+		pgdriver.WithPassword(configuration.DataBasePassword),
+		pgdriver.WithDatabase(configuration.DataBaseName),
+		pgdriver.WithInsecure(true),
+		pgdriver.WithReadTimeout(time.Duration(int(configuration.CallTimeoutInSeconds))*time.Second),
+	))
 }

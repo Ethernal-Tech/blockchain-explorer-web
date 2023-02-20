@@ -36,7 +36,7 @@ import (
 // /actionX will refer to /controllerA/actionX?parameter1=value1&parameter2=value2&parameter3=value3
 func routes(server *gin.Engine, cont ...any) {
 	server.SetFuncMap(template.FuncMap{
-		"getConfig": getConfig,
+		"getAppConfig": getAppConfig,
 	})
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
@@ -45,13 +45,14 @@ func routes(server *gin.Engine, cont ...any) {
 	server.GET("/css/style.css", getCssFile)
 
 	authorized := server.Group("/", gin.BasicAuth(gin.Accounts{
-		"admin": "admin",
+		authConfig.Username: authConfig.Password,
 	}))
 
 	gc := cont[0].(controllers.GlobalController)
 	server.GET("/", gc.GetIndex)
 	server.GET("/:searchValue", gc.GetBySearchValue)
-	authorized.POST("/configuration", gc.UpdateConfiguration)
+	authorized.GET("/configuration/:type", gc.GetConfiguration)
+	authorized.POST("/configuration/:type", gc.UpdateConfiguration)
 
 	bc := cont[1].(controllers.BlockController)
 	blockRoutes := server.Group("/block")
@@ -77,10 +78,10 @@ func routes(server *gin.Engine, cont ...any) {
 	}
 }
 
-func getConfig() *configuration.TemplateConfiguration {
-	templateConfig.Mutex.RLock()
-	defer templateConfig.Mutex.RUnlock()
-	return templateConfig
+func getAppConfig() *configuration.ApplicationConfiguration {
+	appConfig.Mutex.RLock()
+	defer appConfig.Mutex.RUnlock()
+	return appConfig
 }
 
 func getCssFile(c *gin.Context) {
@@ -92,5 +93,5 @@ func getCssFile(c *gin.Context) {
 
 	c.Header("Content-Type", "text/css")
 
-	t.Execute(c.Writer, templateConfig)
+	t.Execute(c.Writer, appConfig)
 }

@@ -18,10 +18,10 @@ type AddressServiceImplementation struct {
 	database *bun.DB
 	ctx      context.Context
 	client   *rpc.Client
-	config   *configuration.Configuration
+	config   *configuration.GeneralConfiguration
 }
 
-func NewAddressService(database *bun.DB, ctx context.Context, client *rpc.Client, config *configuration.Configuration) AddressService {
+func NewAddressService(database *bun.DB, ctx context.Context, client *rpc.Client, config *configuration.GeneralConfiguration) AddressService {
 	return &AddressServiceImplementation{database: database, ctx: ctx, client: client, config: config}
 }
 
@@ -81,4 +81,8 @@ func (as *AddressServiceImplementation) getBalanceFromChainWithTimeout(address s
 	defer cancel()
 	err := as.client.CallContext(ctxWithTimeout, &result, "eth_getBalance", address, "latest")
 	return result, err
+}
+
+func (as *AddressServiceImplementation) ChangeClient(client *rpc.Client) {
+	as.client = client
 }

@@ -4,6 +4,7 @@ type Transactions struct {
 	TotalPages   int
 	TotalRows    int64
 	Transactions []Transaction
+	MaxCount     int
 }
 
 type Transaction struct {
