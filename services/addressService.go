@@ -39,6 +39,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 	for _, v := range transactions {
 		var transac = addressModel.Transaction{
 			Hash:        v.Hash,
+			Method:      getMethodName(v.InputData),
 			BlockNumber: v.BlockNumber,
 			From:        v.From,
 			To:          v.To,

@@ -27,7 +27,8 @@ type Transaction struct {
 	Nonce            uint64 `bun:"type:bigint,notnull"`
 	TransactionIndex uint64 `bun:"type:integer,notnull"`
 	Value            string `bun:"type:varchar"`
-	ContractAddress  string `bun:"type:char(42)"`
+	ContractAddress  string `bun:"type:varchar(42)"`
 	Status           uint64 `bun:"type:smallint,notnull"`
 	Timestamp        uint64 `bun:"type:bigint,notnull"`
+	InputData        string `bun:"type:varchar"`
 }

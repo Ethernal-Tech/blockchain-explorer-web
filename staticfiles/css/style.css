@@ -335,4 +335,8 @@ span.badge.rounded-pill:hover{
 .loader-btn{
     background-color: var(--main-color) !important;
     border-color: var(--main-color) !important;
+} 
+
+.method-name {
+    font-size: 11.6px;
 }
