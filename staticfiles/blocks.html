@@ -125,7 +125,7 @@
                 if(nameValuePair[1] === 'DateTime'){
                     changeColumn('dateTime')
                 }
-                else if (value === 'Age'){
+                else if (nameValuePair[1] === 'Age'){
                     changeColumn('age')
                 }          
             }     
@@ -136,4 +136,9 @@
         var limitFilter =  document.getElementById("limitFilterId").value;
         window.location = "/block/all?l=" + limitFilter;
     }
+
+    window.onbeforeunload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "block";
+    };
 </script>

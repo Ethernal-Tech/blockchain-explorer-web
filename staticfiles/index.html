@@ -119,4 +119,11 @@
 </div>
 
 {{template "footer.html"}}
+
+<script>
+    window.onbeforeunload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "block";
+    };
+</script>
         
