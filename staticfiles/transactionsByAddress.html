@@ -60,7 +60,7 @@
                             {{range .transactions}}
                             <tr>
                                 <td><span class="hash-tag text-truncate"><a href="/transaction/hash/{{.Hash}}">{{.Hash}}</a></span></td>
-                                <td></td>
+                                <td><span class="method-name badge align-middle bg-light text-dark border border-dark dark:border-white border-opacity-10 fw-normal text-truncate w-100 py-1.5">{{.Method}}</span></td>
                                 <td class="d-none d-sm-table-cell"><a href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a></td>
                                 <td>{{.Timestamp}} ago</td>
                                 <td><span class="hash-tag text-truncate"><a href="/address/hash/{{.From}}">{{.From}}</a></span></td>

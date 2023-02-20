@@ -108,7 +108,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber 
 	for _, v := range transactions {
 		var transaction = transactionModel.Transaction{
 			Hash:            v.Hash,
-			Method:          "",
+			Method:          getMethodName(v.InputData),
 			BlockNumber:     v.BlockNumber,
 			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			From:            v.From,
@@ -150,7 +150,7 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 	for _, v := range transactions {
 		var transaction = transactionModel.Transaction{
 			Hash:            v.Hash,
-			Method:          "",
+			Method:          getMethodName(v.InputData),
 			BlockNumber:     v.BlockNumber,
 			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			From:            v.From,
@@ -197,7 +197,7 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 	for _, v := range transactions {
 		var transaction = transactionModel.Transaction{
 			Hash:            v.Hash,
-			Method:          "",
+			Method:          getMethodName(v.InputData),
 			BlockNumber:     v.BlockNumber,
 			Timestamp:       utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			From:            v.From,
@@ -233,4 +233,12 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 		result.TotalPages = int(totalPages)
 	}
 	return &result, nil
+}
+
+func getMethodName(str string) string {
+	if len(str) >= 10 {
+		return str[:10]
+	} else {
+		return str
+	}
 }

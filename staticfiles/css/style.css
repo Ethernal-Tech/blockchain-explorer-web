@@ -319,3 +319,7 @@ span.badge.rounded-pill:hover{
 .txns-number button:hover a {
     color: white;
 }
+
+.method-name {
+    font-size: 11.6px;
+}
