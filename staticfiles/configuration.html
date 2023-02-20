@@ -1,0 +1,42 @@
+<div class="modal fade" id="configurationModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Configuration</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="configurationForm" action="/configuration" method="post">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="form-label" for="backgroundColor">Background color</label>
+                        <input type="color" class="form-control" name="backgroundColor" id="backgroundColor" value={{.BackgroundColor}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="mainColor">Main color</label>
+                        <input type="color" class="form-control" name="mainColor" id="mainColor" value={{.MainColor}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="headerTitle">Header title</label>
+                        <input type="text" class="form-control" name="headerTitle" id="headerTitle" value={{.HeaderTitle}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="mainTitle">Main title</label>
+                        <input type="text" class="form-control" name="mainTitle" id="mainTitle" value={{.MainTitle}}>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn" style="background-color:var(--background-color);color:white">Save</button>
+                  </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
