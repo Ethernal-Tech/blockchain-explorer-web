@@ -83,13 +83,38 @@ func (gc *GlobalController) GetBySearchValue(context *gin.Context) {
 	}
 }
 
+func (gc *GlobalController) GetConfiguration(context *gin.Context) {
+	configType := context.Param("type")
+	switch {
+	case configType == "app":
+		data := gc.ConfigurationService.GetAppConfiguration()
+		context.HTML(200, "appConfiguration.html", data)
+	case configType == "general":
+		data := gc.ConfigurationService.GetGeneralConfiguration()
+		context.HTML(200, "generalConfiguration.html", data)
+	}
+}
+
 func (gc *GlobalController) UpdateConfiguration(context *gin.Context) {
-	var templateConfig *configuration.TemplateConfiguration
-	if err := context.Bind(&templateConfig); err != nil {
+	configType := context.Param("type")
+	switch {
+	case configType == "app":
+		var appConfig *configuration.ApplicationConfiguration
+		if err := context.Bind(&appConfig); err != nil {
+			return
+		}
+		if err := gc.ConfigurationService.UpdateAppConfiguration(appConfig); err != nil {
 
-	}
-	if err := gc.ConfigurationService.Update(templateConfig); err != nil {
+		}
+	case configType == "general":
+		var generalConfig *configuration.GeneralConfiguration
+		if err := context.Bind(&generalConfig); err != nil {
+			return
+		}
+		if err := gc.ConfigurationService.UpdateGeneralConfiguration(generalConfig); err != nil {
 
+		}
 	}
+
 	context.Redirect(302, context.Request.Referer())
 }

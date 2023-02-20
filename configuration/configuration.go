@@ -8,58 +8,85 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Configuration struct {
-	DataBaseUser         string
-	DataBasePassword     string
-	DataBaseHost         string
-	DataBasePort         string
-	DataBaseName         string
-	HTTPUrl              string
-	CallTimeoutInSeconds uint
+type GeneralConfiguration struct {
+	Mutex                         *sync.RWMutex
+	DataBaseUser                  string `form:"dbUser"`
+	DataBasePassword              string `form:"dbPassword"`
+	DataBaseHost                  string `form:"dbHost"`
+	DataBasePort                  string `form:"dbPort"`
+	DataBaseName                  string `form:"dbName"`
+	HTTPUrl                       string `form:"nodeUrl"`
+	CallTimeoutInSeconds          uint
+	TransactionsMaxCount          uint64
+	TransactionsByAddressMaxCount uint
+	Viper                         *viper.Viper
 }
 
-type TemplateConfiguration struct {
+type ApplicationConfiguration struct {
 	Mutex           *sync.RWMutex
 	BackgroundColor string `form:"backgroundColor"`
 	MainColor       string `form:"mainColor"`
 	HeaderTitle     string `form:"headerTitle"`
 	MainTitle       string `form:"mainTitle"`
+	Viper           *viper.Viper
 }
 
-func LoadConfiguration() (*Configuration, *TemplateConfiguration) {
-	configurationFile, error := filepath.Abs(".env")
+type AuthConfiguration struct {
+	Mutex    *sync.RWMutex
+	Username string
+	Password string
+	Viper    *viper.Viper
+}
+
+func LoadConfiguration() (*GeneralConfiguration, *ApplicationConfiguration, *AuthConfiguration) {
+	generalConfiguration := GeneralConfiguration{
+		Viper: getNewViperInstance("general.env"),
+		Mutex: &sync.RWMutex{},
+	}
+	generalConfiguration.DataBaseHost = generalConfiguration.Viper.GetString("DB_HOST")
+	generalConfiguration.DataBasePort = generalConfiguration.Viper.GetString("DB_PORT")
+	generalConfiguration.DataBaseName = generalConfiguration.Viper.GetString("DB_NAME")
+	generalConfiguration.DataBaseUser = generalConfiguration.Viper.GetString("DB_USER")
+	generalConfiguration.DataBasePassword = generalConfiguration.Viper.GetString("DB_PASSWORD")
+	generalConfiguration.HTTPUrl = generalConfiguration.Viper.GetString("HTTPUrl")
+	generalConfiguration.CallTimeoutInSeconds = generalConfiguration.Viper.GetUint("CALL_TIMEOUT_IN_SECONDS")
+	generalConfiguration.TransactionsMaxCount = generalConfiguration.Viper.GetUint64("TRANSACTIONS_MAX_COUNT")
+	generalConfiguration.TransactionsByAddressMaxCount = generalConfiguration.Viper.GetUint("TRANSACTIONS_BY_ADDRESS_MAX_COUNT")
+
+	appConfiguration := ApplicationConfiguration{
+		Viper: getNewViperInstance("app.env"),
+		Mutex: &sync.RWMutex{},
+	}
+	appConfiguration.BackgroundColor = appConfiguration.Viper.GetString("BACKGROUND_COLOR")
+	appConfiguration.MainColor = appConfiguration.Viper.GetString("MAIN_COLOR")
+	appConfiguration.HeaderTitle = appConfiguration.Viper.GetString("HEADER_TITLE")
+	appConfiguration.MainTitle = appConfiguration.Viper.GetString("MAIN_TITLE")
+
+	authConfiguration := AuthConfiguration{
+		Viper: getNewViperInstance("auth.env"),
+		Mutex: &sync.RWMutex{},
+	}
+	authConfiguration.Username = authConfiguration.Viper.GetString("USERNAME")
+	authConfiguration.Password = authConfiguration.Viper.GetString("PASSWORD")
+
+	return &generalConfiguration, &appConfiguration, &authConfiguration
+}
+
+func getNewViperInstance(fileName string) *viper.Viper {
+	configFile, error := filepath.Abs(fileName)
 
 	if error != nil {
 		//TODO: panic
 		os.Exit(-1)
 	}
-
-	viper.SetConfigFile(configurationFile)
-	viper.SetConfigType("env")
-	error = viper.ReadInConfig()
+	newViper := viper.New()
+	newViper.SetConfigFile(configFile)
+	newViper.SetConfigType("env")
+	error = newViper.ReadInConfig()
 
 	if error != nil {
 		//TODO: panic
 		os.Exit(-1)
 	}
-
-	configuration := Configuration{
-		DataBaseUser:         viper.GetString("DB_USER"),
-		DataBasePassword:     viper.GetString("DB_PASSWORD"),
-		DataBaseHost:         viper.GetString("DB_HOST"),
-		DataBasePort:         viper.GetString("DB_PORT"),
-		DataBaseName:         viper.GetString("DB_NAME"),
-		HTTPUrl:              viper.GetString("HTTPUrl"),
-		CallTimeoutInSeconds: viper.GetUint("CALL_TIMEOUT_IN_SECONDS"),
-	}
-
-	templateConfiguration := TemplateConfiguration{
-		Mutex:           &sync.RWMutex{},
-		BackgroundColor: viper.GetString("BACKGROUND_COLOR"),
-		MainColor:       viper.GetString("MAIN_COLOR"),
-		HeaderTitle:     viper.GetString("HEADER_TITLE"),
-		MainTitle:       viper.GetString("MAIN_TITLE"),
-	}
-
-	return &configuration, &templateConfiguration
+	return newViper
 }

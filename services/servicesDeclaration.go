@@ -6,6 +6,8 @@ import (
 	"webbc/models/addressModel"
 	"webbc/models/blockModel"
 	"webbc/models/transactionModel"
+
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 type BlockService interface {
@@ -25,8 +27,12 @@ type TransactionService interface {
 
 type AddressService interface {
 	GetAddress(string) (*addressModel.Address, error)
+	ChangeClient(*rpc.Client)
 }
 
 type ConfigurationService interface {
-	Update(*configuration.TemplateConfiguration) error
+	GetAppConfiguration() *configuration.ApplicationConfiguration
+	GetGeneralConfiguration() *configuration.GeneralConfiguration
+	UpdateAppConfiguration(*configuration.ApplicationConfiguration) error
+	UpdateGeneralConfiguration(*configuration.GeneralConfiguration) error
 }

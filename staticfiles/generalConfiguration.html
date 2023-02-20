@@ -1,0 +1,54 @@
+<div class="modal fade" id="generalConfigurationModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Configuration</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="generalConfigurationForm" action="/configuration/general" method="post">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="dbHost">Database Host</label>
+                        <input type="text" class="form-control" name="dbHost" id="dbHost" value={{.DataBaseHost}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="dbPort">Database Port</label>
+                        <input type="text" class="form-control" name="dbPort" id="dbPort" value={{.DataBasePort}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="dbName">Database Name</label>
+                        <input type="text" class="form-control" name="dbName" id="dbName" value={{.DataBaseName}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="dbUser">Database User</label>
+                        <input type="text" class="form-control" name="dbUser" id="dbUser" value={{.DataBaseUser}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="dbPassword">Database User Password</label>
+                        <input type="password" class="form-control" name="dbPassword" id="dbPassword" value={{.DataBasePassword}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label" for="nodeUrl">Node URL</label>
+                        <input type="text" class="form-control" name="nodeUrl" id="nodeUrl" value={{.HTTPUrl}}>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn" style="background-color:var(--background-color);color:white">Save</button>
+                  </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
