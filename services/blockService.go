@@ -29,19 +29,6 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 
 	}
 
-	var transactionNumberByBlock []models.TransactionNumberByBlock
-	error2 := bsi.database.NewRaw("select block_number, count(*) as count from transactions where block_number in (select blocks.number from blocks order by blocks.number DESC limit 20) group by block_number").Scan(bsi.ctx, &transactionNumberByBlock)
-
-	if error2 != nil {
-
-	}
-
-	var mapTransactionNumberByBlock map[uint64]int = map[uint64]int{}
-
-	for _, v := range transactionNumberByBlock {
-		mapTransactionNumberByBlock[v.Block_number] = v.Count
-	}
-
 	var result []models.Block
 
 	for _, v := range blocks {
@@ -59,7 +46,7 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 			GasUsed:            v.GasUsed,
 			Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			DateTime:           time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
-			TransactionsNumber: mapTransactionNumberByBlock[v.Number],
+			TransactionsNumber: v.TransactionsCount,
 		}
 
 		result = append(result, oneResultBlock)
@@ -73,13 +60,6 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 	error1 := bsi.database.NewSelect().Table("blocks").Where("blocks.number = ?", blockNumber).Scan(bsi.ctx, &block)
 
 	if error1 != nil {
-
-	}
-
-	var transactionNumberInBlock models.TransactionNumberByBlock
-	error2 := bsi.database.NewRaw("select count(*) as count from transactions where block_number = ?", block.Number).Scan(bsi.ctx, &transactionNumberInBlock)
-
-	if error2 != nil {
 
 	}
 
@@ -97,7 +77,7 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 		GasUsed:            block.GasUsed,
 		Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
 		DateTime:           time.Unix(int64(block.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
-		TransactionsNumber: transactionNumberInBlock.Count,
+		TransactionsNumber: block.TransactionsCount,
 	}
 
 	return &oneResultBlock, nil
@@ -108,13 +88,6 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 	error1 := bsi.database.NewSelect().Table("blocks").Where("blocks.hash = ?", blockHash).Scan(bsi.ctx, &block)
 
 	if error1 != nil {
-
-	}
-
-	var transactionNumberInBlock models.TransactionNumberByBlock
-	error2 := bsi.database.NewRaw("select count(*) as count from transactions where block_number = ?", block.Number).Scan(bsi.ctx, &transactionNumberInBlock)
-
-	if error2 != nil {
 
 	}
 
@@ -132,7 +105,7 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 		GasUsed:            block.GasUsed,
 		Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(block.Timestamp), 0)).Seconds()))),
 		DateTime:           time.Unix(int64(block.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
-		TransactionsNumber: transactionNumberInBlock.Count,
+		TransactionsNumber: block.TransactionsCount,
 	}
 
 	return &oneResultBlock, nil
@@ -153,16 +126,10 @@ func (bsi *BlockServiceImplementation) GetAllBlocks(page int, perPage int) (*blo
 			Number:             v.Number,
 			Age:                utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 			DateTime:           time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
-			TransactionsNumber: 0,
+			TransactionsNumber: v.TransactionsCount,
 			Validator:          v.Miner,
 			GasUsed:            v.GasUsed,
 			GasLimit:           v.GasLimit,
-		}
-
-		err := bsi.database.NewRaw("select count(*) as count from transactions where block_number = ?", block.Number).Scan(bsi.ctx, &block.TransactionsNumber)
-
-		if err != nil {
-
 		}
 
 		result.Blocks = append(result.Blocks, block)
