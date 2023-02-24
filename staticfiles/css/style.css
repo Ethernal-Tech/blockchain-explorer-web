@@ -16,7 +16,7 @@ body {
 .top-section {
     background-color: var(--background-color); 
     background-image: url('../images/background.svg'); 
-    min-height: 260px;
+    min-height: 246px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -178,23 +178,18 @@ body {
 
 .index-footer {
     margin-top: auto;
-    min-height: 140px;
+    min-height: 130px;
     background-image: url('../images/background.svg');
     background-color: var(--background-color);
     color: white;
 }
 
-.footer-container-1 {
+.footer-container {
     font-size: 18px;
     display: flex;
     align-items: center;
     border-bottom: 0.1px solid rgba(244, 242, 242, 0.231);
     height: 70px;
-}
-
-.footer-container-2 {
-    margin-top: 20px;
-    font-size: 14px;
 }
 
 .hash-tag {
