@@ -31,38 +31,42 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 	address = strings.ToLower(address)
 
 	var transactions []DB.Transaction
-	err := as.database.NewSelect().Table("transactions").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Order("timestamp DESC").Limit(25).Scan(as.ctx, &transactions)
+	err := as.database.NewSelect().Table("transactions").Where("? = ? OR ? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address, bun.Ident("contract_address"), address).Order("timestamp DESC").Limit(25).Scan(as.ctx, &transactions)
 	if err != nil {
 		//TODO: Error handling
 	}
 
 	for _, v := range transactions {
 		var transac = addressModel.Transaction{
-			Hash:        v.Hash,
-			Method:      getMethodName(v.InputData),
-			BlockNumber: v.BlockNumber,
-			From:        v.From,
-			To:          v.To,
-			Value:       utils.WeiToEther(v.Value),
-			Gas:         v.Gas,
-			GasUsed:     v.GasUsed,
-			GasPrice:    v.GasPrice,
-			Age:         utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
-			DateTime:    time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
+			Hash:            v.Hash,
+			Method:          getMethodName(v.InputData),
+			BlockNumber:     v.BlockNumber,
+			From:            v.From,
+			To:              v.To,
+			Value:           utils.WeiToEther(v.Value),
+			Gas:             v.Gas,
+			GasUsed:         v.GasUsed,
+			GasPrice:        v.GasPrice,
+			Age:             utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
+			DateTime:        time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
+			ContractAddress: v.ContractAddress,
+		}
+		if strings.ReplaceAll(transac.To, " ", "") == "" {
+			transac.To = ""
 		}
 
 		// value := utils.WeiToEther(v.Value)
 		// transac.Value = value
 
-		if address == v.To {
-			transac.Direction = "in"
-		} else {
+		if address == v.From {
 			transac.Direction = "out"
+		} else {
+			transac.Direction = "in"
 		}
 		result.Transactions = append(result.Transactions, transac)
 
 	}
-	count, err := as.database.NewSelect().Table("transactions").Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Count(as.ctx)
+	count, err := as.database.NewSelect().Table("transactions").Where("? = ? OR ? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address, bun.Ident("contract_address"), address).Count(as.ctx)
 	result.TransactionCount = count
 
 	balance, err := as.getBalanceFromChainWithTimeout(address)
@@ -72,6 +76,9 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 
 	//balanceBigInt := utils.ToBigInt(balance)
 	result.Balance = utils.WeiToEther(balance)
+	var isContract bool
+	isContract, err = as.database.NewSelect().Table("transactions").Where("contract_address = ?", address).Exists(as.ctx)
+	result.IsContract = isContract
 	return &result, nil
 }
 

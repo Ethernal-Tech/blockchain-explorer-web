@@ -5,19 +5,21 @@ type Address struct {
 	Balance          string
 	TransactionCount int
 	Transactions     []Transaction
+	IsContract       bool
 }
 
 type Transaction struct {
-	Hash        string
-	Method      string
-	BlockNumber uint64
-	Age         string
-	DateTime    string
-	From        string
-	To          string
-	Direction   string
-	Value       string
-	Gas         uint64
-	GasUsed     uint64
-	GasPrice    uint64
+	Hash            string
+	Method          string
+	BlockNumber     uint64
+	Age             string
+	DateTime        string
+	From            string
+	To              string
+	Direction       string
+	Value           string
+	Gas             uint64
+	GasUsed         uint64
+	GasPrice        uint64
+	ContractAddress string
 }
