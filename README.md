@@ -12,7 +12,7 @@
 </br>
 
 <div align='center'>
-  <img src='https://ethernal.tech/static/media/header-itirijum-ispravka.6d7a1acd09898e5f50bfc5932a8d437a.svg' width='550px' />
+  <img src='https://ethernal.tech/static/media/silver-header-main.ee2a2840942e80d0f71d0b4424dac268.svg' width='550px' />
 </div>
 
 </br>
