@@ -37,6 +37,7 @@ import (
 func routes(server *gin.Engine, cont ...any) {
 	server.SetFuncMap(template.FuncMap{
 		"getAppConfig": getAppConfig,
+		"sub":          Subtraction,
 	})
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
@@ -94,4 +95,8 @@ func getCssFile(c *gin.Context) {
 	c.Header("Content-Type", "text/css")
 
 	t.Execute(c.Writer, appConfig)
+}
+
+func Subtraction(a, b int) int {
+	return a - b
 }

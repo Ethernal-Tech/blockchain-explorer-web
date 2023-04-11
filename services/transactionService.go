@@ -64,9 +64,16 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 
 func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHash string) (*models.Transaction, error) {
 	var transaction DB.Transaction
+	var logs []DB.Log
 	error1 := tsi.database.NewSelect().Table("transactions").Where("hash = ?", transactionHash).Scan(tsi.ctx, &transaction)
 
 	if error1 != nil {
+
+	}
+
+	error2 := tsi.database.NewSelect().Table("logs").Where("transaction_hash = ?", transactionHash).Scan(tsi.ctx, &logs)
+
+	if error2 != nil {
 
 	}
 
@@ -86,11 +93,32 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		Status:           transaction.Status,
 		Age:              utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds()))),
 		DateTime:         time.Unix(int64(transaction.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
+		InputData:        transaction.InputData,
 	}
 
 	if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
 		oneResultTransaction.To = ""
 	}
+
+	for _, element := range logs {
+		var log = models.Log{
+			BlockHash:       element.BlockHash,
+			Index:           element.Index,
+			TransactionHash: element.TransactionHash,
+			Address:         element.Address,
+			BlockNumber:     element.BlockNumber,
+			Topic0:          strings.ReplaceAll(element.Topic0, " ", ""),
+			Topic1:          strings.ReplaceAll(element.Topic1, " ", ""),
+			Topic2:          strings.ReplaceAll(element.Topic2, " ", ""),
+			Topic3:          strings.ReplaceAll(element.Topic3, " ", ""),
+			Data:            element.Data,
+		}
+
+		oneResultTransaction.Logs = append(oneResultTransaction.Logs, log)
+	}
+
+	isContract, _ := tsi.database.NewSelect().Table("transactions").Where("contract_address = ?", oneResultTransaction.To).Exists(tsi.ctx)
+	oneResultTransaction.IsToContract = isContract
 
 	return &oneResultTransaction, nil
 }

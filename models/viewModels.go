@@ -33,4 +33,20 @@ type Transaction struct {
 	Status           uint64
 	Age              string
 	DateTime         string
+	Logs             []Log
+	InputData        string
+	IsToContract     bool
+}
+
+type Log struct {
+	BlockHash       string
+	Index           uint32
+	TransactionHash string
+	Address         string
+	BlockNumber     uint64
+	Topic0          string
+	Topic1          string
+	Topic2          string
+	Topic3          string
+	Data            string
 }

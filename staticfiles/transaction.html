@@ -2,85 +2,191 @@
 
 <div class="container pb-3">
     <div class="be-subtitle">
-        Transaction Details 
+        Transaction Details
     </div>
-    <div class="card border-1 shadow">
-        <div class="card-header bg-white be-card-header">
-            Overview
+
+    <ul class="nav nav-pills py-3 gap-2">
+        <li class="nav-item snap-align-start">
+            <a class="nav-link active" style="background-color: var(--main-color); padding: 5px; cursor: pointer;"
+                onclick="changeTab('overview')">
+                Overview
+            </a>
+        </li>
+        {{$logsLength := len .transaction.Logs}}
+        {{if gt $logsLength 0}}
+        <li class="nav-item snap-align-start">
+            <a class="nav-link active" style="background-color: var(--main-color); padding: 5px; cursor: pointer;"
+                onclick="changeTab('logs')">
+                Logs ({{len .transaction.Logs}})
+            </a>
+        </li>
+        {{end}}
+    </ul>
+
+    <div class="tab-content">
+        <div id="overview" class="tab-pane fade show active">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Transaction Hash:</div>
+                        <div class="col-md-9">
+                            <span class="trim">
+                                {{.transaction.Hash}}
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Status:</div>
+                        <div class="col-md-9">{{.transaction.Status}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Block:</div>
+                        <div class="col-md-9"><a class="text-decoration-none"
+                                href="/block/number/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Block Hash:</div>
+                        <div class="col-md-9">
+                            <span class="trim">
+                                {{.transaction.BlockHash}}
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Timestamp:</div>
+                        <div class="col-md-9">{{.transaction.Age}} ago ({{.transaction.DateTime}} UTC)</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">From:</div>
+                        <div class="col-md-9"><a class="text-decoration-none"
+                                href="/address/hash/{{.transaction.From}}">{{.transaction.From}}</a></div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">To:</div>
+                        <div class="col-md-9">
+                            {{if eq .transaction.To ""}}
+                            [
+                            <a class="text-decoration-none" href="/address/hash/{{.transaction.ContractAddress}}">
+                                <i class="fas fa-file-contract"></i> {{.transaction.ContractAddress}}
+                            </a>
+                            created]
+                            {{else if .transaction.IsToContract}}
+                            <a class="text-decoration-none" href="/address/hash/{{.transaction.To}}">
+                                <i class="fas fa-file-contract"></i> {{.transaction.To}}
+                            </a>
+                            {{else}}
+                            <a class="text-decoration-none" href="/address/hash/{{.transaction.To}}">
+                                {{.transaction.To}}
+                            </a>
+                            {{end}}
+                        </div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas Used:</div>
+                        <div class="col-md-9">{{.transaction.GasUsed}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas Price:</div>
+                        <div class="col-md-9">{{.transaction.GasPrice}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Gas:</div>
+                        <div class="col-md-9">{{.transaction.Gas}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Value:</div>
+                        <div class="col-md-9">{{.transaction.Value}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">Nonce:</div>
+                        <div class="col-md-9">{{.transaction.Nonce}}</div>
+                    </div>
+                    <hr class="transaction-hr">
+                    <div class="row">
+                        <div class="col-md-3">Input data:</div>
+                        <div class="col-md-9">
+                            <textarea class="scrollbar-custom form-control bg-light text-muted font-monospace">{{.transaction.InputData}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-md-3">Transaction Hash:</div>
-                <div class="col-md-9">
-                    <span class="trim">
-                        {{.transaction.Hash}}
-                    </span>
-                </div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Status:</div>
-                <div class="col-md-9">{{.transaction.Status}}</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Block:</div>
-                <div class="col-md-9"><a class="text-decoration-none" href="/block/number/{{.transaction.BlockNumber}}">{{.transaction.BlockNumber}}</a></div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Block Hash:</div>
-                <div class="col-md-9">
-                    <span class="trim">
-                        {{.transaction.BlockHash}}
-                    </span>
-                </div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Timestamp:</div>
-                <div class="col-md-9">{{.transaction.Age}} ago ({{.transaction.DateTime}} UTC)</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">From:</div>
-                <div class="col-md-9"><a class="text-decoration-none" href="/address/hash/{{.transaction.From}}">{{.transaction.From}}</a></div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">To:</div>
-                <div class="col-md-9">
-                    {{if eq .transaction.To ""}}
-                    <span>[Contract]</span> <a class="text-decoration-none" href="/address/hash/{{.transaction.ContractAddress}}">{{.transaction.ContractAddress}}</a>
-                    {{else}}
-                    <a class="text-decoration-none" href="/address/hash/{{.transaction.To}}">{{.transaction.To}}</a>
+        <div id="logs" class="tab-pane fade">
+            <div class="card shadow">
+                <div class="card-body">
+                    <p style="margin-bottom: 20px;">Transaction Receipt Event Logs</p>
+                    {{range $index, $element := .transaction.Logs}}
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2 col-lg-1">
+                            <span class="rounded-pill log-index">
+                                {{ $element.Index }}
+                            </span>
+                        </div>
+                        <div class="col-sm-10 col-md-10 col-lg-11">
+                            <dl class="row">
+                                <dt class="col-md-3 col-lg-1 dt-text">Address</dt>
+                                <dd class="col-md-9">
+                                    <span class="text-decoration-none"><a
+                                            href="/address/hash/{{$element.Address}}">{{$element.Address}}</a></span>
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-md-3 col-lg-1 dt-text">Topics</dt>
+                                <dd class="col-md-9">
+                                    <ul class="list-unstyled">
+                                        {{if ne $element.Topic0 ""}}
+                                        <li>
+                                            <span
+                                                class="badge bg-secondary bg-opacity-10 border border-secondary border-opacity-25 text-dark px-2 me-1">0</span>
+                                            {{ $element.Topic0 }}
+                                        </li>
+                                        {{end}}
+                                        {{if ne $element.Topic1 ""}}
+                                        <li>
+                                            <span
+                                                class="badge bg-secondary bg-opacity-10 border border-secondary border-opacity-25 text-dark px-2 me-1">1</span>
+                                            {{ $element.Topic1 }}
+                                        </li>
+                                        {{end}}
+                                        {{if ne $element.Topic2 ""}}
+                                        <li>
+                                            <span
+                                                class="badge bg-secondary bg-opacity-10 border border-secondary border-opacity-25 text-dark px-2 me-1">2</span>
+                                            {{ $element.Topic2 }}
+                                        </li>
+                                        {{end}}
+                                        {{if ne $element.Topic3 ""}}
+                                        <li>
+                                            <span
+                                                class="badge bg-secondary bg-opacity-10 border border-secondary border-opacity-25 text-dark px-2 me-1">3</span>
+                                            {{ $element.Topic3 }}
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-md-3 col-lg-1 dt-text">Data</dt>
+                                <dd class="col-md-9">{{ $element.Data }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    {{ if lt $index (sub $logsLength 1) }}              
+                        <hr>
+                    {{end}}
                     {{end}}
                 </div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Gas Used:</div>
-                <div class="col-md-9">{{.transaction.GasUsed}}</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Gas Price:</div>
-                <div class="col-md-9">{{.transaction.GasPrice}}</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Gas:</div>
-                <div class="col-md-9">{{.transaction.Gas}}</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Value:</div>
-                <div class="col-md-9">{{.transaction.Value}}</div>
-            </div>
-            <hr class="transaction-hr">
-            <div class="row align-items-center">
-                <div class="col-md-3">Nonce:</div>
-                <div class="col-md-9">{{.transaction.Nonce}}</div>
             </div>
         </div>
     </div>
@@ -89,8 +195,26 @@
 {{template "footer.html"}}
 
 <script>
-    window.onbeforeunload = function(){
+    window.onbeforeunload = function () {
         loader = document.getElementsByClassName("loader");
         loader[0].style.display = "block";
     };
+
+    function changeTab(tab) {
+        var elements = Array.from(document.getElementsByClassName('tab-pane'))
+        elements.forEach((element) => {
+            element.classList.remove('show', 'active');
+        });
+
+        if (tab == 'overview') {
+            history.replaceState("", document.title, window.location.pathname);
+            document.getElementById('overview').classList.add('show', 'active');
+        }
+        else if (tab == 'logs') {
+            var baseUrl = window.location.href.split('#')[0];
+            history.replaceState("", document.title, baseUrl + '#' + tab);
+            document.getElementById('logs').classList.add('show', 'active');
+        }
+
+    }
 </script>
