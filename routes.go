@@ -76,6 +76,7 @@ func routes(server *gin.Engine, cont ...any) {
 	addressRoutes := server.Group("/address")
 	{
 		addressRoutes.GET("/hash/:addresshash", ac.GetAddress)
+		addressRoutes.POST("/uploadABI/:address", ac.UploadABI)
 	}
 }
 

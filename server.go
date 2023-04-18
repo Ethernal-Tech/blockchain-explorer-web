@@ -25,7 +25,7 @@ var (
 	transactionService    services.TransactionService
 	transactionController controllers.TransactionController
 	globalController      controllers.GlobalController
-	addressService        services.AddressService
+	addressService        services.IAddressService
 	addressController     controllers.AddressController
 	configurationService  services.ConfigurationService
 )

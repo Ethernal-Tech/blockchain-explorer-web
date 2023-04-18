@@ -14,11 +14,11 @@ import (
 type GlobalController struct {
 	BlockService         services.BlockService
 	TransactionService   services.TransactionService
-	AddressService       services.AddressService
+	AddressService       services.IAddressService
 	ConfigurationService services.ConfigurationService
 }
 
-func NewGlobalController(blockService services.BlockService, transactionService services.TransactionService, addressService services.AddressService, configurationService services.ConfigurationService) GlobalController {
+func NewGlobalController(blockService services.BlockService, transactionService services.TransactionService, addressService services.IAddressService, configurationService services.ConfigurationService) GlobalController {
 	return GlobalController{BlockService: blockService, TransactionService: transactionService, AddressService: addressService, ConfigurationService: configurationService}
 }
 
