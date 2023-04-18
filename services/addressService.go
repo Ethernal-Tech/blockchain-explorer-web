@@ -57,9 +57,9 @@ func (as *AddressService) GetAddress(address string) (*addressModel.Address, err
 			DateTime:        time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 			ContractAddress: v.ContractAddress,
 		}
-		if strings.ReplaceAll(transac.To, " ", "") == "" {
-			transac.To = ""
-		}
+		// if strings.ReplaceAll(transac.To, " ", "") == "" {
+		// 	transac.To = ""
+		// }
 
 		// value := utils.WeiToEther(v.Value)
 		// transac.Value = value
@@ -83,7 +83,7 @@ func (as *AddressService) GetAddress(address string) (*addressModel.Address, err
 	//balanceBigInt := utils.ToBigInt(balance)
 	result.Balance = utils.WeiToEther(balance)
 	var isContract bool
-	isContract, err = as.database.NewSelect().Table("transactions").Where("contract_address = ?", address).Exists(as.ctx)
+	isContract, err = as.database.NewSelect().Table("contracts").Where("address = ?", address).Exists(as.ctx)
 	result.IsContract = isContract
 	return &result, nil
 }
