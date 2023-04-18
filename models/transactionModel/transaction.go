@@ -19,4 +19,5 @@ type Transaction struct {
 	TxnFee          uint64
 	ContractAddress string
 	Direction       string
+	IsToContract    bool
 }

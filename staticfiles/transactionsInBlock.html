@@ -68,9 +68,13 @@
                             <td>
                                 <span class="hash-tag text-truncate">
                                     {{if eq .To ""}}
-                                    <a href="/address/hash/{{.ContractAddress}}"><i class="fas fa-file-contract"></i> {{.ContractAddress}}</a>
+                                        <a href="/address/hash/{{.ContractAddress}}"><i class="fas fa-newspaper"></i> Contract Creation </a>
                                     {{else}}
-                                    <a href="/address/hash/{{.To}}">{{.To}}</a>
+                                        {{if .IsToContract}}
+                                            <a href="/address/hash/{{.To}}"><i class="fas fa-file-contract"></i> {{.To}}</a>
+                                        {{else}}
+                                            <a href="/address/hash/{{.To}}">{{.To}}</a>
+                                        {{end}}
                                     {{end}}
                                 </span>
                             </td>

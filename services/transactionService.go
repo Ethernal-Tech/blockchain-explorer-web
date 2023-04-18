@@ -52,9 +52,9 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			DateTime:         time.Unix(int64(v.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
 		}
 
-		if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
-			oneResultTransaction.To = ""
-		}
+		// if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+		// 	oneResultTransaction.To = ""
+		// }
 
 		result = append(result, oneResultTransaction)
 	}
@@ -96,9 +96,9 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		InputData:        transaction.InputData,
 	}
 
-	if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
-		oneResultTransaction.To = ""
-	}
+	// if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
+	// 	oneResultTransaction.To = ""
+	// }
 
 	for _, element := range logs {
 		var log = models.Log{
@@ -107,18 +107,22 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 			TransactionHash: element.TransactionHash,
 			Address:         element.Address,
 			BlockNumber:     element.BlockNumber,
-			Topic0:          strings.ReplaceAll(element.Topic0, " ", ""),
-			Topic1:          strings.ReplaceAll(element.Topic1, " ", ""),
-			Topic2:          strings.ReplaceAll(element.Topic2, " ", ""),
-			Topic3:          strings.ReplaceAll(element.Topic3, " ", ""),
-			Data:            element.Data,
+			// Topic0:          strings.ReplaceAll(element.Topic0, " ", ""),
+			// Topic1:          strings.ReplaceAll(element.Topic1, " ", ""),
+			// Topic2:          strings.ReplaceAll(element.Topic2, " ", ""),
+			// Topic3:          strings.ReplaceAll(element.Topic3, " ", ""),
+			Topic0: element.Topic0,
+			Topic1: element.Topic1,
+			Topic2: element.Topic2,
+			Topic3: element.Topic3,
+			Data:   element.Data,
 		}
 
 		oneResultTransaction.Logs = append(oneResultTransaction.Logs, log)
 	}
 
-	isContract, _ := tsi.database.NewSelect().Table("transactions").Where("contract_address = ?", oneResultTransaction.To).Exists(tsi.ctx)
-	oneResultTransaction.IsToContract = isContract
+	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)
+	oneResultTransaction.IsToContract = isToContract
 
 	return &oneResultTransaction, nil
 }
@@ -127,7 +131,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber 
 	var transactions []DB.Transaction
 
 	var offSet = perPage * (page - 1)
-	err := tsi.database.NewSelect().Table("transactions").OrderExpr("block_number DESC").Where("block_number = ?", blockNumber).Limit(perPage).Offset(offSet).Scan(tsi.ctx, &transactions)
+	err := tsi.database.NewSelect().Table("transactions").OrderExpr("transaction_index DESC").Where("block_number = ?", blockNumber).Limit(perPage).Offset(offSet).Scan(tsi.ctx, &transactions)
 
 	if err != nil {
 		//TODO: error handling
@@ -148,9 +152,12 @@ func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber 
 			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
-		if strings.ReplaceAll(transaction.To, " ", "") == "" {
-			transaction.To = ""
-		}
+
+		isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", transaction.To).Exists(tsi.ctx)
+		transaction.IsToContract = isToContract
+		// if strings.ReplaceAll(transaction.To, " ", "") == "" {
+		// 	transaction.To = ""
+		// }
 		result.Transactions = append(result.Transactions, transaction)
 	}
 
@@ -191,9 +198,12 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
-		if strings.ReplaceAll(transaction.To, " ", "") == "" {
-			transaction.To = ""
-		}
+
+		isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", transaction.To).Exists(tsi.ctx)
+		transaction.IsToContract = isToContract
+		// if strings.ReplaceAll(transaction.To, " ", "") == "" {
+		// 	transaction.To = ""
+		// }
 		result.Transactions = append(result.Transactions, transaction)
 	}
 
@@ -239,9 +249,9 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
-		if strings.ReplaceAll(transaction.To, " ", "") == "" {
-			transaction.To = ""
-		}
+		// if strings.ReplaceAll(transaction.To, " ", "") == "" {
+		// 	transaction.To = ""
+		// }
 		if address == v.To {
 			transaction.Direction = "in"
 		} else {
