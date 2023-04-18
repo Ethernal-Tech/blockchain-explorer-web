@@ -7,10 +7,10 @@ import (
 )
 
 type AddressController struct {
-	AddressService services.AddressService
+	AddressService services.IAddressService
 }
 
-func NewAddressController(addressService services.AddressService) AddressController {
+func NewAddressController(addressService services.IAddressService) AddressController {
 	return AddressController{AddressService: addressService}
 }
 
@@ -20,4 +20,8 @@ func (ac *AddressController) GetAddress(context *gin.Context) {
 		"address": address,
 	}
 	context.HTML(200, "address.html", data)
+}
+
+func (ac *AddressController) UploadABI(context *gin.Context) {
+	ac.AddressService.UploadABI(context)
 }

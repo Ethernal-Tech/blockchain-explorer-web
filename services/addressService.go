@@ -2,30 +2,36 @@ package services
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"math"
+	"net/http"
 	"strings"
 	"time"
 	"webbc/DB"
 	"webbc/configuration"
+	"webbc/models/abiModel"
 	"webbc/models/addressModel"
 	"webbc/utils"
 
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
 
-type AddressServiceImplementation struct {
+type AddressService struct {
 	database *bun.DB
 	ctx      context.Context
 	client   *rpc.Client
 	config   *configuration.GeneralConfiguration
 }
 
-func NewAddressService(database *bun.DB, ctx context.Context, client *rpc.Client, config *configuration.GeneralConfiguration) AddressService {
-	return &AddressServiceImplementation{database: database, ctx: ctx, client: client, config: config}
+func NewAddressService(database *bun.DB, ctx context.Context, client *rpc.Client, config *configuration.GeneralConfiguration) IAddressService {
+	return &AddressService{database: database, ctx: ctx, client: client, config: config}
 }
 
-func (as *AddressServiceImplementation) GetAddress(address string) (*addressModel.Address, error) {
+func (as *AddressService) GetAddress(address string) (*addressModel.Address, error) {
 	var result addressModel.Address
 	result.AddressHex = address
 	address = strings.ToLower(address)
@@ -82,7 +88,7 @@ func (as *AddressServiceImplementation) GetAddress(address string) (*addressMode
 	return &result, nil
 }
 
-func (as *AddressServiceImplementation) getBalanceFromChainWithTimeout(address string) (string, error) {
+func (as *AddressService) getBalanceFromChainWithTimeout(address string) (string, error) {
 	var result string
 	ctxWithTimeout, cancel := context.WithTimeout(as.ctx, time.Duration(as.config.CallTimeoutInSeconds)*time.Second)
 	defer cancel()
@@ -90,6 +96,60 @@ func (as *AddressServiceImplementation) getBalanceFromChainWithTimeout(address s
 	return result, err
 }
 
-func (as *AddressServiceImplementation) ChangeClient(client *rpc.Client) {
+func (as *AddressService) ChangeClient(client *rpc.Client) {
 	as.client = client
+}
+
+func (as *AddressService) UploadABI(c *gin.Context) {
+	address := strings.ToLower(c.Param("address"))
+
+	var abiItems []abiModel.AbiItem
+	if err := c.BindJSON(&abiItems); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var dbAbis []DB.Abi = []DB.Abi{}
+	for _, el := range abiItems {
+		if el.Type == "event" {
+			var event abiModel.EventItem = abiModel.EventItem{
+				Anonymous: el.Anonymous,
+				Inputs:    el.Inputs,
+				Name:      el.Name,
+				Type:      el.Type,
+			}
+			jsonBytes, err := json.Marshal(event)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			parsedEvent, err := abi.JSON(strings.NewReader("[" + string(jsonBytes) + "]"))
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			dbAbi := DB.Abi{
+				Hash:       parsedEvent.Events[el.Name].ID.String(),
+				Address:    address,
+				AbiTypeId:  2,
+				Definition: string(jsonBytes),
+			}
+			dbAbis = append(dbAbis, dbAbi)
+		} else if el.Type == "function" {
+			fmt.Println("function")
+		} else if el.Type == "constructor" {
+			fmt.Println("constructor")
+		}
+	}
+
+	_, abiError := as.database.NewInsert().Model(&dbAbis).Exec(as.ctx)
+	if abiError != nil {
+		//TODO: error handling
+		c.JSON(http.StatusBadRequest, gin.H{"error": abiError.Error()})
+		return
+	}
+
+	c.Status(http.StatusOK)
 }

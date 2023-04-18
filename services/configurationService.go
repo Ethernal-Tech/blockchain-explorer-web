@@ -15,10 +15,10 @@ type ConfigurationServiceImplementation struct {
 	generalConfig  *configuration.GeneralConfiguration
 	client         *rpc.Client
 	database       *bun.DB
-	addressService AddressService
+	addressService IAddressService
 }
 
-func NewConfigurationService(appConfig *configuration.ApplicationConfiguration, config *configuration.GeneralConfiguration, client *rpc.Client, database *bun.DB, addressService AddressService) ConfigurationService {
+func NewConfigurationService(appConfig *configuration.ApplicationConfiguration, config *configuration.GeneralConfiguration, client *rpc.Client, database *bun.DB, addressService IAddressService) ConfigurationService {
 	return &ConfigurationServiceImplementation{appConfig: appConfig, generalConfig: config, client: client, database: database, addressService: addressService}
 }
 
