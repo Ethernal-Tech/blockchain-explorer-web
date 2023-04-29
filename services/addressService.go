@@ -84,6 +84,21 @@ func (as *AddressService) GetAddress(address string) (*addressModel.Address, err
 	result.Balance = utils.WeiToEther(balance)
 	var isContract bool
 	isContract, err = as.database.NewSelect().Table("contracts").Where("address = ?", address).Exists(as.ctx)
+
+	if isContract {
+		var creatorTransaction string
+		err = as.database.NewSelect().Table("contracts").ColumnExpr("transaction_hash").Where("address = ?", address).Scan(as.ctx, &creatorTransaction)
+		if err != nil {
+
+		}
+
+		var creatorAddress string
+		err = as.database.NewSelect().Table("transactions").ColumnExpr(`"from"`).Where("hash = ?", creatorTransaction).Scan(as.ctx, &creatorAddress)
+
+		result.CreatorTransaction = creatorTransaction
+		result.CreatorAddress = creatorAddress
+	}
+
 	result.IsContract = isContract
 	return &result, nil
 }

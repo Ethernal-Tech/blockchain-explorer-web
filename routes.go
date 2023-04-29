@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"text/template"
 	"webbc/configuration"
 	"webbc/controllers"
@@ -38,6 +39,7 @@ func routes(server *gin.Engine, cont ...any) {
 	server.SetFuncMap(template.FuncMap{
 		"getAppConfig": getAppConfig,
 		"sub":          Subtraction,
+		"startsWith":   StartsWith,
 	})
 	server.LoadHTMLGlob("staticfiles/*.html")
 	server.Static("/images", "./staticfiles/images")
@@ -100,4 +102,8 @@ func getCssFile(c *gin.Context) {
 
 func Subtraction(a, b int) int {
 	return a - b
+}
+
+func StartsWith(s, prefix string) bool {
+	return strings.HasPrefix(s, prefix)
 }

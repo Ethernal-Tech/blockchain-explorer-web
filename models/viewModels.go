@@ -44,9 +44,15 @@ type Log struct {
 	TransactionHash string
 	Address         string
 	BlockNumber     uint64
+	EventName       string
+	ParamNames      []string
+	ParamTypes      []string
+	ParamIndexed    []bool
 	Topic0          string
 	Topic1          string
 	Topic2          string
 	Topic3          string
 	Data            string
+	DataNames       []string
+	DataValues      []string
 }

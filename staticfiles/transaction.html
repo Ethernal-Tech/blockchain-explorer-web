@@ -1,5 +1,7 @@
 {{template "header.html"}}
 
+{{$logsLength := len .transaction.Logs}}
+
 <div class="container pb-3">
     <div class="be-subtitle">
         Transaction Details
@@ -12,7 +14,6 @@
                 Overview
             </a>
         </li>
-        {{$logsLength := len .transaction.Logs}}
         {{if gt $logsLength 0}}
         <li class="nav-item snap-align-start">
             <a class="nav-link active" style="background-color: var(--main-color); padding: 5px; cursor: pointer;"
@@ -116,7 +117,7 @@
                     <div class="row">
                         <div class="col-md-3">Input data:</div>
                         <div class="col-md-9">
-                            <textarea class="scrollbar-custom form-control bg-light text-muted font-monospace">{{.transaction.InputData}}</textarea>
+                            <textarea readonly class="scrollbar-custom form-control text-muted font-monospace">{{.transaction.InputData}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -127,6 +128,8 @@
                 <div class="card-body">
                     <p style="margin-bottom: 20px;">Transaction Receipt Event Logs</p>
                     {{range $index, $element := .transaction.Logs}}
+                    {{$paramsLength := len $element.ParamNames}}
+                    {{$decodedParamsLength := len $element.DataNames}}
                     <div class="row">
                         <div class="col-sm-2 col-md-2 col-lg-1">
                             <span class="rounded-pill log-index">
@@ -141,6 +144,24 @@
                                             href="/address/hash/{{$element.Address}}">{{$element.Address}}</a></span>
                                 </dd>
                             </dl>
+                            {{if ne $element.EventName ""}}
+                            <dl class="row">
+                                <dt class="col-md-3 col-lg-1 dt-text">Name</dt>
+                                <dd class="col-md-9">
+                                    <span class="text-decoration-none">{{$element.EventName}}</span>
+                                    ({{range $index, $name := $element.ParamNames}}
+                                        {{if index $element.ParamIndexed $index}}
+                                            indexed <span style="color: green;">{{index $element.ParamTypes $index}}</span> <span style="color: red;">{{$name}}</span>
+                                        {{else}}
+                                            <span style="color: green;">{{index $element.ParamTypes $index}}</span> <span style="color: red;">{{$name}}</span>
+                                        {{end}}                      
+                                        {{ if lt $index (sub $paramsLength 1) }}              
+                                            <span>,</span>
+                                        {{end}}
+                                    {{end}})                           
+                                </dd>
+                            </dl>
+                            {{end}}
                             <dl class="row">
                                 <dt class="col-md-3 col-lg-1 dt-text">Topics</dt>
                                 <dd class="col-md-9">
@@ -176,10 +197,26 @@
                                     </ul>
                                 </dd>
                             </dl>
+                            {{if gt $decodedParamsLength 0}}
+                            <dl class="row">
+                                <dt class="col-md-3 col-lg-1 dt-text">Data</dt>
+                                <dd class="col-md-9">
+                                    {{range $index, $value := $element.DataValues}}
+                                        {{if startsWith $value "0x"}}
+                                            {{index $element.DataNames $index}}: <span class="text-decoration-none"><a href="/address/hash/{{$value}}">{{$value}}</a></span>
+                                        {{else}}
+                                            {{index $element.DataNames $index}}: {{$value}}
+                                        {{end}}                                   
+                                        <br>
+                                    {{end}}
+                                </dd>
+                            </dl>
+                            {{else}}
                             <dl class="row">
                                 <dt class="col-md-3 col-lg-1 dt-text">Data</dt>
                                 <dd class="col-md-9">{{ $element.Data }}</dd>
                             </dl>
+                            {{end}}
                         </div>
                     </div>
                     {{ if lt $index (sub $logsLength 1) }}              
@@ -215,6 +252,5 @@
             history.replaceState("", document.title, baseUrl + '#' + tab);
             document.getElementById('logs').classList.add('show', 'active');
         }
-
     }
 </script>

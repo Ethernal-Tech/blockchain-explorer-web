@@ -2,7 +2,10 @@ package services
 
 import (
 	"context"
+	"encoding/hex"
+	"fmt"
 	"math"
+	"reflect"
 	"strings"
 	"time"
 	"webbc/DB"
@@ -11,6 +14,8 @@ import (
 	"webbc/models/transactionModel"
 	"webbc/utils"
 
+	ethereumAbi "github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/uptrace/bun"
 )
 
@@ -71,7 +76,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 
 	}
 
-	error2 := tsi.database.NewSelect().Table("logs").Where("transaction_hash = ?", transactionHash).Scan(tsi.ctx, &logs)
+	error2 := tsi.database.NewSelect().Table("logs").Order("index ASC").Where("transaction_hash = ?", transactionHash).Scan(tsi.ctx, &logs)
 
 	if error2 != nil {
 
@@ -100,23 +105,14 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	// 	oneResultTransaction.To = ""
 	// }
 
-	for _, element := range logs {
-		var log = models.Log{
-			BlockHash:       element.BlockHash,
-			Index:           element.Index,
-			TransactionHash: element.TransactionHash,
-			Address:         element.Address,
-			BlockNumber:     element.BlockNumber,
-			// Topic0:          strings.ReplaceAll(element.Topic0, " ", ""),
-			// Topic1:          strings.ReplaceAll(element.Topic1, " ", ""),
-			// Topic2:          strings.ReplaceAll(element.Topic2, " ", ""),
-			// Topic3:          strings.ReplaceAll(element.Topic3, " ", ""),
-			Topic0: element.Topic0,
-			Topic1: element.Topic1,
-			Topic2: element.Topic2,
-			Topic3: element.Topic3,
-			Data:   element.Data,
+	for _, log := range logs {
+
+		var abi DB.Abi
+		error1 = tsi.database.NewSelect().Table("abis").Where("hash = ? AND address = ?", log.Topic0, log.Address).Scan(tsi.ctx, &abi)
+		if error1 != nil {
+
 		}
+		var log = createLogModel(&log, &abi)
 
 		oneResultTransaction.Logs = append(oneResultTransaction.Logs, log)
 	}
@@ -125,6 +121,121 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	oneResultTransaction.IsToContract = isToContract
 
 	return &oneResultTransaction, nil
+}
+
+func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
+
+	var log models.Log
+	if dbAbi.Id != 0 {
+		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + dbAbi.Definition + "]"))
+		if err != nil {
+			return models.Log{}
+		}
+
+		for _, event := range parsedAbi.Events {
+			//var inputs []string
+
+			paramNames := make([]string, len(event.Inputs))
+			paramTypes := make([]string, len(event.Inputs))
+			paramIndexed := make([]bool, len(event.Inputs))
+			for index, input := range event.Inputs {
+				paramNames[index] = input.Name
+				paramTypes[index] = input.Type.String()
+				paramIndexed[index] = input.Indexed
+			}
+
+			unpackValues, err := event.Inputs.NonIndexed().UnpackValues(common.Hex2Bytes(dbLog.Data[2:]))
+			if err != nil {
+				// Handle the error
+				return models.Log{}
+			}
+
+			dataNames, dataValues := decodeData(unpackValues, event)
+
+			log = models.Log{
+				BlockHash:       dbLog.BlockHash,
+				Index:           dbLog.Index,
+				TransactionHash: dbLog.TransactionHash,
+				Address:         dbLog.Address,
+				BlockNumber:     dbLog.BlockNumber,
+				EventName:       event.Name,
+				Topic0:          dbLog.Topic0,
+				Topic1:          dbLog.Topic1,
+				Topic2:          dbLog.Topic2,
+				Topic3:          dbLog.Topic3,
+				ParamNames:      paramNames,
+				ParamTypes:      paramTypes,
+				ParamIndexed:    paramIndexed,
+				DataNames:       dataNames,
+				DataValues:      dataValues,
+				Data:            dbLog.Data,
+			}
+
+			return log
+		}
+	}
+
+	log = models.Log{
+		BlockHash:       dbLog.BlockHash,
+		Index:           dbLog.Index,
+		TransactionHash: dbLog.TransactionHash,
+		Address:         dbLog.Address,
+		BlockNumber:     dbLog.BlockNumber,
+		EventName:       "",
+		Topic0:          dbLog.Topic0,
+		Topic1:          dbLog.Topic1,
+		Topic2:          dbLog.Topic2,
+		Topic3:          dbLog.Topic3,
+		Data:            dbLog.Data,
+	}
+
+	return log
+}
+
+func decodeData(unpackValues []interface{}, event ethereumAbi.Event) ([]string, []string) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered:", r)
+		}
+	}()
+
+	nonIndexed := event.Inputs.NonIndexed()
+	dataNames := make([]string, len(nonIndexed))
+	dataValues := make([]string, len(nonIndexed))
+
+	for index, value := range unpackValues {
+		dataNames[index] = nonIndexed[index].Name
+		t := reflect.TypeOf(value)
+		v := reflect.ValueOf(value)
+
+		switch t.Kind() {
+		case reflect.Slice:
+			if v.Type().Elem().Kind() == reflect.Ptr {
+				var intSlice []string
+				for i := 0; i < v.Len(); i++ {
+					intSlice = append(intSlice, fmt.Sprintf("%v", v.Index(i)))
+				}
+				dataValues[index] = fmt.Sprintf("%s", strings.Join(intSlice, " "))
+			} else if v.Type().Elem().Kind() == reflect.Uint8 {
+				dataValues[index] = hex.EncodeToString(v.Bytes())
+			}
+			//dataValues[index] = hex.EncodeToString(v.Bytes())
+		case reflect.Array:
+			if t.String() == "common.Address" {
+				dataValues[index] = fmt.Sprintf("0x%v", v)
+			} else {
+				byteSlice := make([]byte, v.Len())
+				for i := 0; i < v.Len(); i++ {
+					byteSlice[i] = byte(v.Index(i).Uint())
+				}
+				dataValues[index] = hex.EncodeToString(byteSlice)
+			}
+		default:
+			dataValues[index] = fmt.Sprintf("%v", v)
+		}
+	}
+
+	return dataNames, dataValues
 }
 
 func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber string, page int, perPage int) (*transactionModel.Transactions, error) {

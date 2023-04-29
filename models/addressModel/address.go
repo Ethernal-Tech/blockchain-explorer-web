@@ -1,11 +1,13 @@
 package addressModel
 
 type Address struct {
-	AddressHex       string
-	Balance          string
-	TransactionCount int
-	Transactions     []Transaction
-	IsContract       bool
+	AddressHex         string
+	Balance            string
+	TransactionCount   int
+	Transactions       []Transaction
+	IsContract         bool
+	CreatorAddress     string
+	CreatorTransaction string
 }
 
 type Transaction struct {

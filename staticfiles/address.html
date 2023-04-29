@@ -1,14 +1,14 @@
 {{template "header.html"}}
 
 <div class="container">
-	<div class="be-subtitle">
+	<div class="be-subtitle">	
 		{{if .address.IsContract }}
-			Contract <span class="strong">{{.address.AddressHex}}</span>
+			Contract <span class="strong" id="address">{{.address.AddressHex}}</span>
 		{{else}}
-			Address <span class="strong">{{.address.AddressHex}}</span>
+			Address <span class="strong" id="address">{{.address.AddressHex}}</span>
 		{{end}}
 	</div>
-	<div class="row">
+	<div class="row mt-3">
 		<div class="col-lg-6">
 			<div class="card h-100 border-1 shadow">
 				<div class="card-header be-card-header">
@@ -38,90 +38,129 @@
 					More info
 				</div>
 				<div class="card-body">
-					<div class="row align-items-center">
-						<div class="col-md-3">My Name Tag:</div>
-						<div class="col-md-9">Not Available</div>
+					<div class="row">
+						{{if .address.IsContract}}
+						<div class="col-md-3">Contract creator:</div>
+						<div class="col-md-9">
+							<span class="text-decoration-none"><a href="/address/hash/{{.address.CreatorAddress}}">{{.address.CreatorAddress}}</a></span>
+							 at txn 
+							 <span class="text-decoration-none"><a href="/transaction/hash/{{.address.CreatorTransaction}}">{{.address.CreatorTransaction}}</a></span>
+							
+						</div>
+						{{end}}
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col mt-3">
-			<div class="card mb-3 border-1 shadow">
-				<div class="card-header be-card-header">
+		<ul class="nav nav-pills py-3 gap-2" style="padding-left: 0.75rem;">
+			<li class="nav-item snap-align-start">
+				<a class="nav-link active" style="background-color: var(--main-color); padding: 5px; cursor: pointer;"
+					onclick="changeTab('transactions')">
 					Transactions
-				</div>
-				<div class="card-body">
-					<div class="d-md-flex justify-content-between">
-						<p class="mb-0">
-							<span class="d-flex align-items-center">
-								{{if gt .address.TransactionCount 25}}
-									Latest 25 from a total of
-								{{else}}
-									Latest {{.address.TransactionCount}} from a total of
-								{{end}}
-								<a style="margin: 0px 4px;" href="/transaction/address/{{.address.AddressHex}}">{{
-									.address.TransactionCount }}
-								</a>
-								transactions
-							</span>
-						</p>
-					</div>
-					<div class="table-responsive mb-2 mb-md-0">
-						<table class="table table-hover align-middle">
-							<thead class="table-light">
-								<tr>
-									<th scope="col">Txn Hash</th>
-									<th scope="col">Method</th>
-									<th scope="col">Block</th>
-									<th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
-									<th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
-									<th scope="col">From</th>
-									<th scope="col"></th>
-									<th scope="col">To</th>
-									<th scope="col">Value</th>
-									<th scope="col">Txn Fee</th>
-								</tr>
-							</thead>
-							<tbody>
-								{{range .address.Transactions}}
-								<tr>
-									<td>
-										<a class="hash-tag text-truncate" href="/transaction/hash/{{.Hash}}">{{.Hash}}</a>
-									</td>
-									<td>
-										<span class="method-name badge align-middle bg-light text-dark border border-dark dark:border-white border-opacity-10 fw-normal text-truncate w-100 py-1.5">{{.Method}}</span>
-									</td>
-									<td>
-										<a class="hash-tag text-truncate" href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a>
-									</td>
-									<td class="ageData">{{.Age}} ago</td>
-									<td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
-									<td>
-										<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
-									</td>
-									{{if eq .Direction "out"}}
-										<td class="text-center"><span class="badge bg-light text-dark">OUT</span></td>
-									{{else}}
-										<td class="text-center"><span class="badge bg-dark">IN</span></td>
-									{{end}}
-									<td>
-										{{if eq .To ""}}
-											Contract Creation
+				</a>
+			</li>
+			
+			{{if .address.IsContract}}
+			<li class="nav-item snap-align-start">
+				<a class="nav-link active" style="background-color: var(--main-color); padding: 5px; cursor: pointer;"
+					onclick="changeTab('code')">
+					Contract
+				</a>
+			</li>
+			{{end}}
+		</ul>
+		<div class="col">
+			<div class="tab-content">
+				<div id="transactions" class="tab-pane fade show active">
+					<div class="card mb-3 border-1 shadow">
+						<div class="card-body">
+							<div class="d-md-flex justify-content-between">
+								<p class="mb-0">
+									<span class="d-flex align-items-center">
+										{{if gt .address.TransactionCount 25}}
+											Latest 25 from a total of
 										{{else}}
-											<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>
+											Latest {{.address.TransactionCount}} from a total of
 										{{end}}
-									</td>
-									<td>{{.Value}} Ether</td>
-									<td></td>
-								</tr>
-								{{end}}
-							</tbody>
-						</table>
+										<a style="margin: 0px 4px;" href="/transaction/address/{{.address.AddressHex}}">{{
+											.address.TransactionCount }}
+										</a>
+										transactions
+									</span>
+								</p>
+							</div>
+							<div class="table-responsive mb-2 mb-md-0">
+								<table class="table table-hover align-middle">
+									<thead class="table-light">
+										<tr>
+											<th scope="col">Txn Hash</th>
+											<th scope="col">Method</th>
+											<th scope="col">Block</th>
+											<th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
+											<th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
+											<th scope="col">From</th>
+											<th scope="col"></th>
+											<th scope="col">To</th>
+											<th scope="col">Value</th>
+											<th scope="col">Txn Fee</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{range .address.Transactions}}
+										<tr>
+											<td>
+												<a class="hash-tag text-truncate" href="/transaction/hash/{{.Hash}}">{{.Hash}}</a>
+											</td>
+											<td>
+												<span class="method-name badge align-middle bg-light text-dark border border-dark dark:border-white border-opacity-10 fw-normal text-truncate w-100 py-1.5">{{.Method}}</span>
+											</td>
+											<td>
+												<a class="hash-tag text-truncate" href="/block/number/{{.BlockNumber}}">{{.BlockNumber}}</a>
+											</td>
+											<td class="ageData">{{.Age}} ago</td>
+											<td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
+											<td>
+												<a class="hash-tag text-truncate" href="/address/hash/{{.From}}">{{.From}}</a>
+											</td>
+											{{if eq .Direction "out"}}
+												<td class="text-center"><span class="badge bg-light text-dark">OUT</span></td>
+											{{else}}
+												<td class="text-center"><span class="badge bg-dark">IN</span></td>
+											{{end}}
+											<td>
+												{{if eq .To ""}}
+													Contract Creation
+												{{else}}
+													<a class="hash-tag text-truncate" href="/address/hash/{{.To}}">{{.To}}</a>
+												{{end}}
+											</td>
+											<td>{{.Value}} Ether</td>
+											<td></td>
+										</tr>
+										{{end}}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="code" class="tab-pane fade">
+					<div class="card shadow">
+						<div class="card-body">
+							ABI:
+							<textarea id="abiJson" class="scrollbar-custom form-control bg-light text-muted font-monospace" style="height: 300px; font-size: 11px;"></textarea>
+							<div class="col-md-9 txns-number" style="width: fit-content; padding-top: 5px;">
+								<button class="btn" style="font-size: 14px;" onclick="uploadABI()">
+									Upload
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 </div>
@@ -129,6 +168,10 @@
 {{template "footer.html"}}
 
 <script>
+
+	var placeholderJSON = JSON.parse('[{"anonymous": false,"inputs": [{"indexed": true,"name": "from","type": "address"},{"indexed": true,"name": "to","type": "address"}, {"indexed": false,"name": "value","type": "uint256"}], "name": "Transfer", "type": "event"}]');
+	document.getElementById('abiJson').placeholder = JSON.stringify(placeholderJSON, undefined, 4);
+
 	javascript: (function () {
 		var cookies = document.cookie.split("; ")
 		cookies.forEach(element => {
@@ -148,4 +191,40 @@
 		loader = document.getElementsByClassName("loader");
 		loader[0].style.display = "block";
 	};
+
+	function changeTab(tab) {
+        var elements = Array.from(document.getElementsByClassName('tab-pane'))
+        elements.forEach((element) => {
+            element.classList.remove('show', 'active');
+        });
+
+        if (tab == 'transactions') {
+            history.replaceState("", document.title, window.location.pathname);
+            document.getElementById('transactions').classList.add('show', 'active');
+        }
+        else if (tab == 'code') {
+            var baseUrl = window.location.href.split('#')[0];
+            history.replaceState("", document.title, baseUrl + '#' + tab);
+            document.getElementById('code').classList.add('show', 'active');
+        }
+    }
+
+	function uploadABI(){
+		
+		abi = document.getElementById('abiJson').value;
+		address= document.getElementById('address').innerHTML
+		
+		$.ajax({
+			url: '/address/uploadABI/'+address,
+			method: 'POST',
+			contentType: 'application/json',
+			data: abi,
+			success: function(response) {
+				alert("ABI is successfully uploaded.");
+			},
+			error: function(xhr, status, error) {
+				console.error('Request failed. Status: ' + status + ', Error: ' + error);
+			}
+		});
+	}
 </script>
