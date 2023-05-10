@@ -115,10 +115,29 @@
                     </div>
                     <hr class="transaction-hr">
                     <div class="row">
-                        <div class="col-md-3">Input data:</div>
+                        <div class="col-md-3">Input data:</div>     
+                        {{if and .transaction.IsToContract .transaction.IsUploadedABI }}
                         <div class="col-md-9">
-                            <textarea readonly class="scrollbar-custom form-control text-muted font-monospace">{{.transaction.InputData}}</textarea>
+                            <textarea id="defaultView" readonly class="scrollbar-custom form-control text-muted font-monospace" style="font-size: 12px; height: 120px;">
+{{.transaction.InputDataSig}}
+
+MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transaction.InputDataParamValues}}
+[{{$index}}]: {{$value}}{{end}}</textarea>
+                            <textarea id="original" readonly class="scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; height: 120px;">{{.transaction.InputData}}</textarea>    
+                            <div class="btn-in-div" style="width: fit-content; display: flex; padding-top: 5px;">
+								<button class="btn" style="font-size: 12px; margin-right: 5px;" onclick="getOriginalView()">
+									Original
+								</button>
+                                <button class="btn" style="font-size: 12px; width: fit-content;" onclick="getDefaultView()">
+									Default view
+								</button>   
+							</div>
+                        </div>   
+                        {{else}}
+                        <div class="col-md-9" >
+                            <textarea readonly class="scrollbar-custom form-control text-muted font-monospace" style="font-size: 12px; height: 120px;">{{.transaction.InputData}}</textarea>
                         </div>
+                        {{end}}
                     </div>
                 </div>
             </div>
@@ -132,7 +151,7 @@
                     {{$decodedParamsLength := len $element.DataNames}}
                     <div class="row">
                         <div class="col-sm-2 col-md-2 col-lg-1">
-                            <span class="rounded-pill log-index">
+                            <span class="rounded-pill number-in-circle">
                                 {{ $element.Index }}
                             </span>
                         </div>
@@ -252,5 +271,21 @@
             history.replaceState("", document.title, baseUrl + '#' + tab);
             document.getElementById('logs').classList.add('show', 'active');
         }
+    }
+
+    function getOriginalView(){
+        original = document.getElementById("original");
+        original.style.display = "block";
+
+        defaultView = document.getElementById("defaultView");
+        defaultView.style.display = "none";
+    }
+
+    function getDefaultView(){
+        defaultView = document.getElementById("defaultView");       
+        defaultView.style.display = "block";
+
+        original = document.getElementById("original");
+        original.style.display = "none";
     }
 </script>

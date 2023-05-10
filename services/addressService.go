@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -57,9 +58,6 @@ func (as *AddressService) GetAddress(address string) (*addressModel.Address, err
 			DateTime:        time.Unix(int64(v.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 			ContractAddress: v.ContractAddress,
 		}
-		// if strings.ReplaceAll(transac.To, " ", "") == "" {
-		// 	transac.To = ""
-		// }
 
 		// value := utils.WeiToEther(v.Value)
 		// transac.Value = value
@@ -153,7 +151,32 @@ func (as *AddressService) UploadABI(c *gin.Context) {
 			}
 			dbAbis = append(dbAbis, dbAbi)
 		} else if el.Type == "function" {
-			fmt.Println("function")
+			var function abiModel.FunctionItem = abiModel.FunctionItem{
+				Inputs:          el.Inputs,
+				Outputs:         el.Outputs,
+				Name:            el.Name,
+				StateMutability: el.StateMutability,
+				Type:            el.Type,
+			}
+			jsonBytes, err := json.Marshal(function)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			parsedFunction, err := abi.JSON(strings.NewReader("[" + string(jsonBytes) + "]"))
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			dbAbi := DB.Abi{
+				Hash:       hex.EncodeToString(parsedFunction.Methods[el.Name].ID),
+				Address:    address,
+				AbiTypeId:  3,
+				Definition: string(jsonBytes),
+			}
+			dbAbis = append(dbAbis, dbAbi)
 		} else if el.Type == "constructor" {
 			fmt.Println("constructor")
 		}

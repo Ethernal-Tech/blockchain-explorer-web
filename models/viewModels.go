@@ -18,24 +18,28 @@ type Block struct {
 }
 
 type Transaction struct {
-	Hash             string
-	BlockHash        string
-	BlockNumber      uint64
-	From             string
-	To               string
-	Gas              uint64
-	GasUsed          uint64
-	GasPrice         uint64
-	Nonce            uint64
-	TransactionIndex uint64
-	Value            string
-	ContractAddress  string
-	Status           uint64
-	Age              string
-	DateTime         string
-	Logs             []Log
-	InputData        string
-	IsToContract     bool
+	Hash                 string
+	BlockHash            string
+	BlockNumber          uint64
+	From                 string
+	To                   string
+	Gas                  uint64
+	GasUsed              uint64
+	GasPrice             uint64
+	Nonce                uint64
+	TransactionIndex     uint64
+	Value                string
+	ContractAddress      string
+	Status               uint64
+	Age                  string
+	DateTime             string
+	Logs                 []Log
+	InputData            string
+	InputDataSig         string
+	InputDataMethodId    string
+	InputDataParamValues []interface{}
+	IsToContract         bool
+	IsUploadedABI        bool
 }
 
 type Log struct {

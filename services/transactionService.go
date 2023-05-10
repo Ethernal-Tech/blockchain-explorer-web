@@ -101,10 +101,19 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		InputData:        transaction.InputData,
 	}
 
-	// if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
-	// 	oneResultTransaction.To = ""
-	// }
+	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)
 
+	//default view of input data
+	if isToContract && oneResultTransaction.InputData != "0x" {
+		var abi DB.Abi
+		error1 = tsi.database.NewSelect().Table("abis").Where("hash = ? AND address = ?", oneResultTransaction.InputData[2:10], oneResultTransaction.To).Scan(tsi.ctx, &abi)
+		if abi.Id != 0 {
+			oneResultTransaction.IsUploadedABI = true
+			oneResultTransaction.InputDataSig, oneResultTransaction.InputDataMethodId, oneResultTransaction.InputDataParamValues = defaultViewInputData(oneResultTransaction.InputData, &abi)
+		}
+	}
+
+	//logs
 	for _, log := range logs {
 
 		var abi DB.Abi
@@ -117,10 +126,55 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		oneResultTransaction.Logs = append(oneResultTransaction.Logs, log)
 	}
 
-	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)
 	oneResultTransaction.IsToContract = isToContract
 
 	return &oneResultTransaction, nil
+}
+
+func defaultViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []interface{}) {
+
+	parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + dbAbi.Definition + "]"))
+	if err != nil {
+		return "", "", []interface{}{}
+	}
+
+	var signature string
+	var methodId string
+	var paramValues []interface{}
+
+	for _, method := range parsedAbi.Methods {
+
+		signature = method.Name + "("
+		params := inputData[10:]
+
+		substrLen := 64
+		numSubstr := len(inputData) / substrLen
+
+		for i := 0; i < numSubstr; i++ {
+			paramValues = append(paramValues, params[i*substrLen:(i+1)*substrLen])
+		}
+
+		for i, input := range method.Inputs {
+			if i < len(method.Inputs)-1 {
+				//we can have tuple, tuple[] or data type such as uint256, bytes ... as parameter's type
+				if len(input.Type.TupleElems) == 0 {
+					signature = signature + input.Type.String() + " " + input.Name + ", "
+				} else {
+					signature = signature + "tuple" + " " + input.Name + ", "
+				}
+			} else {
+				if len(input.Type.TupleElems) == 0 {
+					signature = signature + input.Type.String() + " " + input.Name + ")"
+				} else {
+					signature = signature + "tuple" + " " + input.Name + ")"
+				}
+			}
+		}
+
+		methodId = hex.EncodeToString(method.ID)
+	}
+
+	return signature, methodId, paramValues
 }
 
 func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
@@ -150,7 +204,7 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 				return models.Log{}
 			}
 
-			dataNames, dataValues := decodeData(unpackValues, event)
+			dataNames, dataValues := decodeLogData(unpackValues, event)
 
 			log = models.Log{
 				BlockHash:       dbLog.BlockHash,
@@ -192,7 +246,7 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 	return log
 }
 
-func decodeData(unpackValues []interface{}, event ethereumAbi.Event) ([]string, []string) {
+func decodeLogData(unpackValues []interface{}, event ethereumAbi.Event) ([]string, []string) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered:", r)

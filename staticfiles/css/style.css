@@ -310,11 +310,11 @@ span.badge.rounded-pill:hover{
     }
 /*pagination part - end*/
 
-.txns-number button{
+.btn-in-div button{
     border: none;
     border-radius: 6px;
     height: 86%;
-    width: 100%;
+    /*width: 100%;*/
     font-size: 12px;
     color: var(--main-color);
     background-color: var(--button-all-color);
@@ -322,17 +322,17 @@ span.badge.rounded-pill:hover{
     size: 2cm;
 }
 
-.txns-number button a {
+.btn-in-div button a {
     color: var(--main-color);
     transition: 0.4s;
 }
 
-.txns-number button:hover {
+.btn-in-div button:hover {
     background-color: var(--main-color);
     color: white;
 }
 
-.txns-number button:hover a {
+.btn-in-div button:hover a {
     color: white;
 }
 
@@ -357,7 +357,7 @@ span.badge.rounded-pill:hover{
     font-size: 11.6px;
 }
 
-.log-index {
+.number-in-circle {
     width: 40px; 
     height: 40px; 
     display: flex; 
