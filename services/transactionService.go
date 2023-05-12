@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 	"webbc/DB"
+	webcommon "webbc/common"
 	"webbc/configuration"
 	"webbc/models"
 	"webbc/models/transactionModel"
@@ -116,14 +117,16 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	//logs
 	for _, log := range logs {
 
+		transferType(log, &oneResultTransaction, tsi)
+
 		var abi DB.Abi
 		error1 = tsi.database.NewSelect().Table("abis").Where("hash = ? AND address = ?", log.Topic0, log.Address).Scan(tsi.ctx, &abi)
 		if error1 != nil {
 
 		}
-		var log = createLogModel(&log, &abi)
 
-		oneResultTransaction.Logs = append(oneResultTransaction.Logs, log)
+		var logModel = createLogModel(&log, &abi)
+		oneResultTransaction.Logs = append(oneResultTransaction.Logs, logModel)
 	}
 
 	oneResultTransaction.IsToContract = isToContract
@@ -175,6 +178,46 @@ func defaultViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []in
 	}
 
 	return signature, methodId, paramValues
+}
+
+func transferType(log DB.Log, oneResultTransaction *models.Transaction, tsi *TransactionServiceImplementation) {
+	if log.Topic0 == webcommon.Erc20TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 == "" {
+		transferModel := models.TransferModel{
+			From: "0x" + log.Topic1[len(log.Topic1)-40:],
+			To:   "0x" + log.Topic2[len(log.Topic2)-40:],
+		}
+
+		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + webcommon.Erc20TransferEvent.Abi + "]"))
+		if err == nil {
+			for _, event := range parsedAbi.Events {
+				unpackValues, err := event.Inputs.NonIndexed().UnpackValues(common.Hex2Bytes(log.Data[2:]))
+				if err != nil {
+					break
+				}
+				_, dataValues := decodeLogData(unpackValues, event)
+				transferModel.Value = dataValues[0]
+			}
+		}
+		oneResultTransaction.ERC20Transfers = append(oneResultTransaction.ERC20Transfers, transferModel)
+	} else if log.Topic0 == webcommon.Erc721TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 != "" {
+		transferModel := models.TransferModel{
+			From: "0x" + log.Topic1[len(log.Topic1)-40:],
+			To:   "0x" + log.Topic2[len(log.Topic2)-40:],
+		}
+		oneResultTransaction.ERC721Transfers = append(oneResultTransaction.ERC721Transfers, transferModel)
+	} else if log.Topic0 == webcommon.Erc1155TransferSingleEvent.Signature && log.Topic2 != "" && log.Topic3 != "" {
+		transferModel := models.TransferModel{
+			From: "0x" + log.Topic2[len(log.Topic2)-40:],
+			To:   "0x" + log.Topic3[len(log.Topic3)-40:],
+		}
+		oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
+	} else if log.Topic0 == webcommon.Erc1155TransferBatchEvent.Signature && log.Topic2 != "" && log.Topic3 != "" {
+		transferModel := models.TransferModel{
+			From: "0x" + log.Topic2[len(log.Topic2)-40:],
+			To:   "0x" + log.Topic3[len(log.Topic3)-40:],
+		}
+		oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
+	}
 }
 
 func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {

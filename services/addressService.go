@@ -11,12 +11,12 @@ import (
 	"time"
 	"webbc/DB"
 	"webbc/configuration"
+	"webbc/eth"
 	"webbc/models/abiModel"
 	"webbc/models/addressModel"
 	"webbc/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -24,12 +24,11 @@ import (
 type AddressService struct {
 	database *bun.DB
 	ctx      context.Context
-	client   *rpc.Client
 	config   *configuration.GeneralConfiguration
 }
 
-func NewAddressService(database *bun.DB, ctx context.Context, client *rpc.Client, config *configuration.GeneralConfiguration) IAddressService {
-	return &AddressService{database: database, ctx: ctx, client: client, config: config}
+func NewAddressService(database *bun.DB, ctx context.Context, config *configuration.GeneralConfiguration) IAddressService {
+	return &AddressService{database: database, ctx: ctx, config: config}
 }
 
 func (as *AddressService) GetAddress(address string) (*addressModel.Address, error) {
@@ -105,12 +104,8 @@ func (as *AddressService) getBalanceFromChainWithTimeout(address string) (string
 	var result string
 	ctxWithTimeout, cancel := context.WithTimeout(as.ctx, time.Duration(as.config.CallTimeoutInSeconds)*time.Second)
 	defer cancel()
-	err := as.client.CallContext(ctxWithTimeout, &result, "eth_getBalance", address, "latest")
+	err := eth.GetHttpNodeClient().CallContext(ctxWithTimeout, &result, "eth_getBalance", address, "latest")
 	return result, err
-}
-
-func (as *AddressService) ChangeClient(client *rpc.Client) {
-	as.client = client
 }
 
 func (as *AddressService) UploadABI(c *gin.Context) {

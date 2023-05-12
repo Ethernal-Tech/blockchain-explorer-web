@@ -19,7 +19,6 @@ var (
 	authConfig            *configuration.AuthConfiguration
 	database              *bun.DB
 	server                *gin.Engine
-	connection            eth.BlockchainNodeConnection
 	blockService          services.BlockService
 	blockController       controllers.BlockController
 	transactionService    services.TransactionService
@@ -35,17 +34,15 @@ func main() {
 	generalConfig, appConfig, authConfig = configuration.LoadConfiguration()
 	database = DB.InitializationDB(generalConfig)
 	server = gin.Default()
-	connection := eth.BlockchainNodeConnection{
-		HTTP: eth.GetClient(generalConfig.HTTPUrl),
-	}
+	eth.NewHttpNodeClient(generalConfig.HTTPUrl)
 
 	blockService = services.NewBlockService(database, ctx)
 	blockController = controllers.NewBlockController(blockService)
 	transactionService = services.NewTransactionService(database, ctx, generalConfig)
 	transactionController = controllers.NewTransactionController(transactionService)
-	addressService = services.NewAddressService(database, ctx, connection.HTTP, generalConfig)
+	addressService = services.NewAddressService(database, ctx, generalConfig)
 	addressController = controllers.NewAddressController(addressService)
-	configurationService = services.NewConfigurationService(appConfig, generalConfig, connection.HTTP, database, addressService)
+	configurationService = services.NewConfigurationService(appConfig, generalConfig, database, addressService)
 	globalController = controllers.NewGlobalController(blockService, transactionService, addressService, configurationService)
 
 	routes(server, globalController, blockController, transactionController, addressController)

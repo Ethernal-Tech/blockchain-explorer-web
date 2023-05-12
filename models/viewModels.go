@@ -40,6 +40,9 @@ type Transaction struct {
 	InputDataParamValues []interface{}
 	IsToContract         bool
 	IsUploadedABI        bool
+	ERC20Transfers       []TransferModel
+	ERC721Transfers      []TransferModel
+	ERC1155Transfers     []TransferModel
 }
 
 type Log struct {
@@ -59,4 +62,15 @@ type Log struct {
 	Data            string
 	DataNames       []string
 	DataValues      []string
+}
+
+type TransferModel struct {
+	From      string
+	To        string
+	Value     string   //erc20 & erc1155
+	TokenId   string   //erc721
+	Id        string   //erc1155
+	Ids       []string //erc1155
+	Values    []string //erc1155
+	TokenName string
 }
