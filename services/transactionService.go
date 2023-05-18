@@ -220,7 +220,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 		transferModel := models.TransferModel{
 			From:    "0x" + log.Topic1[len(log.Topic1)-40:],
 			To:      "0x" + log.Topic2[len(log.Topic2)-40:],
-			TokenId: utils.ToUint64(log.Topic3),
+			TokenId: utils.HexNumberToString(log.Topic3),
 		}
 		name, ok := (*contractName)[log.Address]
 		if !ok {

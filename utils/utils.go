@@ -65,6 +65,29 @@ func ToBigInt(str string) *big.Int {
 	return res
 }
 
+func HexNumberToString(hexNumber string) string {
+	if len(hexNumber) == 0 {
+		return "0"
+	}
+	if hexNumber[0:2] == "0x" {
+		if len(hexNumber) <= 2 {
+			return "0"
+		}
+
+		hexNumber = hexNumber[2:]
+
+		num := new(big.Int)
+		num.SetString(hexNumber, 16)
+		return num.String()
+	} else {
+		hexNumber = hexNumber[2:]
+
+		num := new(big.Int)
+		num.SetString(hexNumber, 16)
+		return num.String()
+	}
+}
+
 // func WeiToEther(wei *big.Int) *big.Float {
 // 	f := new(big.Float)
 // 	f.SetPrec(236) //  IEEE 754 octuple-precision binary floating-point format: binary256
