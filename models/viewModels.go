@@ -65,12 +65,13 @@ type Log struct {
 }
 
 type TransferModel struct {
-	From      string
-	To        string
-	Value     string   //erc20 & erc1155
-	TokenId   string   //erc721
-	Id        string   //erc1155
-	Ids       []string //erc1155
-	Values    []string //erc1155
-	TokenName string
+	From         string
+	To           string
+	Value        string   //erc20 & erc1155
+	TokenId      uint64   //erc721
+	Id           string   //erc1155
+	Ids          []string //erc1155
+	Values       []string //erc1155
+	TokenName    string
+	TokenAddress string
 }

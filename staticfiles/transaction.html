@@ -93,12 +93,17 @@
                         <div class="row align-items-center">
                             <div class="col-md-3">ERC-20 Tokens Transferred:</div>
                             <div class="col-md-9">
-                                {{range $index, $transfer := .transaction.ERC20Transfers}}
-                                    From <a class="hash-tag text-truncate"  href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
-                                    To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
-                                    For {{$transfer.Value}}
-                                    <br>
-                                {{end}}
+                                <div class="transfer-container">
+                                    {{range $index, $transfer := .transaction.ERC20Transfers}}
+                                    <div class="transfer-element">
+                                        From <a class="hash-tag text-truncate"  href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
+                                        To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
+                                        For {{$transfer.Value}}
+                                        <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.TokenAddress}}">{{$transfer.TokenName}}</a>
+                                        <br>
+                                    </div>
+                                    {{end}}
+                                </div>
                             </div>
                         </div>
                     {{end}}
@@ -107,11 +112,17 @@
                         <div class="row align-items-center">
                             <div class="col-md-3">ERC-721 Tokens Transferred:</div>
                             <div class="col-md-9">
-                                {{range $index, $transfer := .transaction.ERC721Transfers}}
-                                    From <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
-                                    To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
-                                    <br>
-                                {{end}}
+                                <div class="transfer-container">
+                                    {{range $index, $transfer := .transaction.ERC721Transfers}}
+                                    <div class="transfer-element">
+                                        ERC-721 Token ID [{{$transfer.TokenId}}] 
+                                        <a class="text-truncate" href="/address/hash/{{$transfer.TokenAddress}}">{{$transfer.TokenName}}</a><br>
+                                        From <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
+                                        To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
+                                        <br>
+                                    </div>
+                                    {{end}}
+                                </div>
                             </div>
                         </div>
                     {{end}}

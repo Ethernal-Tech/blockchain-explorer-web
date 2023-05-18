@@ -5,18 +5,22 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math"
+	"math/big"
 	"reflect"
+	"regexp"
 	"strings"
 	"time"
 	"webbc/DB"
 	webcommon "webbc/common"
 	"webbc/configuration"
+	"webbc/eth"
 	"webbc/models"
 	"webbc/models/transactionModel"
 	"webbc/utils"
 
 	ethereumAbi "github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/uptrace/bun"
 )
 
@@ -114,10 +118,11 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		}
 	}
 
+	contractName := make(map[string]string) //Optimization map
 	//logs
 	for _, log := range logs {
 
-		transferType(log, &oneResultTransaction, tsi)
+		tsi.transferType(log, &oneResultTransaction, &contractName)
 
 		var abi DB.Abi
 		error1 = tsi.database.NewSelect().Table("abis").Where("hash = ? AND address = ?", log.Topic0, log.Address).Scan(tsi.ctx, &abi)
@@ -180,13 +185,13 @@ func defaultViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []in
 	return signature, methodId, paramValues
 }
 
-func transferType(log DB.Log, oneResultTransaction *models.Transaction, tsi *TransactionServiceImplementation) {
+func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultTransaction *models.Transaction, contractName *map[string]string) {
 	if log.Topic0 == webcommon.Erc20TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 == "" {
 		transferModel := models.TransferModel{
 			From: "0x" + log.Topic1[len(log.Topic1)-40:],
 			To:   "0x" + log.Topic2[len(log.Topic2)-40:],
 		}
-
+		name, decimals := tsi.getNameAndDecimals(log.Address)
 		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + webcommon.Erc20TransferEvent.Abi + "]"))
 		if err == nil {
 			for _, event := range parsedAbi.Events {
@@ -195,15 +200,35 @@ func transferType(log DB.Log, oneResultTransaction *models.Transaction, tsi *Tra
 					break
 				}
 				_, dataValues := decodeLogData(unpackValues, event)
-				transferModel.Value = dataValues[0]
+				amount, ok := new(big.Int).SetString(dataValues[0], 10)
+				if ok && decimals != 0 {
+					exp := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(decimals)), nil)
+					tokenAmount := new(big.Float).Quo(new(big.Float).SetInt(amount), new(big.Float).SetInt(exp))
+					resultStr := tokenAmount.Text('f', 18)
+					resultStr = strings.TrimRight(resultStr, "0")
+					resultStr = strings.TrimRight(resultStr, ".")
+					transferModel.Value = resultStr
+				} else {
+					transferModel.Value = dataValues[0]
+				}
 			}
 		}
+		transferModel.TokenAddress = log.Address
+		transferModel.TokenName = name
 		oneResultTransaction.ERC20Transfers = append(oneResultTransaction.ERC20Transfers, transferModel)
 	} else if log.Topic0 == webcommon.Erc721TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 != "" {
 		transferModel := models.TransferModel{
-			From: "0x" + log.Topic1[len(log.Topic1)-40:],
-			To:   "0x" + log.Topic2[len(log.Topic2)-40:],
+			From:    "0x" + log.Topic1[len(log.Topic1)-40:],
+			To:      "0x" + log.Topic2[len(log.Topic2)-40:],
+			TokenId: utils.ToUint64(log.Topic3),
 		}
+		name, ok := (*contractName)[log.Address]
+		if !ok {
+			name = tsi.GetName(log.Address)
+			(*contractName)[log.Address] = name
+		}
+		transferModel.TokenAddress = log.Address
+		transferModel.TokenName = name
 		oneResultTransaction.ERC721Transfers = append(oneResultTransaction.ERC721Transfers, transferModel)
 	} else if log.Topic0 == webcommon.Erc1155TransferSingleEvent.Signature && log.Topic2 != "" && log.Topic3 != "" {
 		transferModel := models.TransferModel{
@@ -218,6 +243,77 @@ func transferType(log DB.Log, oneResultTransaction *models.Transaction, tsi *Tra
 		}
 		oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
 	}
+}
+
+func (tsi *TransactionServiceImplementation) getNameAndDecimals(address string) (string, uint64) {
+	var nameStr string
+	var decimalsStr string
+	ctxWithTimeout, cancel := context.WithTimeout(tsi.ctx, time.Duration(tsi.generalConfig.CallTimeoutInSeconds)*time.Second)
+	defer cancel()
+	type request struct {
+		To   string `json:"to"`
+		Data string `json:"data"`
+	}
+
+	var elems []rpc.BatchElem
+
+	elems = append(elems, rpc.BatchElem{
+		Method: "eth_call",
+		Args:   []interface{}{request{address, webcommon.NameMethodSignature}, "latest"},
+		Result: &nameStr,
+	})
+
+	elems = append(elems, rpc.BatchElem{
+		Method: "eth_call",
+		Args:   []interface{}{request{address, webcommon.DecimalsMethodSignature}, "latest"},
+		Result: &decimalsStr,
+	})
+	err := eth.GetHttpNodeClient().BatchCallContext(ctxWithTimeout, elems)
+	if err != nil {
+		nameStr = ""
+		//TODO: Error handling
+	}
+	if len(nameStr) > 0 && nameStr[0:2] == "0x" {
+		nameStr = nameStr[2:]
+	}
+	bs, err := hex.DecodeString(nameStr)
+	re := regexp.MustCompile("[^a-zA-Z0-9// -.]+")
+	str := re.ReplaceAllString(string(bs), "")
+
+	var decimal uint64 = 0
+	if len(decimalsStr) > 0 {
+		decimal = utils.ToUint64(decimalsStr)
+	}
+	return str, decimal
+}
+
+func (tsi *TransactionServiceImplementation) GetName(address string) string {
+	var nameStr string
+	ctxWithTimeout, cancel := context.WithTimeout(tsi.ctx, time.Duration(tsi.generalConfig.CallTimeoutInSeconds)*time.Second)
+	defer cancel()
+	type request struct {
+		To   string `json:"to"`
+		Data string `json:"data"`
+	}
+	var elems []rpc.BatchElem
+
+	elems = append(elems, rpc.BatchElem{
+		Method: "eth_call",
+		Args:   []interface{}{request{address, webcommon.NameMethodSignature}, "latest"},
+		Result: &nameStr,
+	})
+	err := eth.GetHttpNodeClient().BatchCallContext(ctxWithTimeout, elems)
+	if err != nil {
+		nameStr = ""
+		//TODO: Error handling
+	}
+	if len(nameStr) > 0 && nameStr[0:2] == "0x" {
+		nameStr = nameStr[2:]
+	}
+	bs, err := hex.DecodeString(nameStr)
+	re := regexp.MustCompile("[^a-zA-Z0-9// -.]+")
+	str := re.ReplaceAllString(string(bs), "")
+	return str
 }
 
 func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
