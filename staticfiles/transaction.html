@@ -124,13 +124,37 @@
 MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transaction.InputDataParamValues}}
 [{{$index}}]: {{$value}}{{end}}</textarea>
                             <textarea id="original" readonly class="scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; height: 120px;">{{.transaction.InputData}}</textarea>    
+                            <table id="decoded" readonly class="table scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; min-height: 120px; ">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Value</th>
+                                    </tr>                                
+                                </thead>
+                                <tbody>
+                                    {{range $index, $value := .transaction.DecodedInputData.Parameters}}
+                                        <tr>
+                                            <td>{{$value.Name}}</td>
+                                            <td>{{$value.Type}}</td>
+                                            <td>{{$value.Value}}</td>
+                                        </tr>                                       
+                                    {{end}}
+                                </tbody>
+                            </table>                        
                             <div class="btn-in-div" style="width: fit-content; display: flex; padding-top: 5px;">
 								<button class="btn" style="font-size: 12px; margin-right: 5px;" onclick="getOriginalView()">
 									Original
 								</button>
-                                <button class="btn" style="font-size: 12px; width: fit-content;" onclick="getDefaultView()">
+                                <button class="btn" style="font-size: 12px; margin-right: 5px;" onclick="getDefaultView()">
 									Default view
-								</button>   
+								</button>  
+                                {{$decodedInputDataParams := len .transaction.DecodedInputData.Parameters}}
+                                {{if gt $decodedInputDataParams 0}} 
+                                <button class="btn" style="font-size: 12px;" onclick="getDecoded()">
+									Decoded Input Data
+								</button>  
+                                {{end}}
 							</div>
                         </div>   
                         {{else}}
@@ -279,6 +303,8 @@ MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transac
 
         defaultView = document.getElementById("defaultView");
         defaultView.style.display = "none";
+        decoded = document.getElementById("decoded");
+        decoded.style.display = "none";
     }
 
     function getDefaultView(){
@@ -287,5 +313,18 @@ MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transac
 
         original = document.getElementById("original");
         original.style.display = "none";
+        decoded = document.getElementById("decoded");
+        decoded.style.display = "none";
     }
+
+    function getDecoded(){
+        decoded = document.getElementById("decoded");       
+        decoded.style.display = "block";
+
+        original = document.getElementById("original");
+        original.style.display = "none";
+        defaultView = document.getElementById("defaultView"); 
+        defaultView.style.display = "none";
+    }
+
 </script>

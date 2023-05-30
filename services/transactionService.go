@@ -57,10 +57,6 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 			DateTime:         time.Unix(int64(v.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
 		}
 
-		// if strings.ReplaceAll(oneResultTransaction.To, " ", "") == "" {
-		// 	oneResultTransaction.To = ""
-		// }
-
 		result = append(result, oneResultTransaction)
 	}
 
@@ -103,13 +99,13 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 
 	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)
 
-	//default view of input data
+	//default and decoded view of input data
 	if isToContract && oneResultTransaction.InputData != "0x" {
 		var abi DB.Abi
 		error1 = tsi.database.NewSelect().Table("abis").Where("hash = ? AND address = ?", oneResultTransaction.InputData[2:10], oneResultTransaction.To).Scan(tsi.ctx, &abi)
 		if abi.Id != 0 {
 			oneResultTransaction.IsUploadedABI = true
-			oneResultTransaction.InputDataSig, oneResultTransaction.InputDataMethodId, oneResultTransaction.InputDataParamValues = defaultViewInputData(oneResultTransaction.InputData, &abi)
+			oneResultTransaction.InputDataSig, oneResultTransaction.InputDataMethodId, oneResultTransaction.InputDataParamValues, oneResultTransaction.DecodedInputData = defaultAndDecodedViewInputData(oneResultTransaction.InputData, &abi)
 		}
 	}
 
@@ -131,16 +127,17 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	return &oneResultTransaction, nil
 }
 
-func defaultViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []interface{}) {
+func defaultAndDecodedViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []interface{}, models.DecodedInputData) {
 
 	parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + dbAbi.Definition + "]"))
 	if err != nil {
-		return "", "", []interface{}{}
+		return "", "", []interface{}{}, models.DecodedInputData{}
 	}
 
 	var signature string
 	var methodId string
 	var paramValues []interface{}
+	var decodedInputData models.DecodedInputData
 
 	for _, method := range parsedAbi.Methods {
 
@@ -154,27 +151,51 @@ func defaultViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []in
 			paramValues = append(paramValues, params[i*substrLen:(i+1)*substrLen])
 		}
 
+		var hasTuple bool
+
 		for i, input := range method.Inputs {
-			if i < len(method.Inputs)-1 {
-				//we can have tuple, tuple[] or data type such as uint256, bytes ... as parameter's type
-				if len(input.Type.TupleElems) == 0 {
+			if len(input.Type.TupleElems) == 0 {
+				if i < len(method.Inputs)-1 {
 					signature = signature + input.Type.String() + " " + input.Name + ", "
 				} else {
-					signature = signature + "tuple" + " " + input.Name + ", "
-				}
-			} else {
-				if len(input.Type.TupleElems) == 0 {
 					signature = signature + input.Type.String() + " " + input.Name + ")"
+				}
+
+			} else {
+				hasTuple = true
+				if i < len(method.Inputs)-1 {
+					signature = signature + "tuple" + " " + input.Name + ", "
 				} else {
 					signature = signature + "tuple" + " " + input.Name + ")"
 				}
 			}
 		}
 
+		decodedInputData.FunctionSignature = signature
+
+		if !hasTuple {
+			unpackValues, _ := method.Inputs.UnpackValues(common.Hex2Bytes(params))
+
+			dataNames, dataTypes, dataValues := decodeData(unpackValues, method.Inputs)
+			for i, _ := range dataValues {
+				var parameter = models.ParameterInfo{
+					Name:  dataNames[i],
+					Type:  dataTypes[i],
+					Value: dataValues[i],
+				}
+
+				decodedInputData.Parameters = append(decodedInputData.Parameters, parameter)
+			}
+
+		} else {
+			//TODO
+
+		}
+
 		methodId = hex.EncodeToString(method.ID)
 	}
 
-	return signature, methodId, paramValues
+	return signature, methodId, paramValues, decodedInputData
 }
 
 func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
@@ -204,7 +225,7 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 				return models.Log{}
 			}
 
-			dataNames, dataValues := decodeLogData(unpackValues, event)
+			dataNames, _, dataValues := decodeData(unpackValues, event.Inputs.NonIndexed())
 
 			log = models.Log{
 				BlockHash:       dbLog.BlockHash,
@@ -246,21 +267,23 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 	return log
 }
 
-func decodeLogData(unpackValues []interface{}, event ethereumAbi.Event) ([]string, []string) {
+func decodeData(unpackValues []interface{}, arguments ethereumAbi.Arguments) ([]string, []string, []string) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered:", r)
 		}
 	}()
 
-	nonIndexed := event.Inputs.NonIndexed()
-	dataNames := make([]string, len(nonIndexed))
-	dataValues := make([]string, len(nonIndexed))
+	//nonIndexed := event.Inputs.NonIndexed()
+	dataNames := make([]string, len(arguments))
+	dataTypes := make([]string, len(arguments))
+	dataValues := make([]string, len(arguments))
 
 	for index, value := range unpackValues {
-		dataNames[index] = nonIndexed[index].Name
 		t := reflect.TypeOf(value)
 		v := reflect.ValueOf(value)
+		dataNames[index] = arguments[index].Name
+		dataTypes[index] = arguments[index].Type.String()
 
 		switch t.Kind() {
 		case reflect.Slice:
@@ -273,10 +296,9 @@ func decodeLogData(unpackValues []interface{}, event ethereumAbi.Event) ([]strin
 			} else if v.Type().Elem().Kind() == reflect.Uint8 {
 				dataValues[index] = hex.EncodeToString(v.Bytes())
 			}
-			//dataValues[index] = hex.EncodeToString(v.Bytes())
 		case reflect.Array:
 			if t.String() == "common.Address" {
-				dataValues[index] = fmt.Sprintf("0x%v", v)
+				dataValues[index] = fmt.Sprintf("%v", v)
 			} else {
 				byteSlice := make([]byte, v.Len())
 				for i := 0; i < v.Len(); i++ {
@@ -289,7 +311,7 @@ func decodeLogData(unpackValues []interface{}, event ethereumAbi.Event) ([]strin
 		}
 	}
 
-	return dataNames, dataValues
+	return dataNames, dataTypes, dataValues
 }
 
 func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber string, page int, perPage int) (*transactionModel.Transactions, error) {
@@ -320,9 +342,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber 
 
 		isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", transaction.To).Exists(tsi.ctx)
 		transaction.IsToContract = isToContract
-		// if strings.ReplaceAll(transaction.To, " ", "") == "" {
-		// 	transaction.To = ""
-		// }
+
 		result.Transactions = append(result.Transactions, transaction)
 	}
 

@@ -38,8 +38,20 @@ type Transaction struct {
 	InputDataSig         string
 	InputDataMethodId    string
 	InputDataParamValues []interface{}
+	DecodedInputData     DecodedInputData
 	IsToContract         bool
 	IsUploadedABI        bool
+}
+
+type DecodedInputData struct {
+	FunctionSignature string
+	Parameters        []ParameterInfo
+}
+
+type ParameterInfo struct {
+	Name  string
+	Type  string
+	Value string
 }
 
 type Log struct {
