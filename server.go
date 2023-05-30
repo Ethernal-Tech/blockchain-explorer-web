@@ -27,6 +27,8 @@ var (
 	addressService        services.IAddressService
 	addressController     controllers.AddressController
 	configurationService  services.ConfigurationService
+	nftService            services.INftService
+	nftController         controllers.NftController
 )
 
 func main() {
@@ -44,7 +46,9 @@ func main() {
 	addressController = controllers.NewAddressController(addressService)
 	configurationService = services.NewConfigurationService(appConfig, generalConfig, database, addressService)
 	globalController = controllers.NewGlobalController(blockService, transactionService, addressService, configurationService)
+	nftService = services.NewNftService(database, ctx, generalConfig)
+	nftController = controllers.NewNftController(nftService)
 
-	routes(server, globalController, blockController, transactionController, addressController)
+	routes(server, globalController, blockController, transactionController, addressController, nftController)
 	server.Run(":8080")
 }

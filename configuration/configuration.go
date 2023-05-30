@@ -19,6 +19,7 @@ type GeneralConfiguration struct {
 	CallTimeoutInSeconds          uint
 	TransactionsMaxCount          uint64
 	TransactionsByAddressMaxCount uint
+	NftLatestTransfersMaxCount    uint
 	Viper                         *viper.Viper
 }
 
@@ -52,6 +53,7 @@ func LoadConfiguration() (*GeneralConfiguration, *ApplicationConfiguration, *Aut
 	generalConfiguration.CallTimeoutInSeconds = generalConfiguration.Viper.GetUint("CALL_TIMEOUT_IN_SECONDS")
 	generalConfiguration.TransactionsMaxCount = generalConfiguration.Viper.GetUint64("TRANSACTIONS_MAX_COUNT")
 	generalConfiguration.TransactionsByAddressMaxCount = generalConfiguration.Viper.GetUint("TRANSACTIONS_BY_ADDRESS_MAX_COUNT")
+	generalConfiguration.NftLatestTransfersMaxCount = generalConfiguration.Viper.GetUint("NFT_LATEST_TRANSFER_MAX_COUNT")
 
 	appConfiguration := ApplicationConfiguration{
 		Viper: getNewViperInstance("app.env"),

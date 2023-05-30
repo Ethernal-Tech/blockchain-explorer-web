@@ -5,6 +5,7 @@ import (
 	"webbc/models"
 	"webbc/models/addressModel"
 	"webbc/models/blockModel"
+	"webbc/models/nftModel"
 	"webbc/models/transactionModel"
 
 	"github.com/gin-gonic/gin"
@@ -35,4 +36,8 @@ type ConfigurationService interface {
 	GetGeneralConfiguration() *configuration.GeneralConfiguration
 	UpdateAppConfiguration(*configuration.ApplicationConfiguration) error
 	UpdateGeneralConfiguration(*configuration.GeneralConfiguration) error
+}
+
+type INftService interface {
+	GetLatestTransfers(int, int) (*nftModel.NftTransactions, error)
 }

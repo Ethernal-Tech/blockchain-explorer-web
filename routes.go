@@ -80,6 +80,12 @@ func routes(server *gin.Engine, cont ...any) {
 		addressRoutes.GET("/hash/:addresshash", ac.GetAddress)
 		addressRoutes.POST("/uploadABI/:address", ac.UploadABI)
 	}
+
+	nc := cont[4].(controllers.NftController)
+	nftRoutes := server.Group("/nft")
+	{
+		nftRoutes.GET("/transfers", nc.GetLatestTransfers)
+	}
 }
 
 func getAppConfig() *configuration.ApplicationConfiguration {
