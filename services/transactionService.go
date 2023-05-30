@@ -235,13 +235,57 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 			From: "0x" + log.Topic2[len(log.Topic2)-40:],
 			To:   "0x" + log.Topic3[len(log.Topic3)-40:],
 		}
+		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + webcommon.Erc1155TransferSingleEvent.Abi + "]"))
+		if err == nil {
+			for _, event := range parsedAbi.Events {
+				unpackValues, err := event.Inputs.NonIndexed().UnpackValues(common.Hex2Bytes(log.Data[2:]))
+				if err != nil {
+					break
+				}
+				_, dataValues := decodeLogData(unpackValues, event)
+				transferModel.TokenId = dataValues[0]
+				transferModel.Value = dataValues[1]
+			}
+		}
+
+		name, ok := (*contractName)[log.Address]
+		if !ok {
+			name = tsi.GetName(log.Address)
+			(*contractName)[log.Address] = name
+		}
+		transferModel.TokenAddress = log.Address
+		transferModel.TokenName = name
 		oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
 	} else if log.Topic0 == webcommon.Erc1155TransferBatchEvent.Signature && log.Topic2 != "" && log.Topic3 != "" {
-		transferModel := models.TransferModel{
-			From: "0x" + log.Topic2[len(log.Topic2)-40:],
-			To:   "0x" + log.Topic3[len(log.Topic3)-40:],
+		name, ok := (*contractName)[log.Address]
+		if !ok {
+			name = tsi.GetName(log.Address)
+			(*contractName)[log.Address] = name
 		}
-		oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
+		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + webcommon.Erc1155TransferBatchEvent.Abi + "]"))
+		var dataValues []string
+		if err == nil {
+			for _, event := range parsedAbi.Events {
+				unpackValues, err := event.Inputs.NonIndexed().UnpackValues(common.Hex2Bytes(log.Data[2:]))
+				if err != nil {
+					break
+				}
+				_, dataValues = decodeLogData(unpackValues, event)
+			}
+		}
+		tokenIds := strings.Split(dataValues[0], " ")
+		values := strings.Split(dataValues[1], " ")
+		for index, id := range tokenIds {
+			transferModel := models.TransferModel{
+				From:         "0x" + log.Topic2[len(log.Topic2)-40:],
+				To:           "0x" + log.Topic3[len(log.Topic3)-40:],
+				TokenId:      id,
+				Value:        values[index],
+				TokenAddress: log.Address,
+				TokenName:    name,
+			}
+			oneResultTransaction.ERC1155Transfers = append(oneResultTransaction.ERC1155Transfers, transferModel)
+		}
 	}
 }
 
