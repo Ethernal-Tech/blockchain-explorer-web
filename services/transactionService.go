@@ -220,7 +220,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 				if err != nil {
 					break
 				}
-				_, dataValues := decodeLogData(unpackValues, event)
+				_, _, dataValues := decodeData(unpackValues, event.Inputs.NonIndexed())
 				amount, ok := new(big.Int).SetString(dataValues[0], 10)
 				if ok && decimals != 0 {
 					exp := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(decimals)), nil)
@@ -263,7 +263,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 				if err != nil {
 					break
 				}
-				_, dataValues := decodeLogData(unpackValues, event)
+				_, _, dataValues := decodeData(unpackValues, event.Inputs.NonIndexed())
 				transferModel.TokenId = dataValues[0]
 				transferModel.Value = dataValues[1]
 			}
@@ -291,7 +291,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 				if err != nil {
 					break
 				}
-				_, dataValues = decodeLogData(unpackValues, event)
+				_, _, dataValues = decodeData(unpackValues, event.Inputs.NonIndexed())
 			}
 		}
 		tokenIds := strings.Split(dataValues[0], " ")
