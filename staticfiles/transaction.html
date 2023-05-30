@@ -88,6 +88,61 @@
                             {{end}}
                         </div>
                     </div>
+                    {{if gt (len .transaction.ERC20Transfers) 0}}
+                        <hr class="transaction-hr">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">ERC-20 Tokens Transferred:</div>
+                            <div class="col-md-9">
+                                <div class="transfer-container">
+                                    {{range $index, $transfer := .transaction.ERC20Transfers}}
+                                    <div class="transfer-element">
+                                        From <a class="hash-tag text-truncate"  href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
+                                        To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
+                                        For {{$transfer.Value}}
+                                        <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.TokenAddress}}">{{$transfer.TokenName}}</a>
+                                        <br>
+                                    </div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                    {{end}}
+                    {{if gt (len .transaction.ERC721Transfers) 0}}
+                        <hr class="transaction-hr">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">ERC-721 Tokens Transferred:</div>
+                            <div class="col-md-9">
+                                <div class="transfer-container">
+                                    {{range $index, $transfer := .transaction.ERC721Transfers}}
+                                    <div class="transfer-element">
+                                        ERC-721 Token ID [{{$transfer.TokenId}}] 
+                                        <a class="text-truncate" href="/address/hash/{{$transfer.TokenAddress}}">{{$transfer.TokenName}}</a><br>
+                                        From <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
+                                        To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
+                                        <br>
+                                    </div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                    {{end}}
+                    {{if gt (len .transaction.ERC1155Transfers) 0}}
+                        <hr class="transaction-hr">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">ERC-1155 Tokens Transferred:</div>
+                            <div class="col-md-9">
+                                <div class="transfer-container">
+                                    {{range $index, $transfer := .transaction.ERC1155Transfers}}
+                                        ERC-1155 For {{$transfer.Value}} of Token ID [{{$transfer.TokenId}}]
+                                        <a class="text-truncate" href="/address/hash/{{$transfer.TokenAddress}}">{{$transfer.TokenName}}</a><br>
+                                        From <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.From}}">{{$transfer.From}}</a>
+                                        To <a class="hash-tag text-truncate" href="/address/hash/{{$transfer.To}}">{{$transfer.To}}</a>
+                                        <br>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                    {{end}}
                     <hr class="transaction-hr">
                     <div class="row align-items-center">
                         <div class="col-md-3">Gas Used:</div>

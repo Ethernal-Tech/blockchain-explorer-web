@@ -371,3 +371,12 @@ span.badge.rounded-pill:hover{
 textarea {
     height: 90px; padding: 0%; font-size: 0.9rem;
 }
+
+.transfer-container {
+    max-height: 270px; /* set maximum height here */
+    overflow-y: auto; /* enable vertical scrollbar when needed */
+}
+
+.transfer-element {
+    padding-bottom: 5px;
+}

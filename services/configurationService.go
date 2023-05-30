@@ -6,20 +6,18 @@ import (
 	"webbc/configuration"
 	"webbc/eth"
 
-	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/uptrace/bun"
 )
 
 type ConfigurationServiceImplementation struct {
 	appConfig      *configuration.ApplicationConfiguration
 	generalConfig  *configuration.GeneralConfiguration
-	client         *rpc.Client
 	database       *bun.DB
 	addressService IAddressService
 }
 
-func NewConfigurationService(appConfig *configuration.ApplicationConfiguration, config *configuration.GeneralConfiguration, client *rpc.Client, database *bun.DB, addressService IAddressService) ConfigurationService {
-	return &ConfigurationServiceImplementation{appConfig: appConfig, generalConfig: config, client: client, database: database, addressService: addressService}
+func NewConfigurationService(appConfig *configuration.ApplicationConfiguration, config *configuration.GeneralConfiguration, database *bun.DB, addressService IAddressService) ConfigurationService {
+	return &ConfigurationServiceImplementation{appConfig: appConfig, generalConfig: config, database: database, addressService: addressService}
 }
 
 func (csi *ConfigurationServiceImplementation) GetAppConfiguration() *configuration.ApplicationConfiguration {
@@ -56,8 +54,7 @@ func (csi *ConfigurationServiceImplementation) UpdateGeneralConfiguration(config
 	csi.generalConfig.Mutex.Lock()
 	defer csi.generalConfig.Mutex.Unlock()
 
-	csi.client = eth.GetClient(config.HTTPUrl)
-	csi.addressService.ChangeClient(csi.client)
+	eth.NewHttpNodeClient(config.HTTPUrl)
 	DB.ChangeDB(config, csi.database)
 
 	csi.generalConfig.DataBaseHost = config.DataBaseHost

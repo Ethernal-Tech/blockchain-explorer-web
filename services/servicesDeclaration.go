@@ -7,7 +7,6 @@ import (
 	"webbc/models/blockModel"
 	"webbc/models/transactionModel"
 
-	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,7 +27,6 @@ type TransactionService interface {
 
 type IAddressService interface {
 	GetAddress(string) (*addressModel.Address, error)
-	ChangeClient(*rpc.Client)
 	UploadABI(*gin.Context)
 }
 
