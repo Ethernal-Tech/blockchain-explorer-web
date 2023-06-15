@@ -179,7 +179,7 @@
 MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transaction.InputDataParamValues}}
 [{{$index}}]: {{$value}}{{end}}</textarea>
                             <textarea id="original" readonly class="scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; height: 120px;">{{.transaction.InputData}}</textarea>    
-                            <table id="decoded" readonly class="table scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; min-height: 120px; ">
+                            <table id="decoded" readonly class="table scrollbar-custom form-control text-muted font-monospace" style="display: none; font-size: 12px; min-height: 120px; overflow: auto;">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -192,7 +192,11 @@ MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transac
                                         <tr>
                                             <td>{{$value.Name}}</td>
                                             <td>{{$value.Type}}</td>
-                                            <td>{{$value.Value}}</td>
+                                            {{if startsWith $value.Type "bytes"}}
+                                                <td>0x{{$value.Value}}</td>
+                                            {{else}}
+                                                <td>{{$value.Value}}</td>
+                                            {{end}}
                                         </tr>                                       
                                     {{end}}
                                 </tbody>
