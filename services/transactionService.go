@@ -20,8 +20,11 @@ import (
 
 	ethereumAbi "github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/uptrace/bun"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 type TransactionServiceImplementation struct {
@@ -46,20 +49,10 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 
 	for _, v := range transactions {
 		var oneResultTransaction = models.Transaction{
-			Hash:             v.Hash,
-			BlockHash:        v.BlockHash,
-			BlockNumber:      v.BlockNumber,
-			From:             v.From,
-			To:               v.To,
-			Gas:              v.Gas,
-			GasUsed:          v.GasUsed,
-			GasPrice:         v.GasPrice,
-			Nonce:            v.Nonce,
-			TransactionIndex: v.TransactionIndex,
-			ContractAddress:  v.ContractAddress,
-			Status:           v.Status,
-			Age:              utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
-			DateTime:         time.Unix(int64(v.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
+			Hash: v.Hash,
+			From: v.From,
+			To:   v.To,
+			Age:  utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Timestamp), 0)).Seconds()))),
 		}
 
 		result = append(result, oneResultTransaction)
@@ -83,23 +76,27 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 
 	}
 
+	p := message.NewPrinter(language.English)
 	var oneResultTransaction = models.Transaction{
-		Hash:             transaction.Hash,
-		BlockHash:        transaction.BlockHash,
-		BlockNumber:      transaction.BlockNumber,
-		From:             transaction.From,
-		To:               transaction.To,
-		Gas:              transaction.Gas,
-		GasUsed:          transaction.GasUsed,
-		GasPrice:         transaction.GasPrice,
-		Nonce:            transaction.Nonce,
-		TransactionIndex: transaction.TransactionIndex,
-		Value:            utils.WeiToEther(transaction.Value),
-		ContractAddress:  transaction.ContractAddress,
-		Status:           transaction.Status,
-		Age:              utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds()))),
-		DateTime:         time.Unix(int64(transaction.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
-		InputData:        transaction.InputData,
+		Hash:              transaction.Hash,
+		BlockHash:         transaction.BlockHash,
+		BlockNumber:       transaction.BlockNumber,
+		From:              transaction.From,
+		To:                transaction.To,
+		Gas:               p.Sprintf("%v", transaction.Gas),
+		GasUsed:           p.Sprintf("%v", transaction.GasUsed),
+		GasUsedPercentage: math.Round(((float64(transaction.GasUsed)/float64(transaction.Gas))*100)*100) / 100,
+		GasPriceInGwei:    float64(transaction.GasPrice) / float64(params.GWei),
+		GasPriceInEth:     float64(transaction.GasPrice) / float64(params.Ether),
+		TxnFee:            (float64(transaction.GasPrice) / float64(1000000000000000000)) * float64(transaction.GasUsed),
+		Nonce:             transaction.Nonce,
+		TransactionIndex:  transaction.TransactionIndex,
+		Value:             utils.WeiToEther(transaction.Value),
+		ContractAddress:   transaction.ContractAddress,
+		Status:            transaction.Status,
+		Age:               utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(transaction.Timestamp), 0)).Seconds()))),
+		DateTime:          time.Unix(int64(transaction.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
+		InputData:         transaction.InputData,
 	}
 
 	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)

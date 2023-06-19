@@ -145,18 +145,18 @@
                     {{end}}
                     <hr class="transaction-hr">
                     <div class="row align-items-center">
-                        <div class="col-md-3">Gas Used:</div>
-                        <div class="col-md-9">{{.transaction.GasUsed}}</div>
+                        <div class="col-md-3">Transaction Fee:</div>
+                        <div class="col-md-9">{{printf "%.18f" .transaction.TxnFee}} ETH</span></div>
                     </div>
                     <hr class="transaction-hr">
                     <div class="row align-items-center">
                         <div class="col-md-3">Gas Price:</div>
-                        <div class="col-md-9">{{.transaction.GasPrice}}</div>
+                        <div class="col-md-9">{{.transaction.GasPriceInGwei}} Gwei <span class="text-dimmed">({{printf "%.18f" .transaction.GasPriceInEth}} ETH)</span></div>
                     </div>
                     <hr class="transaction-hr">
                     <div class="row align-items-center">
-                        <div class="col-md-3">Gas:</div>
-                        <div class="col-md-9">{{.transaction.Gas}}</div>
+                        <div class="col-md-3">Gas Limit & Usage by Txn:</div>
+                        <div class="col-md-9">{{.transaction.Gas}} | {{.transaction.GasUsed}} ({{.transaction.GasUsedPercentage}}%)</div>
                     </div>
                     <hr class="transaction-hr">
                     <div class="row align-items-center">
