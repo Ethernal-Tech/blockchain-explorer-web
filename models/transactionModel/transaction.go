@@ -16,7 +16,7 @@ type Transaction struct {
 	From            string
 	To              string
 	Value           string
-	TxnFee          uint64
+	TxnFee          string
 	ContractAddress string
 	Direction       string
 	IsToContract    bool

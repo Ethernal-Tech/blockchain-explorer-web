@@ -27,8 +27,8 @@ type Transaction struct {
 	GasUsed              string
 	GasUsedPercentage    float64
 	GasPriceInGwei       float64
-	GasPriceInEth        float64
-	TxnFee               float64
+	GasPriceInEth        string
+	TxnFee               string
 	Nonce                uint64
 	TransactionIndex     uint64
 	Value                string

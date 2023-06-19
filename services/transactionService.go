@@ -87,8 +87,6 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		GasUsed:           p.Sprintf("%v", transaction.GasUsed),
 		GasUsedPercentage: math.Round(((float64(transaction.GasUsed)/float64(transaction.Gas))*100)*100) / 100,
 		GasPriceInGwei:    float64(transaction.GasPrice) / float64(params.GWei),
-		GasPriceInEth:     float64(transaction.GasPrice) / float64(params.Ether),
-		TxnFee:            (float64(transaction.GasPrice) / float64(1000000000000000000)) * float64(transaction.GasUsed),
 		Nonce:             transaction.Nonce,
 		TransactionIndex:  transaction.TransactionIndex,
 		Value:             utils.WeiToEther(transaction.Value),
@@ -98,6 +96,12 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		DateTime:          time.Unix(int64(transaction.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
 		InputData:         transaction.InputData,
 	}
+
+	txnFee := (float64(transaction.GasPrice) / float64(params.Ether)) * float64(transaction.GasUsed)
+	oneResultTransaction.TxnFee = utils.ShowDecimalPrecision(txnFee, 18)
+
+	gasPriceInEth := float64(transaction.GasPrice) / float64(params.Ether)
+	oneResultTransaction.GasPriceInEth = utils.ShowDecimalPrecision(gasPriceInEth, 18)
 
 	isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", oneResultTransaction.To).Exists(tsi.ctx)
 
@@ -516,9 +520,11 @@ func (tsi *TransactionServiceImplementation) GetTransactionsInBlock(blockNumber 
 			From:            v.From,
 			To:              v.To,
 			Value:           utils.WeiToEther(v.Value),
-			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
+
+		txnFee := (float64(v.GasPrice) / float64(params.Ether)) * float64(v.GasUsed)
+		transaction.TxnFee = utils.ShowDecimalPrecision(txnFee, 8)
 
 		isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", transaction.To).Exists(tsi.ctx)
 		transaction.IsToContract = isToContract
@@ -560,9 +566,11 @@ func (tsi TransactionServiceImplementation) GetAllTransactions(page int, perPage
 			From:            v.From,
 			To:              v.To,
 			Value:           utils.WeiToEther(v.Value),
-			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
+
+		txnFee := (float64(v.GasPrice) / float64(params.Ether)) * float64(v.GasUsed)
+		transaction.TxnFee = utils.ShowDecimalPrecision(txnFee, 8)
 
 		isToContract, _ := tsi.database.NewSelect().Table("contracts").Where("address = ?", transaction.To).Exists(tsi.ctx)
 		transaction.IsToContract = isToContract
@@ -611,12 +619,12 @@ func (tsi TransactionServiceImplementation) GetTransactionsByAddress(address str
 			From:            v.From,
 			To:              v.To,
 			Value:           utils.WeiToEther(v.Value),
-			TxnFee:          0000000,
 			ContractAddress: v.ContractAddress,
 		}
-		// if strings.ReplaceAll(transaction.To, " ", "") == "" {
-		// 	transaction.To = ""
-		// }
+
+		txnFee := (float64(v.GasPrice) / float64(params.Ether)) * float64(v.GasUsed)
+		transaction.TxnFee = utils.ShowDecimalPrecision(txnFee, 8)
+
 		if address == v.To {
 			transaction.Direction = "in"
 		} else {
