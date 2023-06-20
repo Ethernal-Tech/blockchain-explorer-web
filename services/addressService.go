@@ -17,6 +17,7 @@ import (
 	"webbc/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -58,8 +59,8 @@ func (as *AddressService) GetAddress(address string) (*addressModel.Address, err
 			ContractAddress: v.ContractAddress,
 		}
 
-		// value := utils.WeiToEther(v.Value)
-		// transac.Value = value
+		txnFee := (float64(v.GasPrice) / float64(params.Ether)) * float64(v.GasUsed)
+		transac.TxnFee = utils.ShowDecimalPrecision(txnFee, 8)
 
 		if address == v.From {
 			transac.Direction = "out"
