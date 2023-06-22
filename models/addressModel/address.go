@@ -23,5 +23,6 @@ type Transaction struct {
 	Gas             uint64
 	GasUsed         uint64
 	GasPrice        uint64
+	TxnFee          string
 	ContractAddress string
 }

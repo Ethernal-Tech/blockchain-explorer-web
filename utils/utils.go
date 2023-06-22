@@ -3,6 +3,7 @@ package utils
 import (
 	"math/big"
 	"strconv"
+	"strings"
 
 	"github.com/ethereum/go-ethereum/params"
 )
@@ -102,6 +103,22 @@ func WeiToEther(wei string) string {
 	valueBigInt := ToBigInt(wei)
 	valueBigFloat := new(big.Float).SetInt(valueBigInt)
 	return new(big.Float).Quo(valueBigFloat, big.NewFloat(params.Ether)).Text('f', -1)
+}
+
+func ShowDecimalPrecision(number float64, precision int) string {
+	numberStr := strconv.FormatFloat(number, 'f', -1, 64)
+
+	decimalSeparator := "."
+	if strings.Contains(numberStr, ",") {
+		decimalSeparator = ","
+	}
+	parts := strings.Split(numberStr, decimalSeparator)
+	if len(parts) > 1 && len(parts[1]) >= int(precision) {
+		parts[1] = parts[1][:precision]
+		parts[1] = strings.TrimRight(parts[1], "0")
+		return parts[0] + decimalSeparator + parts[1]
+	}
+	return numberStr
 }
 
 func Convert(number int) string {

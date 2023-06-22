@@ -382,3 +382,7 @@ textarea {
 .transfer-element {
     padding-bottom: 5px;
 }
+
+.text-dimmed {
+    color: #93a3b8;
+}
