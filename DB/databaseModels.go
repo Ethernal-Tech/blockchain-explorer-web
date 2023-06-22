@@ -66,7 +66,7 @@ type AbiType struct {
 	Name string `bun:"type:varchar,notnull"`
 }
 
-type Nft struct {
+type NftTransfer struct {
 	Id              int64
 	BlockHash       string
 	Index           uint32
@@ -80,9 +80,19 @@ type Nft struct {
 	TokenTypeId     int
 	TokenType       TokenType
 	Transaction     Transaction
+	NftMetadataId   *uint64
 }
 
 type TokenType struct {
 	Id   int
 	Name string
+}
+
+type NftMetadata struct {
+	Id          int64
+	TokenId     string
+	Address     string
+	Name        string
+	Image       string
+	Description string
 }

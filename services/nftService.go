@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"strings"
 	"time"
 	"webbc/DB"
 	"webbc/configuration"
+	"webbc/models"
 	"webbc/models/nftModel"
 	"webbc/utils"
 
@@ -27,17 +29,17 @@ func NewNftService(database *bun.DB, ctx context.Context, generalConfig *configu
 func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTransactions, error) {
 	var offSet = perPage * (page - 1)
 
-	dbNfts := make([]DB.Nft, 0)
-	err := ns.database.NewSelect().Model((*DB.Nft)(nil)).
-		ColumnExpr("nft.*").
+	dbNfts := make([]DB.NftTransfer, 0)
+	err := ns.database.NewSelect().Model((*DB.NftTransfer)(nil)).
+		ColumnExpr("nft_transfer.*").
 		ColumnExpr("t.timestamp AS transaction__timestamp, t.input_data AS transaction__input_data").
 		ColumnExpr("tt.name AS token_type__name").
-		Join("JOIN token_types AS tt ON tt.id = nft.token_type_id").
-		Join("JOIN transactions AS t ON t.hash = nft.transaction_hash").
+		Join("JOIN token_types AS tt ON tt.id = nft_transfer.token_type_id").
+		Join("JOIN transactions AS t ON t.hash = nft_transfer.transaction_hash").
 		Order("block_number DESC").
 		Order("t.transaction_index DESC").
-		Order("nft.index DESC").
-		Order("nft.token_id DESC").
+		Order("nft_transfer.index DESC").
+		Order("nft_transfer.token_id DESC").
 		Limit(perPage).Offset(offSet).Scan(ns.ctx, &dbNfts)
 
 	if err != nil {
@@ -88,7 +90,7 @@ func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTr
 	}
 
 	var totalRows int
-	ns.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.nfts' ::regclass;").Scan(ns.ctx, &totalRows)
+	ns.database.NewRaw("SELECT reltuples::bigint FROM pg_class WHERE oid = 'public.nft_transfers' ::regclass;").Scan(ns.ctx, &totalRows)
 	result.TotalRows = int64(totalRows)
 
 	maxRows := int(ns.generalConfig.NftLatestTransfersMaxCount)
@@ -104,4 +106,65 @@ func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTr
 	}
 	result.MaxCount = int(maxRows)
 	return &result, nil
+}
+
+func (ns *NftService) GetNftMetadata(address string, tokenId string) (*models.NftMetadataModel, error) {
+	var nftMetadata DB.NftMetadata
+	error1 := ns.database.NewSelect().Table("nft_metadata").Where("token_id = ?", tokenId).Scan(ns.ctx, &nftMetadata)
+
+	if error1 != nil {
+
+	}
+
+	if strings.HasPrefix(nftMetadata.Image, "ipfs") {
+		nftMetadata.Image = "http://nswd.ddns.net:8088/ipfs/" + strings.Split(nftMetadata.Image, "//")[1]
+	}
+
+	var nftMetadataModel = models.NftMetadataModel{
+		Id:      nftMetadata.Id,
+		TokenId: nftMetadata.TokenId,
+		Address: nftMetadata.Address,
+		Name:    nftMetadata.Name,
+		Image:   nftMetadata.Image,
+	}
+
+	var transfersDB []DB.NftTransfer
+	err := ns.database.NewSelect().Model((*DB.NftTransfer)(nil)).
+		ColumnExpr("nft_transfer.*").
+		ColumnExpr("t.timestamp AS transaction__timestamp, t.input_data AS transaction__input_data").
+		ColumnExpr("tt.name AS token_type__name").
+		Join("JOIN token_types AS tt ON tt.id = nft_transfer.token_type_id").
+		Join("JOIN transactions AS t ON t.hash = nft_transfer.transaction_hash").
+		Order("block_number DESC").
+		Order("t.transaction_index DESC").
+		Order("nft_transfer.index DESC").
+		Order("nft_transfer.token_id DESC").
+		Where("? = ? AND ? = ?", bun.Ident("address"), strings.ToLower(address), bun.Ident("token_id"), tokenId).
+		Limit(25).Offset(0).Scan(ns.ctx, &transfersDB)
+
+	if err != nil {
+		//TODO: Error handling
+	}
+
+	var transfers []models.TransferModel
+
+	for _, v := range transfersDB {
+		var oneTransfer = models.TransferModel{
+			From:            v.From,
+			To:              v.To,
+			Age:             utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(v.Transaction.Timestamp), 0)).Seconds()))),
+			DateTime:        time.Unix(int64(v.Transaction.Timestamp), 0).UTC().Format("Jan-02-2006 15:04:05"),
+			TransactionHash: v.TransactionHash,
+		}
+
+		transfers = append(transfers, oneTransfer)
+	}
+
+	nftMetadataModel.Transfers = transfers
+
+	var totalRows int
+	err = ns.database.QueryRow("SELECT COUNT(*) FROM nft_transfers WHERE address = ? AND token_id = ?", strings.ToLower(address), tokenId).Scan(&totalRows)
+	nftMetadataModel.TotalRows = int64(totalRows)
+
+	return &nftMetadataModel, nil
 }
