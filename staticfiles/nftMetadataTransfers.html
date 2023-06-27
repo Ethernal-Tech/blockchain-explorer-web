@@ -1,0 +1,46 @@
+<div class="card border-1 shadow">
+    <div class="card-body">
+        <div class="d-md-flex justify-content-between mb-3">
+            <p class="mb-0">
+                <span class="d-flex align-items-center"> A total of {{.nftMetadata.TotalRows}} records found</span>       
+            </p>       
+        </div>
+        <div class="table-responsive mb-0">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Transaction Hash</th>        
+                        <th id="age" onclick="changeColumn('dateTime')" style="cursor: pointer;" scope="col">Age</th>
+						<th id="dateTime" onclick="changeColumn('age')" style="display: none; cursor: pointer;" scope="col">Date Time (UTC)</th>
+                        <th scope="col">From</th>
+                        <th scope="col"></th>
+                        <th scope="col">To</th>               
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .nftMetadata.Transfers}}
+                        <tr>
+                            <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{.TransactionHash}}</td>
+                            <td class="ageData">{{.Age}} ago</td>
+							<td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
+                            <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><a href="/address/hash/{{.From}}">{{.From}}</a></td>
+                            <td class="text-center"><span class="btn btn-sm btn-light rounded-circle"><i class="fas fa-long-arrow-alt-right"></i></span></td>
+                            <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><a href="/address/hash/{{.To}}">{{.To}}</a></td>
+                        </tr>
+                        {{end}}              
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
+                    <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
+                    <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
+                    <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
+                    <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
+                </select>
+                <span>records</span>
+            </div>
+        </div>
+    </div>
+</div>

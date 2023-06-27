@@ -1,0 +1,83 @@
+{{template "header.html"}}
+
+<div class="container">
+    <div class="row mt-3" style="margin-top: 65px !important;">
+		<div class="col-lg-5">
+			<div class="card h-100 border-1 shadow" >				
+				<div class="card-body">
+					{{if ne .nftMetadata.Image ""}}
+                        <img src="{{.nftMetadata.Image}}" alt="nft" style="width: auto;
+                        height: auto;
+                        max-width: 100%;
+                        max-height: 100%;
+                        margin-left: auto;
+                        margin-right: auto;
+                        border-radius: 0.5rem;">    
+                    {{else}}
+                        <img src="/images/nft_placeholder.png" alt="nft_placeholder" style="width: auto;
+                        height: auto;
+                        max-width: 100%;
+                        max-height: 100%;
+                        margin-left: auto;
+                        margin-right: auto;
+                        border-radius: 0.5rem;">
+                    {{end}}
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-7">
+            <p style="font-size: 20px; font-weight: bold;">{{.nftMetadata.Name}} #{{.nftMetadata.TokenId}}</p>
+			<div class="card  border-1 shadow">
+				<div class="card-body">
+					<div class="row">
+						<div style="border-bottom: 1px solid rgba(0, 0, 0, 0.175); font-weight: bold; font-size: 16px; padding: 7px;">
+                            <i class="fas fa-list"></i> Details 
+                        </div>
+                        <div class="row align-items-center" style="padding: 14px;">
+                            <div class="col-md-3"><i class="fas fa-question-circle"></i> Owner:</div>
+                            <div class="col-md-9"></div>   
+                        </div>
+                        <div class="row align-items-center" style="padding: 14px;">
+                            <div class="col-md-3"><i class="fas fa-question-circle"></i> Contract Address:</div>
+                            <div class="col-md-9">{{.nftMetadata.Address}}</div>                 
+                        </div>
+                        <div class="row align-items-center" style="padding: 14px;">
+                            <div class="col-md-3"><i class="fas fa-question-circle"></i> Creator:</div>
+                            <div class="col-md-9"></div>                 
+                        </div>
+                        <div class="row align-items-center" style="padding: 14px;">
+                            <div class="col-md-3"><i class="fas fa-question-circle"></i> Token ID:</div>
+                            <div class="col-md-9">{{.nftMetadata.TokenId}}</div>                 
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row mt-3 mb-3">
+		<div class="col-lg-12">
+			{{template "nftMetadataTransfers.html" .}}
+		</div>
+	</div>
+</div>
+
+{{template "footer.html"}}
+
+<script>
+
+	javascript: (function () {
+		var cookies = document.cookie.split("; ")
+		cookies.forEach(element => {
+			var nameValuePair = element.split("=");
+			if (nameValuePair[0] === "timestamp") {
+				if (nameValuePair[1] === 'DateTime') {
+					changeColumn('dateTime')
+				}
+				else if (nameValuePair[1] === 'Age') {
+					changeColumn('age')
+				}
+			}
+		});
+	})();
+
+</script>

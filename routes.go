@@ -85,6 +85,7 @@ func routes(server *gin.Engine, cont ...any) {
 	nftRoutes := server.Group("/nft")
 	{
 		nftRoutes.GET("/transfers", nc.GetLatestTransfers)
+		nftRoutes.GET("/:address/:tokenid", nc.GetNftMetadata)
 	}
 }
 

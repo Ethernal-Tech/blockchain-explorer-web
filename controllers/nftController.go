@@ -40,6 +40,20 @@ func (nc *NftController) GetLatestTransfers(context *gin.Context) {
 	context.HTML(200, "nftLatestTransfers.html", data)
 }
 
+func (nc *NftController) GetNftMetadata(context *gin.Context) {
+	nftMetadata, error := nc.NftService.GetNftMetadata(context.Param("address"), context.Param("tokenid"))
+
+	if error != nil {
+
+	}
+
+	data := gin.H{
+		"nftMetadata": nftMetadata,
+	}
+
+	context.HTML(200, "nftMetadata.html", data)
+}
+
 func paginationNftTransaction(context *gin.Context) (int, int) {
 	page := 1
 	pageStr := context.Query("p")
