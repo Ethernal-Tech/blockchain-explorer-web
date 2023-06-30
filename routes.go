@@ -86,6 +86,7 @@ func routes(server *gin.Engine, cont ...any) {
 	{
 		nftRoutes.GET("/transfers", nc.GetLatestTransfers)
 		nftRoutes.GET("/:address/:tokenid", nc.GetNftMetadata)
+		nftRoutes.GET("/transfers/:address/:tokenid", nc.GetNftTransfers)
 	}
 }
 

@@ -39,6 +39,7 @@ type ConfigurationService interface {
 }
 
 type INftService interface {
-	GetLatestTransfers(int, int) (*nftModel.NftTransactions, error)
-	GetNftMetadata(string, string) (*models.NftMetadataModel, error)
+	GetLatestTransfers(int, int) (*nftModel.NftTransfers, error)
+	GetNftMetadata(string, string) (*nftModel.NftMetadata, error)
+	GetNftTransfers(string, string, int, int) (*nftModel.NftTransfers, error)
 }

@@ -2,8 +2,35 @@
     <div class="card-body">
         <div class="d-md-flex justify-content-between mb-3">
             <p class="mb-0">
-                <span class="d-flex align-items-center"> A total of {{.nftMetadata.TotalRows}} records found</span>       
-            </p>       
+                <span class="d-flex align-items-center"> A total of {{.nftTransfers.TotalRows}} records found</span>       
+            </p> 
+            <div class="be-pagination">
+                <ul class="d-inline-flex">
+                    <li>
+                        <a class="paginationBtn" onclick="pageChanged('p=1&l={{.nftTransfers.PaginationData.PerPage}}')">First</a>
+                    </li>
+                    <li>
+                        {{ if (gt .nftTransfers.PaginationData.CurrentPage 1)}}
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.PreviousPage}}&l={{.nftTransfers.PaginationData.PerPage}}')"><</a>
+                        {{ else }}
+                        <span class="disable-paging-button"></span>
+                        {{ end }}
+                    </li>
+                    <li>
+                        <span>Page {{.nftTransfers.PaginationData.CurrentPage}} of {{.nftTransfers.PaginationData.TotalPages}}</span>
+                    </li>
+                    <li>
+                        {{ if (lt .nftTransfers.PaginationData.CurrentPage .nftTransfers.PaginationData.TotalPages)}}
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.NextPage}}&l={{.nftTransfers.PaginationData.PerPage}}')">></a>
+                        {{ else }}
+                        <span class="disable-paging-button paginationBtn">></span>
+                        {{ end }}
+                    </li>
+                    <li>
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.TotalPages}}&l={{.nftTransfers.PaginationData.PerPage}}')">Last</a>
+                    </li>
+                </ul>
+            </div>      
         </div>
         <div class="table-responsive mb-0">
             <table class="table table-hover align-middle">
@@ -18,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{range .nftMetadata.Transfers}}
+                    {{range .nftTransfers.Transfers}}
                         <tr>
                             <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{.TransactionHash}}</td>
                             <td class="ageData">{{.Age}} ago</td>
@@ -34,12 +61,39 @@
         <div class="d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <span>Show</span><select id="limitFilterId" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onchange="limitChanged()">
-                    <option value="10" {{if eq .pagination.PerPage 10}}selected="selected"{{end}}>10</option>
-                    <option value="25" {{if eq .pagination.PerPage 25}}selected="selected"{{end}}>25</option>
-                    <option value="50" {{if eq .pagination.PerPage 50}}selected="selected"{{end}}>50</option>
-                    <option value="100" {{if eq .pagination.PerPage 100}}selected="selected"{{end}}>100</option>
+                    <option value="10" {{if eq .nftTransfers.PaginationData.PerPage 10}}selected="selected"{{end}}>10</option>
+                    <option value="25" {{if eq .nftTransfers.PaginationData.PerPage 25}}selected="selected"{{end}}>25</option>
+                    <option value="50" {{if eq .nftTransfers.PaginationData.PerPage 50}}selected="selected"{{end}}>50</option>
+                    <option value="100" {{if eq .nftTransfers.PaginationData.PerPage 100}}selected="selected"{{end}}>100</option>
                 </select>
                 <span>records</span>
+            </div>
+            <div class="be-pagination">
+                <ul class="d-inline-flex">
+                    <li>
+                        <a class="paginationBtn" onclick="pageChanged('p=1&l={{.nftTransfers.PaginationData.PerPage}}')">First</a>
+                    </li>
+                    <li>
+                        {{ if (gt .nftTransfers.PaginationData.CurrentPage 1)}}
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.PreviousPage}}&l={{.nftTransfers.PaginationData.PerPage}}')"><</a>
+                        {{ else }}
+                        <span class="disable-paging-button"></span>
+                        {{ end }}
+                    </li>
+                    <li>
+                        <span>Page {{.nftTransfers.PaginationData.CurrentPage}} of {{.nftTransfers.PaginationData.TotalPages}}</span>
+                    </li>
+                    <li>
+                        {{ if (lt .nftTransfers.PaginationData.CurrentPage .nftTransfers.PaginationData.TotalPages)}}
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.NextPage}}&l={{.nftTransfers.PaginationData.PerPage}}')">></a>
+                        {{ else }}
+                        <span class="disable-paging-button paginationBtn">></span>
+                        {{ end }}
+                    </li>
+                    <li>
+                        <a class="paginationBtn" onclick="pageChanged('p={{.nftTransfers.PaginationData.TotalPages}}&l={{.nftTransfers.PaginationData.PerPage}}')">Last</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

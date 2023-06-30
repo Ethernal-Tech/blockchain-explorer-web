@@ -1,14 +1,29 @@
 package nftModel
 
-type NftTransactions struct {
-	TotalPages   int
-	TotalRows    int64
-	Transactions []NftTransaction
-	MaxCount     int
+import (
+	"webbc/models/paginationModel"
+)
+
+type NftMetadata struct {
+	Id      int64
+	TokenId string
+	Address string
+	Name    string
+	Image   string
+	Owner   string
+	Creator string
 }
 
-type NftTransaction struct {
-	Hash            string
+type NftTransfers struct {
+	TotalPages     int
+	TotalRows      int64
+	Transfers      []NftTransfer
+	MaxCount       int
+	PaginationData paginationModel.PaginationData
+}
+
+type NftTransfer struct {
+	TransactionHash string
 	Method          string
 	Age             string
 	DateTime        string
@@ -18,7 +33,7 @@ type NftTransaction struct {
 	Item            string
 	IsFromContract  bool
 	IsToContract    bool
-	NftId           string
+	TokenId         string
 	Value           string
-	ContractAddress string
+	Address         string
 }

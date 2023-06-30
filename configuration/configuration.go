@@ -21,6 +21,7 @@ type GeneralConfiguration struct {
 	TransactionsByAddressMaxCount uint
 	NftLatestTransfersMaxCount    uint
 	Viper                         *viper.Viper
+	IpfsNodeUrl                   string
 }
 
 type ApplicationConfiguration struct {
@@ -54,6 +55,7 @@ func LoadConfiguration() (*GeneralConfiguration, *ApplicationConfiguration, *Aut
 	generalConfiguration.TransactionsMaxCount = generalConfiguration.Viper.GetUint64("TRANSACTIONS_MAX_COUNT")
 	generalConfiguration.TransactionsByAddressMaxCount = generalConfiguration.Viper.GetUint("TRANSACTIONS_BY_ADDRESS_MAX_COUNT")
 	generalConfiguration.NftLatestTransfersMaxCount = generalConfiguration.Viper.GetUint("NFT_LATEST_TRANSFER_MAX_COUNT")
+	generalConfiguration.IpfsNodeUrl = generalConfiguration.Viper.GetString("IPFS_NODE_URL")
 
 	appConfiguration := ApplicationConfiguration{
 		Viper: getNewViperInstance("app.env"),

@@ -386,3 +386,10 @@ textarea {
 .text-dimmed {
     color: #93a3b8;
 }
+
+.paginationBtn {
+    color: var(--main-color);
+    cursor: pointer;
+    display: block;
+    padding: 5px;
+}

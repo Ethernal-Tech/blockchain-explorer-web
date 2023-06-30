@@ -26,8 +26,8 @@ func (nc *NftController) GetLatestTransfers(context *gin.Context) {
 	}
 
 	data := gin.H{
-		"transactions": result.Transactions,
-		"txsMaxCount":  result.MaxCount,
+		"transfers":   result.Transfers,
+		"txsMaxCount": result.MaxCount,
 		"pagination": paginationModel.PaginationData{
 			NextPage:     page + 1,
 			PreviousPage: page - 1,
@@ -52,6 +52,30 @@ func (nc *NftController) GetNftMetadata(context *gin.Context) {
 	}
 
 	context.HTML(200, "nftMetadata.html", data)
+}
+
+func (nc *NftController) GetNftTransfers(context *gin.Context) {
+	page, perPage := paginationNftTransaction(context)
+
+	nftTransfers, error := nc.NftService.GetNftTransfers(context.Param("address"), context.Param("tokenid"), page, perPage)
+	nftTransfers.PaginationData = paginationModel.PaginationData{
+		NextPage:     page + 1,
+		PreviousPage: page - 1,
+		CurrentPage:  page,
+		TotalPages:   nftTransfers.TotalPages,
+		TotalRows:    nftTransfers.TotalRows,
+		PerPage:      perPage,
+	}
+
+	if error != nil {
+
+	}
+
+	data := gin.H{
+		"nftTransfers": nftTransfers,
+	}
+
+	context.HTML(200, "nftMetadataTransfers.html", data)
 }
 
 func paginationNftTransaction(context *gin.Context) (int, int) {
