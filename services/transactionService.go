@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"webbc/DB"
@@ -86,7 +87,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 		Gas:               p.Sprintf("%v", transaction.Gas),
 		GasUsed:           p.Sprintf("%v", transaction.GasUsed),
 		GasUsedPercentage: math.Round(((float64(transaction.GasUsed)/float64(transaction.Gas))*100)*100) / 100,
-		GasPriceInGwei:    float64(transaction.GasPrice) / float64(params.GWei),
+		GasPriceInGwei:    strconv.FormatFloat(float64(transaction.GasPrice)/float64(params.GWei), 'f', -1, 64),
 		Nonce:             transaction.Nonce,
 		TransactionIndex:  transaction.TransactionIndex,
 		Value:             utils.WeiToEther(transaction.Value),
