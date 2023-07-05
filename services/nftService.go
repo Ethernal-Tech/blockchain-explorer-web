@@ -109,9 +109,9 @@ func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTr
 
 func (ns *NftService) GetNftMetadata(address string, tokenId string) (*nftModel.NftMetadata, error) {
 	var nftMetadataDB DB.NftMetadata
-	error1 := ns.database.NewSelect().Table("nft_metadata").Where("token_id = ? AND address = ?", tokenId, strings.ToLower(address)).Scan(ns.ctx, &nftMetadataDB)
+	err := ns.database.NewSelect().Table("nft_metadata").Where("token_id = ? AND address = ?", tokenId, strings.ToLower(address)).Scan(ns.ctx, &nftMetadataDB)
 
-	if error1 != nil {
+	if err != nil {
 
 	}
 
@@ -128,7 +128,7 @@ func (ns *NftService) GetNftMetadata(address string, tokenId string) (*nftModel.
 	}
 
 	var totalRows int
-	err := ns.database.QueryRow("SELECT COUNT(*) FROM nft_transfers WHERE address = ? AND token_id = ?", strings.ToLower(address), tokenId).Scan(&totalRows)
+	err = ns.database.QueryRow("SELECT COUNT(*) FROM nft_transfers WHERE address = ? AND token_id = ?", strings.ToLower(address), tokenId).Scan(&totalRows)
 
 	if err != nil {
 

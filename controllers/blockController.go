@@ -9,10 +9,10 @@ import (
 )
 
 type BlockController struct {
-	BlockService services.BlockService
+	BlockService services.IBlockService
 }
 
-func NewBlockController(blockService services.BlockService) BlockController {
+func NewBlockController(blockService services.IBlockService) BlockController {
 	return BlockController{BlockService: blockService}
 }
 

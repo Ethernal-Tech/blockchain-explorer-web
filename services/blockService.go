@@ -5,7 +5,6 @@ import (
 	"math"
 	"time"
 	"webbc/DB"
-	"webbc/models"
 	"webbc/models/blockModel"
 	"webbc/utils"
 
@@ -17,11 +16,11 @@ type BlockServiceImplementation struct {
 	ctx      context.Context
 }
 
-func NewBlockService(database *bun.DB, ctx context.Context) BlockService {
+func NewBlockService(database *bun.DB, ctx context.Context) IBlockService {
 	return &BlockServiceImplementation{database: database, ctx: ctx}
 }
 
-func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]models.Block, error) {
+func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]blockModel.Block, error) {
 	var blocks []DB.Block
 	error1 := bsi.database.NewSelect().Table("blocks").Order("number DESC").Limit(20).Scan(bsi.ctx, &blocks)
 
@@ -29,10 +28,10 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 
 	}
 
-	var result []models.Block
+	var result []blockModel.Block
 
 	for _, v := range blocks {
-		var oneResultBlock models.Block = models.Block{
+		var oneResultBlock blockModel.Block = blockModel.Block{
 			Hash:               v.Hash,
 			Number:             v.Number,
 			ParentHash:         v.ParentHash,
@@ -55,7 +54,7 @@ func (bsi *BlockServiceImplementation) GetLastBlocks(numberOfBlocks int) (*[]mod
 	return &result, nil
 }
 
-func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*models.Block, error) {
+func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*blockModel.Block, error) {
 	var block DB.Block
 	error1 := bsi.database.NewSelect().Table("blocks").Where("blocks.number = ?", blockNumber).Scan(bsi.ctx, &block)
 
@@ -63,7 +62,7 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 
 	}
 
-	var oneResultBlock models.Block = models.Block{
+	var oneResultBlock blockModel.Block = blockModel.Block{
 		Hash:               block.Hash,
 		Number:             block.Number,
 		ParentHash:         block.ParentHash,
@@ -83,7 +82,7 @@ func (bsi *BlockServiceImplementation) GetBlockByNumber(blockNumber uint64) (*mo
 	return &oneResultBlock, nil
 }
 
-func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models.Block, error) {
+func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*blockModel.Block, error) {
 	var block DB.Block
 	error1 := bsi.database.NewSelect().Table("blocks").Where("blocks.hash = ?", blockHash).Scan(bsi.ctx, &block)
 
@@ -91,7 +90,7 @@ func (bsi *BlockServiceImplementation) GetBlockByHash(blockHash string) (*models
 
 	}
 
-	var oneResultBlock models.Block = models.Block{
+	var oneResultBlock blockModel.Block = blockModel.Block{
 		Hash:               block.Hash,
 		Number:             block.Number,
 		ParentHash:         block.ParentHash,

@@ -11,10 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type BlockService interface {
-	GetLastBlocks(int) (*[]models.Block, error)
-	GetBlockByNumber(uint64) (*models.Block, error)
-	GetBlockByHash(string) (*models.Block, error)
+type IBlockService interface {
+	GetLastBlocks(int) (*[]blockModel.Block, error)
+	GetBlockByNumber(uint64) (*blockModel.Block, error)
+	GetBlockByHash(string) (*blockModel.Block, error)
 	GetAllBlocks(int, int) (*blockModel.Blocks, error)
 }
 

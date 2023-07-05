@@ -1,21 +1,21 @@
 package models
 
-type Block struct {
-	Hash               string
-	Number             uint64
-	ParentHash         string
-	Nonce              string
-	Validator          string
-	Difficulty         string
-	TotalDifficulty    string
-	ExtraData          []byte
-	Size               uint64
-	GasLimit           uint64
-	GasUsed            uint64
-	Age                string
-	DateTime           string
-	TransactionsNumber int
-}
+// type Block struct {
+// 	Hash               string
+// 	Number             uint64
+// 	ParentHash         string
+// 	Nonce              string
+// 	Validator          string
+// 	Difficulty         string
+// 	TotalDifficulty    string
+// 	ExtraData          []byte
+// 	Size               uint64
+// 	GasLimit           uint64
+// 	GasUsed            uint64
+// 	Age                string
+// 	DateTime           string
+// 	TransactionsNumber int
+// }
 
 type Transaction struct {
 	Hash                 string
@@ -94,14 +94,14 @@ type TransferModel struct {
 	DateTime        string
 }
 
-type NftMetadataModel struct {
-	Id        int64
-	TokenId   string
-	Address   string
-	Name      string
-	Image     string
-	Owner     string
-	Creator   string
-	Transfers []TransferModel
-	TotalRows int64
-}
+// type NftMetadataModel struct {
+// 	Id        int64
+// 	TokenId   string
+// 	Address   string
+// 	Name      string
+// 	Image     string
+// 	Owner     string
+// 	Creator   string
+// 	Transfers []TransferModel
+// 	TotalRows int64
+// }

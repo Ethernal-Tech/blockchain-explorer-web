@@ -19,7 +19,7 @@ var (
 	authConfig            *configuration.AuthConfiguration
 	database              *bun.DB
 	server                *gin.Engine
-	blockService          services.BlockService
+	blockService          services.IBlockService
 	blockController       controllers.BlockController
 	transactionService    services.TransactionService
 	transactionController controllers.TransactionController
