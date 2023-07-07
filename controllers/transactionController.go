@@ -9,10 +9,10 @@ import (
 )
 
 type TransactionController struct {
-	TransactionService services.TransactionService
+	TransactionService services.ITransactionService
 }
 
-func NewTransactionController(transactionService services.TransactionService) TransactionController {
+func NewTransactionController(transactionService services.ITransactionService) TransactionController {
 	return TransactionController{TransactionService: transactionService}
 }
 

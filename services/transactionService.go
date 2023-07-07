@@ -15,7 +15,6 @@ import (
 	webcommon "webbc/common"
 	"webbc/configuration"
 	"webbc/eth"
-	"webbc/models"
 	"webbc/models/transactionModel"
 	"webbc/utils"
 
@@ -34,11 +33,11 @@ type TransactionServiceImplementation struct {
 	generalConfig *configuration.GeneralConfiguration
 }
 
-func NewTransactionService(database *bun.DB, ctx context.Context, generalConfig *configuration.GeneralConfiguration) TransactionService {
+func NewTransactionService(database *bun.DB, ctx context.Context, generalConfig *configuration.GeneralConfiguration) ITransactionService {
 	return &TransactionServiceImplementation{database: database, ctx: ctx, generalConfig: generalConfig}
 }
 
-func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransactions int) (*[]models.Transaction, error) {
+func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransactions int) (*[]transactionModel.Transaction, error) {
 	var transactions []DB.Transaction
 	err := tsi.database.NewSelect().Table("transactions").Order("block_number DESC").Limit(20).Scan(tsi.ctx, &transactions)
 
@@ -46,10 +45,10 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 
 	}
 
-	var result []models.Transaction
+	var result []transactionModel.Transaction
 
 	for _, v := range transactions {
-		var oneResultTransaction = models.Transaction{
+		var oneResultTransaction = transactionModel.Transaction{
 			Hash: v.Hash,
 			From: v.From,
 			To:   v.To,
@@ -62,7 +61,7 @@ func (tsi *TransactionServiceImplementation) GetLastTransactions(numberOfTransac
 	return &result, nil
 }
 
-func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHash string) (*models.Transaction, error) {
+func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHash string) (*transactionModel.Transaction, error) {
 	var transaction DB.Transaction
 	var logs []DB.Log
 	error1 := tsi.database.NewSelect().Table("transactions").Where("hash = ?", transactionHash).Scan(tsi.ctx, &transaction)
@@ -78,7 +77,7 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	}
 
 	p := message.NewPrinter(language.English)
-	var oneResultTransaction = models.Transaction{
+	var oneResultTransaction = transactionModel.Transaction{
 		Hash:              transaction.Hash,
 		BlockHash:         transaction.BlockHash,
 		BlockNumber:       transaction.BlockNumber,
@@ -137,17 +136,17 @@ func (tsi *TransactionServiceImplementation) GetTransactionByHash(transactionHas
 	return &oneResultTransaction, nil
 }
 
-func defaultAndDecodedViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []interface{}, models.DecodedInputData) {
+func defaultAndDecodedViewInputData(inputData string, dbAbi *DB.Abi) (string, string, []interface{}, transactionModel.DecodedInputData) {
 
 	parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + dbAbi.Definition + "]"))
 	if err != nil {
-		return "", "", []interface{}{}, models.DecodedInputData{}
+		return "", "", []interface{}{}, transactionModel.DecodedInputData{}
 	}
 
 	var signature string
 	var methodId string
 	var paramValues []interface{}
-	var decodedInputData models.DecodedInputData
+	var decodedInputData transactionModel.DecodedInputData
 
 	for _, method := range parsedAbi.Methods {
 
@@ -188,7 +187,7 @@ func defaultAndDecodedViewInputData(inputData string, dbAbi *DB.Abi) (string, st
 
 			dataNames, dataTypes, dataValues := decodeData(unpackValues, method.Inputs)
 			for i, _ := range dataValues {
-				var parameter = models.ParameterInfo{
+				var parameter = transactionModel.ParameterInfo{
 					Name:  dataNames[i],
 					Type:  dataTypes[i],
 					Value: dataValues[i],
@@ -208,9 +207,9 @@ func defaultAndDecodedViewInputData(inputData string, dbAbi *DB.Abi) (string, st
 	return signature, methodId, paramValues, decodedInputData
 }
 
-func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultTransaction *models.Transaction, contractName *map[string]string) {
+func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultTransaction *transactionModel.Transaction, contractName *map[string]string) {
 	if log.Topic0 == webcommon.Erc20TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 == "" {
-		transferModel := models.TransferModel{
+		transferModel := transactionModel.TransferModel{
 			From: "0x" + log.Topic1[len(log.Topic1)-40:],
 			To:   "0x" + log.Topic2[len(log.Topic2)-40:],
 		}
@@ -240,7 +239,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 		transferModel.TokenName = name
 		oneResultTransaction.ERC20Transfers = append(oneResultTransaction.ERC20Transfers, transferModel)
 	} else if log.Topic0 == webcommon.Erc721TransferEvent.Signature && log.Topic1 != "" && log.Topic2 != "" && log.Topic3 != "" {
-		transferModel := models.TransferModel{
+		transferModel := transactionModel.TransferModel{
 			From:    "0x" + log.Topic1[len(log.Topic1)-40:],
 			To:      "0x" + log.Topic2[len(log.Topic2)-40:],
 			TokenId: utils.HexNumberToString(log.Topic3),
@@ -254,7 +253,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 		transferModel.TokenName = name
 		oneResultTransaction.ERC721Transfers = append(oneResultTransaction.ERC721Transfers, transferModel)
 	} else if log.Topic0 == webcommon.Erc1155TransferSingleEvent.Signature && log.Topic2 != "" && log.Topic3 != "" {
-		transferModel := models.TransferModel{
+		transferModel := transactionModel.TransferModel{
 			From: "0x" + log.Topic2[len(log.Topic2)-40:],
 			To:   "0x" + log.Topic3[len(log.Topic3)-40:],
 		}
@@ -299,7 +298,7 @@ func (tsi *TransactionServiceImplementation) transferType(log DB.Log, oneResultT
 		tokenIds := strings.Split(dataValues[0], " ")
 		values := strings.Split(dataValues[1], " ")
 		for index, id := range tokenIds {
-			transferModel := models.TransferModel{
+			transferModel := transactionModel.TransferModel{
 				From:         "0x" + log.Topic2[len(log.Topic2)-40:],
 				To:           "0x" + log.Topic3[len(log.Topic3)-40:],
 				TokenId:      id,
@@ -383,13 +382,13 @@ func (tsi *TransactionServiceImplementation) GetName(address string) string {
 	return str
 }
 
-func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
+func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) transactionModel.Log {
 
-	var log models.Log
+	var log transactionModel.Log
 	if dbAbi.Id != 0 {
 		parsedAbi, err := ethereumAbi.JSON(strings.NewReader("[" + dbAbi.Definition + "]"))
 		if err != nil {
-			return models.Log{}
+			return transactionModel.Log{}
 		}
 
 		for _, event := range parsedAbi.Events {
@@ -407,12 +406,12 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 			unpackValues, err := event.Inputs.NonIndexed().UnpackValues(common.Hex2Bytes(dbLog.Data[2:]))
 			if err != nil {
 				// Handle the error
-				return models.Log{}
+				return transactionModel.Log{}
 			}
 
 			dataNames, _, dataValues := decodeData(unpackValues, event.Inputs.NonIndexed())
 
-			log = models.Log{
+			log = transactionModel.Log{
 				BlockHash:       dbLog.BlockHash,
 				Index:           dbLog.Index,
 				TransactionHash: dbLog.TransactionHash,
@@ -435,7 +434,7 @@ func createLogModel(dbLog *DB.Log, dbAbi *DB.Abi) models.Log {
 		}
 	}
 
-	log = models.Log{
+	log = transactionModel.Log{
 		BlockHash:       dbLog.BlockHash,
 		Index:           dbLog.Index,
 		TransactionHash: dbLog.TransactionHash,

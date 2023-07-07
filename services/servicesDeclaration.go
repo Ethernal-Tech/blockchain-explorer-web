@@ -2,7 +2,6 @@ package services
 
 import (
 	"webbc/configuration"
-	"webbc/models"
 	"webbc/models/addressModel"
 	"webbc/models/blockModel"
 	"webbc/models/nftModel"
@@ -18,9 +17,9 @@ type IBlockService interface {
 	GetAllBlocks(int, int) (*blockModel.Blocks, error)
 }
 
-type TransactionService interface {
-	GetLastTransactions(int) (*[]models.Transaction, error)
-	GetTransactionByHash(string) (*models.Transaction, error)
+type ITransactionService interface {
+	GetLastTransactions(int) (*[]transactionModel.Transaction, error)
+	GetTransactionByHash(string) (*transactionModel.Transaction, error)
 	GetTransactionsInBlock(string, int, int) (*transactionModel.Transactions, error)
 	GetAllTransactions(int, int) (*transactionModel.Transactions, error)
 	GetTransactionsByAddress(string, int, int) (*transactionModel.Transactions, error)

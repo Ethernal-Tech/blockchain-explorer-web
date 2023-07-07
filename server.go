@@ -21,7 +21,7 @@ var (
 	server                *gin.Engine
 	blockService          services.IBlockService
 	blockController       controllers.BlockController
-	transactionService    services.TransactionService
+	transactionService    services.ITransactionService
 	transactionController controllers.TransactionController
 	globalController      controllers.GlobalController
 	addressService        services.IAddressService
