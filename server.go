@@ -50,5 +50,5 @@ func main() {
 	nftController = controllers.NewNftController(nftService)
 
 	routes(server, globalController, blockController, transactionController, addressController, nftController)
-	server.Run(":8080")
+	server.Run(":80")
 }
