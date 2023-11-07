@@ -157,8 +157,15 @@
         window.location = "/nft/transfers?l=" + limitFilter;
     }
 
+    //-----------loader-------------------
+    window.onload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "none";
+    }
+
     window.onbeforeunload = function(){
         loader = document.getElementsByClassName("loader");
         loader[0].style.display = "block";
     };
+    //----------------------------------------
 </script>

@@ -67,8 +67,11 @@
     var tokenid = "{{ .nftMetadata.TokenId }}";
     var address = "{{ .nftMetadata.Address }}";
     limitFilter = 25;
-    limitChanged();
-
+    
+    // if(tokenid!= "" && address!= ""){
+    //     limitChanged();
+    // }
+    
     function limitChanged(){
         var limitFilterElement =  document.getElementById("limitFilterId")
         if(limitFilterElement != null){
@@ -123,8 +126,6 @@
             .catch(error => {
                 console.error("Error:", error);
             });
-
-
     }
 
 </script>

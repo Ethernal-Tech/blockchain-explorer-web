@@ -334,10 +334,6 @@ MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transac
 {{template "footer.html"}}
 
 <script>
-    window.onbeforeunload = function () {
-        loader = document.getElementsByClassName("loader");
-        loader[0].style.display = "block";
-    };
 
     function changeTab(tab) {
         var elements = Array.from(document.getElementsByClassName('tab-pane'))
@@ -385,5 +381,17 @@ MethodID: 0x{{.transaction.InputDataMethodId}}{{range $index, $value := .transac
         defaultView = document.getElementById("defaultView"); 
         defaultView.style.display = "none";
     }
+
+    //-----------loader-------------------
+    window.onload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "none";
+    }
+
+    window.onbeforeunload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "block";
+    };
+    //----------------------------------------
 
 </script>

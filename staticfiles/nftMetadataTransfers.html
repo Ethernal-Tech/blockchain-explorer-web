@@ -47,6 +47,7 @@
                 <tbody>
                     {{range .nftTransfers.Transfers}}
                         <tr>
+                            <!-- <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><a href="/transaction/hash/{{.TransactionHash}}">{{.TransactionHash}}</a></td> -->
                             <td style="max-width: 180px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{.TransactionHash}}</td>
                             <td class="ageData">{{.Age}} ago</td>
 							<td class="dateTimeData" style="display: none;">{{.DateTime}}</td>
