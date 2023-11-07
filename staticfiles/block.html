@@ -100,5 +100,10 @@
         loader = document.getElementsByClassName("loader");
         loader[0].style.display = "block";
     };
+
+    window.onunload = function(){
+        loader = document.getElementsByClassName("loader");
+        loader[0].style.display = "none";
+    }
     //----------------------------------------
 </script>
