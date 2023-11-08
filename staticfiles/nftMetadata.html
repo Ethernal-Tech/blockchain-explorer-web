@@ -68,9 +68,9 @@
     var address = "{{ .nftMetadata.Address }}";
     limitFilter = 25;
     
-    // if(tokenid!= "" && address!= ""){
-    //     limitChanged();
-    // }
+    if(tokenid!= "" && address!= ""){
+        limitChanged();
+    }
     
     function limitChanged(){
         var limitFilterElement =  document.getElementById("limitFilterId")
