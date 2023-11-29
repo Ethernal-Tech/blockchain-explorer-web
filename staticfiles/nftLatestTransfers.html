@@ -90,9 +90,11 @@
                                 <a href="/nft/{{.Address}}/{{.TokenId}}" class="d-flex align-items-center" style="gap: 0.5rem;">
                                     <div>
                                         {{if ne .NftImage ""}}
-                                        <img src="{{.NftImage}}" alt="nft" style="width: 40px; height: 40px; border-radius: 0.5rem;" onerror="this.src='/images/nft_placeholder.png';">
+                                        <img src="{{.NftImage}}" alt="nft" style="width: 40px; height: 40px; border-radius: 0.5rem;" onerror="this.src='/images/nft_small_placeholder.svg';">
                                         {{else}}
-                                        <img src="/images/nft_placeholder.png" alt="nft_placeholder" style="width: 40px; height: 40px; border-radius: 0.5rem;">
+                                        <div class="nft-image-small">
+                                            <img src="/images/nft_small_placeholder.svg" alt="nft_placeholder">
+                                        </div>
                                         {{end}}
                                     </div>
                                     <div>

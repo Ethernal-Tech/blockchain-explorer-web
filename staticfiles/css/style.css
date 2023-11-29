@@ -393,3 +393,20 @@ textarea {
     display: block;
     padding: 5px;
 }
+
+.nft-image-small {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #F8F9FA;
+}
+
+.nft-image-small img {
+    width: 24px;
+    height: 24px;
+    border-radius: 0.5rem;
+}
