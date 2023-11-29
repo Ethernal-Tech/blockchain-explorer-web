@@ -80,7 +80,7 @@ type NftTransfer struct {
 	TokenTypeId     int
 	TokenType       TokenType
 	Transaction     Transaction
-	NftMetadataId   *uint64
+	NftMetadata     NftMetadata
 }
 
 type TokenType struct {

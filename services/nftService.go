@@ -33,6 +33,10 @@ func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTr
 		ColumnExpr("nft_transfer.*").
 		ColumnExpr("t.timestamp AS transaction__timestamp, t.input_data AS transaction__input_data").
 		ColumnExpr("tt.name AS token_type__name").
+		ColumnExpr("nm.name AS nft_metadata__name, nm.image AS nft_metadata__image").
+		Join("LEFT JOIN nft_metadata AS nm").
+		JoinOn("nm.address = nft_transfer.address").
+		JoinOn("nm.token_id = nft_transfer.token_id").
 		Join("JOIN token_types AS tt ON tt.id = nft_transfer.token_type_id").
 		Join("JOIN transactions AS t ON t.hash = nft_transfer.transaction_hash").
 		Order("block_number DESC").
@@ -60,7 +64,14 @@ func (ns *NftService) GetLatestTransfers(page int, perPage int) (*nftModel.NftTr
 			Age:             utils.Convert(int(math.Round(time.Now().Sub(time.Unix(int64(dbNft.Transaction.Timestamp), 0)).Seconds()))),
 			DateTime:        time.Unix(int64(dbNft.Transaction.Timestamp), 0).UTC().Format("2006-01-02 15:04:05"),
 			Address:         dbNft.Address,
+			NftName:         dbNft.NftMetadata.Name,
+			NftImage:        dbNft.NftMetadata.Image,
 		}
+
+		if strings.HasPrefix(transaction.NftImage, "ipfs") {
+			transaction.NftImage = ns.generalConfig.IpfsNodeUrl + strings.Split(transaction.NftImage, "//")[1]
+		}
+
 		number := new(big.Int)
 		if value, ok := number.SetString(dbNft.Value, 10); ok == true {
 			if value.Cmp(big.NewInt(99)) == 1 {

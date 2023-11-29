@@ -36,4 +36,6 @@ type NftTransfer struct {
 	TokenId         string
 	Value           string
 	Address         string
+	NftName         string
+	NftImage        string
 }
