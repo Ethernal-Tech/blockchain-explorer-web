@@ -1,5 +1,16 @@
 {{template "header.html"}}
 
+<script>
+    function setNftPlaceholder(el) {
+        var placeholderHTML = '<div class="nft-image-small">'+
+                                '<img src="/images/nft_small_placeholder.svg" alt="nft_placeholder">'+
+                                '</div>'
+
+        var imageContainer = el.parentNode;
+        imageContainer.innerHTML = placeholderHTML;
+    }
+</script>
+
 <div class="container pb-3">
     <div class="be-subtitle">
         NFT Transfers
@@ -90,7 +101,9 @@
                                 <a href="/nft/{{.Address}}/{{.TokenId}}" class="d-flex align-items-center" style="gap: 0.5rem;">
                                     <div>
                                         {{if ne .NftImage ""}}
-                                        <img src="{{.NftImage}}" alt="nft" style="width: 40px; height: 40px; border-radius: 0.5rem;" onerror="this.src='/images/nft_small_placeholder.svg';">
+                                        <div>
+                                            <img src="{{.NftImage}}" alt="nft" style="width: 40px; height: 40px; border-radius: 0.5rem;" onerror="setNftPlaceholder(this)">
+                                        </div>
                                         {{else}}
                                         <div class="nft-image-small">
                                             <img src="/images/nft_small_placeholder.svg" alt="nft_placeholder">
