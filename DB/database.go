@@ -22,7 +22,9 @@ func InitializationDB(configuration *configuration.GeneralConfiguration) *bun.DB
 		pgdriver.WithReadTimeout(time.Duration(int(configuration.CallTimeoutInSeconds))*time.Second),
 	))
 
-	return bun.NewDB(sqlDB, pgdialect.New())
+	db := bun.NewDB(sqlDB, pgdialect.New())
+	//db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+	return db
 }
 
 func ChangeDB(configuration *configuration.GeneralConfiguration, db *bun.DB) {
